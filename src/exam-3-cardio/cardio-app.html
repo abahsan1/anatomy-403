@@ -79,6 +79,7 @@ const stressed=x=>!!(x.said||x.note);
 
 /* ---------- state ---------- */
 const st=Object.assign({mode:"mcq",lec:1,topic:-1,style:"all",flagOnly:false,fsrc:"review"},LS.get("cardio-prefs",{}));
+{const m=location.hash.match(/^#lecture-([1-6])$/);if(m)st.lec=+m[1];}
 if(st.lec&&!READY.includes(st.lec))st.lec=READY[0]||0;
 const savePrefs=()=>LS.set("cardio-prefs",st);
 let prog=Object.assign({flags:{},missed:{},rec:{},at:0},LS.get("cardio-prog",{}));
@@ -304,7 +305,8 @@ function renderFC(){
 /* ---------- rail ---------- */
 function renderLects(){$("#lects").innerHTML=LECTURES.map(L=>'<button class="lect" data-l="'+L.n+'" aria-pressed="'+(st.lec===L.n)+'"'+(L.ready?"":" disabled")+"><b>"+(L.ready?"Lecture "+L.n+": "+esc(L.name):"Lecture "+L.n)+"</b><span>"+(L.ready?(QS.filter(q=>q.l===L.n).length+BL.filter(b=>b.l===L.n).length)+" items":"Not added yet")+"</span></button>").join("")+
   (READY.length>1?'<button class="lect" data-l="0" aria-pressed="'+(st.lec===0)+'"><b>All lectures</b><span>Mixed</span></button>':"");
-  document.querySelectorAll(".lect[data-l]").forEach(b=>b.onclick=()=>{st.lec=+b.dataset.l;st.topic=-1;renderRail();sync()})}
+  document.querySelectorAll(".lect[data-l]").forEach(b=>b.onclick=()=>{st.lec=+b.dataset.l;st.topic=-1;try{history.replaceState(null,"",st.lec?"#lecture-"+st.lec:location.pathname)}catch(e){}renderRail();sync()})}
+window.addEventListener("hashchange",()=>{const m=location.hash.match(/^#lecture-([1-6])$/);const n=m?+m[1]:0;if(n!==st.lec&&(n===0||READY.includes(n))){st.lec=n;st.topic=-1;renderRail();sync()}});
 function tally(items){let r=0,a=0;items.forEach(x=>{if(x.id in prog.rec){a++;r+=prog.rec[x.id]}});return {r,a,n:items.length,m:items.filter(x=>prog.missed[x.id]).length}}
 function renderRecord(){
   const lecs=st.lec?[st.lec]:READY;const all=[...BY.values()];

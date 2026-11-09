@@ -1,12 +1,16 @@
 # Anatomy 403 Practice
 
-Practice questions, fill-in-the-blank sentences and flashcards for Anatomy 403, one set per exam. Live at https://anatomy-403.vercel.app. Every page is a single static HTML file; flags and progress are saved in the browser.
+Practice questions, fill-in-the-blank sentences and flashcards for Anatomy 403, one set per exam. Live at https://anatomy-403.vercel.app. There is one page per exam, with its lectures as tabs; open a lecture directly with `#lecture-N` (for example `/exam-2/neuro#lecture-3`). Every page is a single static HTML file; flags and progress are saved in the browser.
 
 | Exam | Pages |
 | --- | --- |
-| Exam 1, musculoskeletal | `exam-1/msk1.html` to `exam-1/msk5.html` |
+| Exam 1, musculoskeletal | `exam-1/msk.html` (lectures 1 to 5 as tabs) |
 | Exam 2, neuroanatomy | `exam-2/neuro.html` |
 | Exam 3, cardiovascular and respiratory | `exam-3/cardio.html` |
+
+## Building
+
+Exam 1 is built from the five lecture quizzes in `src/exam-1-msk/` with `node src/build-msk.mjs`.
 
 ## Adding Cardio lectures
 

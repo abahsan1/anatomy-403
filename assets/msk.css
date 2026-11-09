@@ -10,6 +10,15 @@ body{font-family:var(--x-font);-webkit-font-smoothing:antialiased}
 header h1{font-family:var(--x-font);font-weight:800;letter-spacing:-0.02em;font-size:clamp(1.6rem,4.6vw,2.2rem)}
 header p{font-size:.92rem;margin-top:4px}
 
+/* lecture tabs */
+.lecs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:20px 0 4px;padding:2px 2px 6px}
+.lecs::-webkit-scrollbar{display:none}
+.lecs button{flex:none;min-height:44px;padding:8px 16px;border:0;border-radius:var(--x-r-pill);background:var(--x-surface);color:var(--x-ink);box-shadow:var(--x-shadow-sm);font:600 .85rem/1.2 var(--x-font);cursor:pointer;transition:background-color .15s var(--x-ease),color .15s var(--x-ease)}
+.lecs button b{font-weight:800;color:var(--x-coral);margin-right:4px}
+.lecs button[aria-pressed="true"]{background:#C94A14;color:#fff}
+.lecs button[aria-pressed="true"] b{color:#fff}
+.lecs button:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
+
 /* controls: pills on the light page */
 .controls{gap:10px;margin:20px 0 12px}
 .seg{border:0;background:var(--x-surface);box-shadow:var(--x-shadow-sm);padding:4px;gap:2px}

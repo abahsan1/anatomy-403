@@ -1851,6 +1851,7 @@ const saidBadge=x=>x.said?'<span class="said-badge">Stressed in lecture</span>':
 const saidNote=x=>x.said?'<p class="said"><b>In lecture:</b> '+esc(x.said)+'</p>':'';
 const st={mode:'mcq',lec:0,style:'all'};
 try{const s=JSON.parse(localStorage.getItem('neuro2-prefs')||'{}');if(s.mode)st.mode=s.mode;if(s.lec!=null)st.lec=s.lec;if(s.style)st.style=s.style;}catch(e){}
+{const m=location.hash.match(/^#lecture-([1-6])$/);if(m)st.lec=+m[1];}
 const save=()=>{try{localStorage.setItem('neuro2-prefs',JSON.stringify({mode:st.mode,lec:st.lec,style:st.style}))}catch(e){}};
 const $=s=>document.querySelector(s), view=$('#view');
 let flags=new Set();
@@ -2251,7 +2252,8 @@ $('#m-mcq').onclick=()=>{st.mode='mcq';sync()};
 $('#m-id').onclick=()=>{st.mode='id';sync()};
 $('#m-fc').onclick=()=>{st.mode='fc';sync()};
 $('#m-fb').onclick=()=>{st.mode='fb';sync()};
-document.querySelectorAll('.chip[data-l]').forEach(c=>c.onclick=()=>{st.lec=+c.dataset.l;sync()});
+document.querySelectorAll('.chip[data-l]').forEach(c=>c.onclick=()=>{st.lec=+c.dataset.l;history.replaceState(null,'',st.lec?'#lecture-'+st.lec:location.pathname);sync()});
+window.addEventListener('hashchange',()=>{const m=location.hash.match(/^#lecture-([1-6])$/);const n=m?+m[1]:0;if(n!==st.lec){st.lec=n;sync()}});
 $('#fchip').onclick=()=>{st.flagOnly=!st.flagOnly;sync()};
 sync();
 })();

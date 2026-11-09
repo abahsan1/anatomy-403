@@ -1,3 +1,10 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/exam-1/msk1", "destination": "/exam-1/msk#lecture-1", "permanent": true },
+    { "source": "/exam-1/msk2", "destination": "/exam-1/msk#lecture-2", "permanent": true },
+    { "source": "/exam-1/msk3", "destination": "/exam-1/msk#lecture-3", "permanent": true },
+    { "source": "/exam-1/msk4", "destination": "/exam-1/msk#lecture-4", "permanent": true },
+    { "source": "/exam-1/msk5", "destination": "/exam-1/msk#lecture-5", "permanent": true }
+  ]
 }
