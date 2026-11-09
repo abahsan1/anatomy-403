@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MSK3 Quiz: Head, Neck & Back</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F4; --paper:#FFFFFF; --ink:#1D2733; --muted:#5B6878; --line:#D3DAE2;
+  --accent:#0F6E74; --accent-ink:#FFFFFF; --good:#2E7D4F; --good-bg:#E3F2E8;
+  --bad:#B3412F; --bad-bg:#F8E6E2; --blank:#FFF6D6; --blank-line:#C99A1A; --todo:#C9D1DA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141A21; --paper:#1D2530; --ink:#E6EBF0; --muted:#9AA7B5; --line:#2F3A47;
+    --accent:#4FB3B8; --accent-ink:#0B1A1B; --good:#6CC08C; --good-bg:#1D3326;
+    --bad:#E3826F; --bad-bg:#3A221D; --blank:#2E2A18; --blank-line:#D9B44A; --todo:#3A4654;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141A21; --paper:#1D2530; --ink:#E6EBF0; --muted:#9AA7B5; --line:#2F3A47;
+  --accent:#4FB3B8; --accent-ink:#0B1A1B; --good:#6CC08C; --good-bg:#1D3326;
+  --bad:#E3826F; --bad-bg:#3A221D; --blank:#2E2A18; --blank-line:#D9B44A; --todo:#3A4654;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:24px 18px 48px}
+header h1{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.75rem;line-height:1.2;margin:0 0 4px}
+header p{margin:0;color:var(--muted);font-size:.95rem}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:.88rem;padding:6px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.ghost{border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-size:.88rem;padding:6px 12px;border-radius:999px;cursor:pointer}
+.score{margin-left:auto;font-size:.9rem;color:var(--muted)}
+.score b{color:var(--ink)}
+.track{display:flex;flex-wrap:wrap;gap:3px;margin:6px 0 18px}
+.track button{width:14px;height:14px;border-radius:3px;border:0;padding:0;background:var(--todo);cursor:pointer}
+.track button.good{background:var(--good)}
+.track button.bad{background:var(--bad)}
+.track button.cur{outline:2px solid var(--ink);outline-offset:1px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 22px 18px}
+.kind{font-size:.85rem;color:var(--muted);margin:0 0 10px}
+.kind span{color:var(--accent);font-weight:600}
+.prompt{font-family:Literata,Georgia,serif;font-size:1.2rem;line-height:1.75;margin:0 0 18px}
+.prompt input{font:inherit;font-family:Figtree,system-ui,sans-serif;font-size:1rem;background:var(--blank);color:var(--ink);border:0;border-bottom:2px solid var(--blank-line);border-radius:4px 4px 0 0;padding:1px 8px;margin:0 3px;min-width:7ch;width:12ch;max-width:100%}
+.prompt input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.prompt input.good{background:var(--good-bg);border-bottom-color:var(--good)}
+.prompt input.bad{background:var(--bad-bg);border-bottom-color:var(--bad)}
+.opts{display:grid;gap:8px;margin:0 0 16px;padding:0;list-style:none}
+.opts button{width:100%;text-align:left;font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--accent)}
+.opts button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opts button.pick{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opts button.good{background:var(--good-bg);border-color:var(--good)}
+.opts button.bad{background:var(--bad-bg);border-color:var(--bad)}
+.opts button:disabled{cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font:inherit;font-weight:600;font-size:.95rem;border-radius:10px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible,.ghost:focus-visible,.seg button:focus-visible,.track button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.spacer{flex:1}
+.feedback{margin:16px 0 0;padding:12px 14px;border-radius:10px;font-size:.95rem;display:none}
+.feedback.show{display:block}
+.feedback.good{background:var(--good-bg)}
+.feedback.bad{background:var(--bad-bg)}
+.feedback strong{display:block;margin-bottom:2px}
+.feedback .ans{font-weight:600}
+.override{margin-top:8px;background:transparent;border:0;padding:0;color:var(--accent);font:inherit;font-size:.9rem;text-decoration:underline;cursor:pointer}
+.fc-group{font-size:.85rem;color:var(--muted);margin:0 0 4px}
+.fc-name{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.6rem;line-height:1.25;margin:0 0 10px}
+.fc-cue{color:var(--muted);margin:0 0 18px}
+.fc-back{display:grid;grid-template-columns:minmax(110px,auto) 1fr;gap:8px 16px;margin:0 0 18px;padding:14px 0 0;border-top:1px solid var(--line)}
+.fc-back dt{font-size:.85rem;color:var(--accent);font-weight:600;padding-top:2px}
+.fc-back dd{margin:0}
+@media (max-width:520px){.fc-back{grid-template-columns:1fr;gap:2px 0}.fc-back dd{margin-bottom:8px}}
+.btn.flag[aria-pressed="true"]{background:var(--blank);border-color:var(--blank-line);color:var(--ink)}
+.track button.flagged{box-shadow:inset 0 -5px 0 var(--blank-line)}
+.ghost[aria-pressed="true"]{background:var(--blank);border-color:var(--blank-line)}
+.empty{color:var(--muted)}
+.done{text-align:left}
+.done h2{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.5rem;margin:0 0 6px}
+.done p{margin:0 0 16px;color:var(--muted)}
+.hint{font-size:.85rem;color:var(--muted);margin-top:14px}
+@media (max-width:520px){.prompt{font-size:1.08rem}.card{padding:18px 16px 16px}.score{margin-left:0;width:100%}}
+@media (prefers-reduced-motion:no-preference){.feedback.show{animation:in .18s ease-out}@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>MSK3: Head, Neck &amp; Back</h1>
+    <p>Multiple choice mixed with fill-in-the-blank. Lecture-style questions covering every learning objective in depth. Use the topic menu to drill one lecture at a time, or choose "Muscle flashcards" to review attachments, actions, and innervation.</p>
+  </header>
+
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Question type">
+      <button data-filter="all" aria-pressed="true">All</button>
+      <button data-filter="mc" aria-pressed="false">Multiple choice</button>
+      <button data-filter="fill" aria-pressed="false">Fill in the blank</button>
+    </div>
+    <select class="ghost" id="topic" aria-label="Topic"><option value="all">All topics</option></select>
+    <button class="ghost" id="onlyFlag" aria-pressed="false">&#9873; Flagged only (<span id="flagCount">0</span>)</button>
+    <button class="ghost" id="shuffle">Shuffle &amp; restart</button>
+    <div class="score" id="score"></div>
+  </div>
+
+  <div class="track" id="track" aria-label="Jump to question"></div>
+
+  <main id="main"></main>
+  <p class="hint">Enter checks your answer; press Enter again to go to the next question. Spelling is forgiving, and if your wording differs but you know you were right, choose "Count it as correct." Press F or use the flag button to mark a question or card to come back to. Your flags are saved in this browser.</p>
+</div>
+
+<script>
+const Q = [
+// ---------- Neurocranium ----------
+{s:"Neurocranium",t:"mc",p:"A trauma report describes a fracture of the calvaria. Which region is injured?",o:["The dome-like roof of the cranium","The cranial base","The facial skeleton","The mandible","The orbit floor"],c:0,e:"Calvaria means skull cap. The basicranium is the cranial base, and the viscerocranium is the facial skeleton."},
+{s:"Neurocranium",t:"mc",p:"Using the course's definitions, which bone is part of the skull but NOT part of the cranium (neurocranium)?",o:["Mandible","Frontal","Occipital","Sphenoid","Parietal"],c:0,e:"The skull is the whole bony skeleton of the head: cranium, facial skeleton, and mandible. Most definitions treat the cranium as the neurocranium, or brain case."},
+{s:"Neurocranium",t:"fill",p:"Three components of the skull: ___, ___, ___.",a:[["cranium","neurocranium"],["facial skeleton","viscerocranium"],["mandible"]],e:"Cranium, facial skeleton, and mandible."},
+{s:"Neurocranium",t:"mc",p:"The two components of the cranium are:",o:["Calvaria and basicranium","Viscerocranium and mandible","Frontal and occipital bones","Neurocranium and calvaria","Cranial fossae and sutures"],c:0,e:"The calvaria is the dome-like roof and the basicranium is the base."},
+{s:"Neurocranium",t:"mc",p:"Which set contains ONLY unpaired bones of the neurocranium?",o:["Frontal, occipital, sphenoid, ethmoid","Parietal, temporal, frontal","Temporal, sphenoid, ethmoid","Parietal, occipital, sphenoid","Frontal, parietal, temporal"],c:0,e:"The parietal and temporal bones are paired."},
+{s:"Neurocranium",t:"mc",p:"The supra-orbital margin of the frontal bone marks:",o:["The boundary between the squamous and orbital parts, at the eyebrow region","The frontal–parietal suture","The roof of the nasal cavity","The attachment of the temporalis","The site of the frontal sinus opening"],c:0,e:"The frontal bone forms the forehead and the roofs of the orbits."},
+{s:"Neurocranium",t:"mc",p:"Which pair of bones forms the major portion of the lateral walls and roof of the calvaria?",o:["Parietal bones","Temporal bones","Frontal and occipital bones","Sphenoid wings","Zygomatic bones"],c:0,e:"The parietal bones are paired flat bones."},
+{s:"Neurocranium",t:"mc",p:"A patient's jaw locks open after a wide yawn. The mandibular condyle has slid anterior to which temporal bone feature?",o:["Articular tubercle","Mastoid process","Styloid process","External acoustic meatus","Petrous part"],c:0,e:"The articular tubercle is an inferior projection of the zygomatic process, just anterior to the mandibular fossa."},
+{s:"Neurocranium",t:"mc",p:"A child has pain and swelling in the bony prominence behind the ear, with infection spreading into air-filled spaces. Which feature is involved, and which muscle attaches there?",o:["Mastoid process; sternocleidomastoid","Styloid process; tongue muscles","Articular tubercle; lateral pterygoid","Zygomatic process; masseter","Occipital condyle; trapezius"],c:0,e:"The mastoid process contains the mastoid air cells and is the superior attachment of the SCM."},
+{s:"Neurocranium",t:"fill",p:"Temporal bone passageway that lets sound reach the tympanic membrane: ___",a:[["external acoustic meatus","external acoustic opening","external auditory meatus"]],e:"External acoustic meatus. Meatus means passageway."},
+{s:"Neurocranium",t:"fill",p:"Ossicles from the tympanic membrane inward: ___, ___, ___.",a:[["malleus"],["incus"],["stapes"]],e:"The malleus attaches to the tympanic membrane, and the stapes sits in the oval window."},
+{s:"Neurocranium",t:"mc",p:"A patient's hearing loss is traced to an ossicle fixed in the oval window. Which ossicle is it, and which part of the temporal bone houses it?",o:["Stapes; petrous part","Malleus; mastoid process","Incus; squamous part","Stapes; zygomatic process","Malleus; petrous part"],c:0,e:"The petrous part is part of the basicranium and houses the middle and inner ear."},
+{s:"Neurocranium",t:"mc",p:"The styloid process serves mainly as:",o:["An attachment point for muscles and ligaments of the tongue and neck","The articulation for the mandible","A container for air cells","The attachment of the trapezius","A passageway for CN VII"],c:0,e:"It is a slender, inferior projection of the temporal bone."},
+{s:"Neurocranium",t:"mc",p:"Which occipital bone feature forms a joint with C1, and which serves as an attachment for the trapezius and nuchal ligament?",o:["Occipital condyles; external occipital protuberance","External occipital protuberance; occipital condyles","Foramen magnum; occipital condyles","Jugular foramen; mastoid process","Occipital condyles; foramen magnum"],c:0,e:"The occipital condyles form the atlanto-occipital joint with C1."},
+{s:"Neurocranium",t:"mc",p:"Why is the sphenoid called the 'keystone' of the basicranium?",o:["It sits in the middle of the cranial base and articulates with many bones, with many foramina for neurovasculature","It is the largest bone of the calvaria","It forms the entire orbit","It houses the inner ear","It forms the foramen magnum"],c:0,e:"The sphenoid is unpaired and butterfly-shaped. It also forms a small part of the calvaria and the orbit."},
+{s:"Neurocranium",t:"mc",p:"After a head injury, a patient can no longer smell and has clear fluid leaking from the nose. Which bone is most likely fractured?",o:["Ethmoid (cribriform foramina)","Sphenoid (sella turcica)","Temporal (petrous part)","Occipital (foramen magnum)","Frontal (supra-orbital margin)"],c:0,e:"Axons of the olfactory nerve (CN I) pass through the cribriform foramina of the ethmoid, in the anterior cranial fossa."},
+{s:"Neurocranium",t:"mc",p:"Why does the internal cranial base have three stepped fossae?",o:["The cranial bones form around the brain, so their shape follows brain structure","Muscles of mastication pull on them","They follow the paranasal sinuses","The vertebral column shapes them","They form from cartilage models"],c:0,e:"The anterior, middle, and posterior fossae each hold different parts of the brain."},
+{s:"Neurocranium",t:"mc",p:"Match each cranial fossa to its contents (anterior, middle, posterior):",o:["Frontal lobes; temporal lobes and pituitary; cerebellum, pons, medulla","Temporal lobes; frontal lobes; cerebellum","Cerebellum; pituitary; frontal lobes","Frontal lobes; cerebellum; temporal lobes","Pituitary; frontal lobes; medulla"],c:0,e:"The anterior fossa is formed by the frontal bone, ethmoid, and lesser wings of the sphenoid. The middle fossa by the sphenoid and temporal bone. The posterior fossa mostly by the occipital bone plus the temporal bone."},
+{s:"Neurocranium",t:"mc",p:"A pituitary tumor enlarges the hypophyseal fossa. Which structure is eroded, and in which fossa?",o:["Sella turcica of the sphenoid; middle cranial fossa","Cribriform foramina; anterior fossa","Jugular foramen; posterior fossa","Internal acoustic meatus; posterior fossa","Foramen magnum; posterior fossa"],c:0,e:"The sella turcica is a saddle-like midline structure."},
+{s:"Neurocranium",t:"mc",p:"A lesion compresses everything passing through the superior orbital fissure. Which nerve is SPARED?",o:["Optic n. (CN II)","Oculomotor n. (CN III)","Trochlear n. (CN IV)","Ophthalmic n. (CN V1)","Abducens n. (CN VI)"],c:0,e:"CN II and the ophthalmic artery travel through the optic canal instead."},
+{s:"Neurocranium",t:"mc",p:"A tumor at the jugular foramen causes hoarseness, trouble swallowing, and weak shoulder shrugging. Which nerve would NOT be affected?",o:["Facial n. (CN VII)","Glossopharyngeal n. (CN IX)","Vagus n. (CN X)","Accessory n. (CN XI)","None; all four pass through"],c:0,e:"The jugular foramen transmits the internal jugular v., CN IX, CN X, and CN XI. CN VII passes through the internal acoustic meatus."},
+{s:"Neurocranium",t:"fill",p:"Opening transmitting CN VII and CN VIII: ___",a:[["internal acoustic meatus","internal acoustic opening","internal auditory meatus"]],e:"Internal acoustic meatus, in the posterior cranial fossa."},
+{s:"Neurocranium",t:"mc",p:"Which structures pass through the foramen magnum?",o:["Medulla/spinal cord transition, vertebral aa., CN XI","CN IX, X, XI and the internal jugular v.","CN VII and VIII","CN III, IV, V1, VI","CN II and the ophthalmic a."],c:0,e:"CN XI is also listed with the jugular foramen."},
+// ---------- Viscerocranium ----------
+{s:"Viscerocranium",t:"mc",p:"Which bone is NOT part of the viscerocranium?",o:["Parietal","Maxilla","Zygomatic","Lacrimal","Vomer"],c:0,e:"The viscerocranium is the facial skeleton, the mostly irregular bones surrounding the mouth, nose, and most of the orbit."},
+{s:"Viscerocranium",t:"mc",p:"A punch fractures the bridge of the nose. Which bones are injured, and what do they protect?",o:["Nasal bones; the superior entry of the nasal cavity","Vomer; the nasal septum","Lacrimal bones; the tear duct","Maxillae; the hard palate","Ethmoid; the cribriform foramina"],c:0,e:"The nasal bones are small and flattened."},
+{s:"Viscerocranium",t:"mc",p:"Which features belong to the maxillae?",o:["Maxillary teeth, most of the hard palate, maxillary sinuses","Mandibular teeth and the coronoid process","The posterior hard palate only","The inferior nasal septum","The lateral orbital wall only"],c:0,e:"The maxillae form the upper jaw."},
+{s:"Viscerocranium",t:"mc",p:"Which bone does NOT contain a paranasal sinus?",o:["Parietal","Maxilla","Frontal","Sphenoid","Ethmoid"],c:0,e:"Paranasal sinuses are mucous membrane-lined cavities in four bones: the maxillae, frontal, sphenoid, and ethmoid."},
+{s:"Viscerocranium",t:"fill",p:"Paranasal sinuses drain into the ___ nasal wall.",a:[["lateral"]],e:"Inflammation of the lining of one or more sinuses is sinusitis."},
+{s:"Viscerocranium",t:"mc",p:"The nasal conchae increase mucosal and vascular surface area in order to:",o:["Warm and humidify inhaled air","Produce tears","Form the nasal septum","Anchor the teeth","Drain the paranasal sinuses"],c:0,e:"The superior and middle conchae are part of the ethmoid. The inferior concha is a separate paired bone."},
+{s:"Viscerocranium",t:"mc",p:"A deviated septum involves its bony INFERIOR portion. Which bone is it?",o:["Vomer","Ethmoid","Nasal bone","Palatine","Septal cartilage"],c:0,e:"The ethmoid forms the septum superiorly, the vomer inferiorly, and septal cartilage anteriorly."},
+{s:"Viscerocranium",t:"mc",p:"A cleft involves only the posterior part of the hard palate, where the soft palate attaches. Which bones are involved?",o:["Palatine bones","Maxillae","Vomer","Mandible","Zygomatic bones"],c:0,e:"The maxillae form most of the hard palate, and the palatine bones form its posterior portion."},
+{s:"Viscerocranium",t:"mc",p:"An orbital floor fracture after a blow to the cheek most likely involves:",o:["The zygomatic bone","The lacrimal bone only","The nasal bone","The vomer","The parietal bone"],c:0,e:"The zygomatic bones ('cheekbones') form the lateral wall and floor of the orbit."},
+{s:"Viscerocranium",t:"mc",p:"A patient's tears don't drain into the nose. Which small bone forms a fossa (with the maxilla) along this pathway?",o:["Lacrimal","Nasal","Palatine","Vomer","Zygomatic"],c:0,e:"The lacrimal bones are the smallest bones of the face."},
+{s:"Viscerocranium",t:"mc",p:"Which statement about the mandible is correct?",o:["It is the only movable skull bone besides the ossicles","Its ramus holds the mandibular teeth","Its body is the vertical portion","It articulates with the maxilla at the TMJ","It has no foramina"],c:0,e:"The body is horizontal, U-shaped, and holds the teeth. The ramus is vertical and posterior."},
+{s:"Viscerocranium",t:"mc",p:"A dentist numbs the lower teeth by injecting near an opening on the inner ramus. Which nerve and foramen are targeted?",o:["Inferior alveolar n.; mandibular foramen","Facial n.; stylomastoid foramen","Hypoglossal n.; foramen magnum","Mandibular n.; jugular foramen","Lingual n.; mental foramen"],c:0,e:"This is the inferior alveolar nerve (IAN) block."},
+{s:"Viscerocranium",t:"fill",p:"Adult dental formula per quadrant (I:C:P:M): ___",a:[["2:1:2:3","2 1 2 3","2123"]],e:"2:1:2:3, for 32 permanent teeth. Deciduous teeth follow 2:1:2, for 20."},
+{s:"Viscerocranium",t:"mc",p:"Match the tooth to its shape: thin cutting edge, single cone, 2 cusps, 3+ cusps.",o:["Incisor, canine, premolar, molar","Canine, incisor, molar, premolar","Incisor, premolar, canine, molar","Molar, canine, premolar, incisor","Premolar, canine, incisor, molar"],c:0,e:"A premolar is also called a bicuspid."},
+{s:"Viscerocranium",t:"fill",p:"Number of deciduous teeth: ___",a:[["20","twenty"]],e:"20 deciduous vs. 32 permanent."},
+// ---------- Joints of the head ----------
+{s:"Joints of the head",t:"mc",p:"Skull sutures are classified as:",o:["Fibrous joints, immovable in adults","Cartilaginous joints, slightly movable","Synovial joints, freely movable","Symphyses","Synchondroses"],c:0,e:"Sutures are held by sutural ligaments."},
+{s:"Joints of the head",t:"mc",p:"Which suture lies in the coronal plane and unites the frontal bone with both parietal bones?",o:["Coronal","Sagittal","Squamous","Lambdoid","Frontal-occipital"],c:0,e:"Sagittal: parietals in the midline. Squamous: parietal and temporal (paired). Lambdoid: parietals and occipital."},
+{s:"Joints of the head",t:"fill",p:"Suture uniting the parietal and temporal bones: ___",a:[["squamous"]],e:"The squamous suture is paired."},
+{s:"Joints of the head",t:"fill",p:"Suture uniting both parietals with the occipital: ___",a:[["lambdoid"]],e:"Lambdoid."},
+{s:"Joints of the head",t:"mc",p:"After a blow to the side of the head, a patient is lucid briefly and then deteriorates. The fracture is at the pterion. Why is this site dangerous?",o:["Branches of the middle meningeal a. run deep to it, so an epidural hematoma can form","It overlies the internal jugular v.","It overlies the pituitary","The TMJ dislocates","The vertebral aa. are torn"],c:0,e:"At the pterion, the frontal, parietal, temporal, and sphenoid bones meet."},
+{s:"Joints of the head",t:"mc",p:"Why do infants have fontanels?",o:["Dense CT between incompletely developed bones allows growth and flexibility; it is later replaced by bone through intramembranous ossification","They are synovial joints for chewing","They are air-filled sinuses","They are cartilage models for endochondral ossification","They drain CSF"],c:0,e:"Fontanels are the infant skull's 'soft spots.'"},
+{s:"Joints of the head",t:"mc",p:"What are the articular surfaces of the TMJ?",o:["Mandibular condyle and mandibular fossa of the temporal bone, separated by an articular disc","Coronoid process and zygomatic arch","Mandibular condyle and occipital condyle","Ramus and maxilla","Articular tubercle and styloid process"],c:0,e:"The disc splits the joint into superior and inferior compartments."},
+{s:"Joints of the head",t:"mc",p:"Jutting the chin forward (protraction) mainly happens in which TMJ compartment, and elevation/depression in which?",o:["Superior; inferior","Inferior; superior","Both in the superior compartment","Both in the inferior compartment","Neither; it's a plane joint"],c:0,e:"The structure of the disc and compartments is what lets the TMJ perform these specific movements."},
+{s:"Joints of the head",t:"fill",p:"TMJ classification: modified ___ joint.",a:[["hinge"]],e:"Modified hinge."},
+{s:"Joints of the head",t:"mc",p:"Which presentation best fits temporomandibular disorder (TMD)?",o:["Jaw pain with reduced mobility","A condyle locked anterior to the articular tubercle","Unilateral facial paralysis","Loss of smell","Hearing loss"],c:0,e:"Dislocation is a separate clinical issue: the condyle passes anterior to the articular tubercle."},
+// ---------- Muscles of the head ----------
+{s:"Muscles of the head",t:"mc",p:"What makes the muscles of facial expression unusual compared with most skeletal muscles?",o:["They lie in subcutaneous tissue and attach distally to skin","They attach only to the mandible","They are innervated by CN V3","They are smooth muscle","They lack innervation"],c:0,e:"They move the skin and change facial expression. All are innervated by the facial n. (CN VII)."},
+{s:"Muscles of the head",t:"mc",p:"A patient with Bell palsy would show all of the following on the affected side EXCEPT:",o:["Weakness when clenching the jaw","Inability to close the eye tightly","Drooping at the corner of the mouth","Food collecting between cheek and gums","Unilateral loss of facial expression"],c:0,e:"Jaw clenching uses the muscles of mastication (CN V3), not CN VII."},
+{s:"Muscles of the head",t:"mc",p:"Food keeps pocketing between a patient's cheek and molars. Which muscle is weak?",o:["Buccinator","Masseter","Orbicularis oris","Temporalis","Medial pterygoid"],c:0,e:"The buccinator presses the cheek against the molars and, together with the tongue, keeps food out of the oral vestibule. It also resists distension when blowing."},
+{s:"Muscles of the head",t:"mc",p:"Which muscle pairing is correct?",o:["Orbicularis oculi: closes eyelids; orbicularis oris: closes the oral fissure and protrudes the lips","Orbicularis oculi: elevates the eyeball","Orbicularis oris: presses cheek on molars","Both are muscles of mastication","Both are innervated by CN III"],c:0,e:"Both are sphincteric muscles of facial expression."},
+{s:"Muscles of the head",t:"fill",p:"Nerve to the muscles of facial expression: ___",a:[["facial","cn vii","cn 7","vii"]],e:"Facial n. (CN VII)."},
+{s:"Muscles of the head",t:"mc",p:"The extra-ocular muscles attach distally to the:",o:["Sclera","Cornea","Eyelid skin","Orbital floor","Optic nerve"],c:0,e:"They control eyeball movements: elevation/depression, abduction/adduction, and intorsion/extorsion."},
+{s:"Muscles of the head",t:"mc",p:"Complete damage to CN III would affect how many of the six extra-ocular muscles?",o:["4","1","2","6","3"],c:0,e:"CN III supplies 4 of the 6. CN IV and CN VI supply one each."},
+{s:"Muscles of the head",t:"fill",p:"Medial rotation of the eyeball: ___",a:[["intorsion"]],e:"Intorsion. Lateral rotation is extorsion."},
+{s:"Muscles of the head",t:"mc",p:"Compression of CN V3 would most weaken which movement?",o:["Elevation of the mandible (biting)","Closing the eyelid","Moving the tongue","Elevating the eyeball","Smiling"],c:0,e:"All muscles of mastication attach to the mandible and are innervated by V3. Elevation is their most powerful movement."},
+{s:"Muscles of the head",t:"mc",p:"Which muscle of mastication both elevates and retrudes the mandible, attaching to the coronoid process?",o:["Temporalis","Masseter","Medial pterygoid","Lateral pterygoid","Buccinator"],c:0,e:"The temporalis is palpable at the temple."},
+{s:"Muscles of the head",t:"mc",p:"A patient can't open the jaw against resistance or jut the chin forward. Which muscle is most affected?",o:["Lateral pterygoid","Masseter","Temporalis","Medial pterygoid","Orbicularis oris"],c:0,e:"The lateral pterygoid has two heads and is the only muscle of mastication that depresses the mandible."},
+{s:"Muscles of the head",t:"mc",p:"The masseter and medial pterygoid 'mirror' each other because they:",o:["Attach to the superficial and deep sides of the ramus, and both elevate and protrude","Both attach to the coronoid process","Both depress the mandible","Are both muscles of facial expression","Are both innervated by CN VII"],c:0,e:"The masseter is palpable. The medial pterygoid is not."},
+{s:"Muscles of the head",t:"mc",p:"Which pairing of tongue muscles is correct?",o:["Extrinsic: originate outside the tongue, change its position; intrinsic: entirely within, change its shape","Extrinsic: change shape; intrinsic: change position","Both are innervated by CN VII","Intrinsic muscles attach to the hyoid","There are 8 extrinsic muscles"],c:0,e:"There are 4 extrinsic and 4 intrinsic muscles. Most are innervated by the hypoglossal n. (CN XII)."},
+{s:"Muscles of the head",t:"fill",p:"Nerve innervating most tongue muscles: ___",a:[["hypoglossal","cn xii","cn 12","xii"]],e:"Hypoglossal n. (CN XII)."},
+// ---------- Bones & joints of neck & back ----------
+{s:"Bones & joints of neck & back",t:"mc",p:"Which statement about the hyoid is correct?",o:["It articulates with no other bone and is suspended by muscles and ligaments between the mandible and larynx","It articulates with C3","It is part of the viscerocranium","It is paired","It forms the floor of the orbit"],c:0,e:"The hyoid is unpaired and supports the tongue."},
+{s:"Bones & joints of neck & back",t:"mc",p:"Which is NOT a function of the vertebral column?",o:["Producing cerebrospinal fluid","Protecting the spinal cord","Allowing movement","Providing attachment for bones and muscles","Bearing weight"],c:0,e:"CSF sits within the vertebral canal, but the column doesn't produce it."},
+{s:"Bones & joints of neck & back",t:"mc",p:"A typical vertebra consists of:",o:["A body, a vertebral arch, and 7 processes","A body and 4 processes","An arch and 2 transverse processes only","A body, dens, and 7 processes","A ring of bone with no body"],c:0,e:"The 7 processes are 2 transverse, 1 spinous, and 4 articular."},
+{s:"Bones & joints of neck & back",t:"mc",p:"A surgeon removes the broad, flat plates of the vertebral arch to decompress the spinal cord. Which parts are removed?",o:["Laminae","Pedicles","Vertebral bodies","Transverse processes","Intervertebral discs"],c:0,e:"The pedicles project posteriorly from the body and unite with the laminae."},
+{s:"Bones & joints of neck & back",t:"mc",p:"The vertebral foramen is formed by:",o:["The vertebral arch and the posterior surface of the body","Adjacent vertebral notches and the IV disc","The transverse processes","The spinous process and laminae only","The articular facets"],c:0,e:"A succession of vertebral foramina forms the vertebral canal, which contains the spinal cord, spinal nerve roots, meninges, epidural fat, and CSF."},
+{s:"Bones & joints of neck & back",t:"mc",p:"A herniated disc compresses a spinal nerve as it exits the column. Where does the nerve exit, and what lies there?",o:["Intervertebral foramen; dorsal root ganglia","Vertebral foramen; spinal cord","Transverse foramen; vertebral a.","Foramen magnum; medulla","Sacral hiatus; cauda equina"],c:0,e:"The intervertebral foramen is formed by the vertebral notches of adjacent vertebrae plus the IV disc."},
+{s:"Bones & joints of neck & back",t:"mc",p:"Which processes provide attachment for the deep back muscles?",o:["Transverse and spinous processes","Articular processes only","Pedicles and laminae","Vertebral bodies","Dens and odontoid"],c:0,e:"The spinous process extends posteriorly and is palpable. The transverse processes extend posterolaterally."},
+{s:"Bones & joints of neck & back",t:"fill",p:"Joints formed by the articular processes: ___ joints",a:[["facet"]],e:"Each of the 4 articular processes bears a facet."},
+{s:"Bones & joints of neck & back",t:"mc",p:"A vertebra has small body, bifid spinous process, and holes in its transverse processes. Identify it and what passes through the holes.",o:["Cervical; vertebral aa.","Thoracic; ribs","Lumbar; spinal nerves","Cervical; spinal cord","Sacral; ventral rami"],c:0,e:"Transverse foramina carry the vertebral arteries. C2/3–C6 have bifid spinous processes."},
+{s:"Bones & joints of neck & back",t:"mc",p:"A vertebra is a ring of bone with no body and no spinous process. It articulates with:",o:["The occipital condyles and C2","The ribs","The sacrum","C1 and C3","The hyoid"],c:0,e:"This is C1, the atlas."},
+{s:"Bones & joints of neck & back",t:"fill",p:"C2 process forming a pivot joint with C1: ___",a:[["dens","odontoid process","odontoid"]],e:"The dens (odontoid process) of the axis."},
+{s:"Bones & joints of neck & back",t:"mc",p:"Which vertebral type articulates with both the head and the tubercle of a rib, and where?",o:["Thoracic; costal facets on the body and on the transverse process","Cervical; transverse foramina","Lumbar; articular processes","Thoracic; the spinous process","Sacral; the auricular surface"],c:0,e:"The head of the rib meets the body, and the tubercle meets the transverse process."},
+{s:"Bones & joints of neck & back",t:"mc",p:"Which vertebrae are largest and have superior articular processes directed medially?",o:["Lumbar","Cervical","Thoracic","Sacral","Coccygeal"],c:0,e:"Lumbar vertebrae support a lot of weight. The vertebral bodies get larger toward the lumbar region."},
+{s:"Bones & joints of neck & back",t:"fill",p:"Number of cervical, thoracic, lumbar vertebrae: ___, ___, ___",a:[["7","seven"],["12","twelve"],["5","five"]],e:"The sacrum is 5 fused vertebrae and the coccyx is 4."},
+{s:"Bones & joints of neck & back",t:"mc",p:"Which curvatures are concave anteriorly, and when did they develop?",o:["Thoracic and sacral (kyphoses); fetal period (primary)","Cervical and lumbar (lordoses); fetal period","Thoracic and sacral; after birth (secondary)","Cervical and lumbar; primary","All four; fetal period"],c:0,e:"The primary curvatures come from the flexed fetal position. The secondary curvatures, cervical and lumbar, come from extension and align with developmental landmarks."},
+{s:"Bones & joints of neck & back",t:"mc",p:"What are the main functions of the adult spinal curvatures?",o:["Flexibility and shock-absorbing resilience","Protecting the ribs","Producing CSF","Preventing all rotation","Anchoring the hyoid"],c:0,e:"Adults have 4 curvatures."},
+{s:"Bones & joints of neck & back",t:"mc",p:"An elderly woman has a hunched upper back and multiple vertebral compression fractures. Which curvature is this, and what's the likely cause?",o:["Excessive thoracic kyphosis; osteoporosis","Excessive lumbar lordosis; weight gain","Scoliosis; muscle weakness","Excessive cervical lordosis; trauma","Normal sacral kyphosis"],c:0,e:"Osteoporosis often causes excessive thoracic kyphosis."},
+{s:"Bones & joints of neck & back",t:"mc",p:"A patient with weak trunk muscles and recent large weight gain has an anterior pelvic tilt. Which atypical curvature fits?",o:["Excessive lumbar lordosis","Excessive thoracic kyphosis","Scoliosis","Loss of sacral kyphosis","Excessive cervical kyphosis"],c:0,e:"Scoliosis is an atypical lateral curvature."},
+{s:"Bones & joints of neck & back",t:"mc",p:"Which statement about intervertebral discs is FALSE?",o:["There is a disc between C1 and C2","They are symphyses between vertebral bodies","They get thicker inferiorly","The anulus fibrosus is thinner posteriorly","The nucleus pulposus is semifluid"],c:0,e:"There is no IV disc between C1 and C2, or between the fused (non-movable) vertebrae."},
+{s:"Bones & joints of neck & back",t:"mc",p:"A lifter develops leg pain from a 'slipped disc.' Which description is most accurate?",o:["The nucleus pulposus herniates posterolaterally through the anulus fibrosus, usually at L4–L5 or L5–S1, and can impinge on nerves","The anulus fibrosus herniates anteriorly at C1–C2","The vertebral body slips posteriorly","The nucleus pulposus herniates anteriorly into the abdomen","A facet joint dislocates"],c:0,e:"The anulus is thinner posteriorly, which is why herniation usually goes posterolaterally."},
+{s:"Bones & joints of neck & back",t:"fill",p:"Outer fibrocartilaginous ring of the IV disc: anulus ___",a:[["fibrosus"]],e:"The anulus fibrosus surrounds the nucleus pulposus."},
+// ---------- Muscles of neck & back ----------
+{s:"Muscles of neck & back",t:"mc",p:"The sternocleidomastoid attaches superiorly to ___ and inferiorly to ___.",o:["Mastoid process and occipital bone; manubrium and clavicle","Manubrium; mastoid process","Hyoid; clavicle","External occipital protuberance; spine of scapula","Styloid process; sternum body"],c:0,e:"The SCM is a prominent, rope-like landmark in the anterolateral neck."},
+{s:"Muscles of neck & back",t:"mc",p:"Bilateral vs. unilateral SCM contraction produces:",o:["Neck flexion; lateral flexion and rotation of the head","Head extension; neck flexion","Hyoid elevation; hyoid depression","Neck flexion; head extension","Rotation; neck extension"],c:0,e:"Both sides together flex the neck. One side alone laterally flexes and rotates the head."},
+{s:"Muscles of neck & back",t:"mc",p:"A neck surgery injures CN XI. Which pair of muscles weakens?",o:["Sternocleidomastoid and trapezius","Masseter and temporalis","Suprahyoid and infrahyoid","Erector spinae and latissimus dorsi","Buccinator and orbicularis oris"],c:0,e:"The accessory n. (CN XI) innervates both."},
+{s:"Muscles of neck & back",t:"mc",p:"When you swallow, the hyoid rises and the floor of the mouth tightens. Which group does this?",o:["Suprahyoid mm.","Infrahyoid mm.","Muscles of mastication","Extrinsic tongue mm.","Erector spinae"],c:0,e:"The 4 suprahyoid muscles support the tongue, elevate the hyoid, and form the floor of the mouth."},
+{s:"Muscles of neck & back",t:"mc",p:"Which group depresses the hyoid and moves the thyroid cartilage (larynx)?",o:["Infrahyoid mm.","Suprahyoid mm.","Sternocleidomastoid","Trapezius","Lateral pterygoid"],c:0,e:"There are 4 infrahyoid muscles."},
+{s:"Muscles of neck & back",t:"mc",p:"Which action does the trapezius perform on the head?",o:["Extends the head","Flexes the neck","Depresses the mandible","Rotates the head to the same side only","Elevates the hyoid"],c:0,e:"The trapezius has a bigger role in moving the pectoral girdle. It is innervated by CN XI."},
+{s:"Muscles of neck & back",t:"mc",p:"What are the three major groups of deep back muscles?",o:["Splenius, erector spinae, transversospinales","Trapezius, latissimus dorsi, erector spinae","Iliocostalis, longissimus, spinalis","Suprahyoid, infrahyoid, SCM","Splenius, trapezius, rhomboids"],c:0,e:"The deep back muscles are complex, with multiple origins and insertions and considerable overlap."},
+{s:"Muscles of neck & back",t:"fill",p:"Erector spinae columns, lateral to medial: ___, ___, ___",a:[["iliocostalis"],["longissimus"],["spinalis"]],e:"Mnemonic: I Love Spine."},
+{s:"Muscles of neck & back",t:"mc",p:"A worker strains his back lifting a box with a rounded spine. Which muscle is most likely strained, and what is its main action?",o:["Erector spinae; extension of the vertebral column","Latissimus dorsi; flexion of the trunk","Trapezius; head flexion","SCM; neck extension","Transversus abdominis; rotation"],c:0,e:"The erector spinae is the largest muscle mass of the back and is commonly strained by improper lifting."},
+// ---------- Muscle flashcards ----------
+{s:"Muscle flashcards",t:"card",g:"Muscles of facial expression (group)",n:"Muscles of facial expression",f:[["Location","Subcutaneous tissue and fascia of the scalp, face, and neck"],["Distal attachment","Skin"],["Action","Move the skin and change facial expression"],["Innervation","Facial n. (CN VII)"],["Clinical","Bell palsy: unilateral paralysis of these muscles"]]},
+{s:"Muscle flashcards",t:"card",g:"Facial expression",n:"Orbicularis oculi",f:[["Type","Sphincteric muscle around the eye"],["Action","Closes the eyelids"],["Innervation","Facial n. (CN VII)"]]},
+{s:"Muscle flashcards",t:"card",g:"Facial expression",n:"Orbicularis oris",f:[["Type","Sphincteric muscle around the mouth"],["Action","Closes the oral fissure; protrudes the lips"],["Innervation","Facial n. (CN VII)"]]},
+{s:"Muscle flashcards",t:"card",g:"Facial expression",n:"Buccinator",f:[["Location","Most of the muscular cheek; deeper plane than other facial muscles"],["Action","Presses cheek against molars; with the tongue, keeps food out of the oral vestibule; resists distension when blowing"],["Innervation","Facial n. (CN VII)"]]},
+{s:"Muscle flashcards",t:"card",g:"Orbit",n:"Extra-ocular muscles (6)",f:[["Distal attachment","Sclera"],["Actions","Elevation/depression, abduction/adduction, intorsion/extorsion of the eyeball"],["Innervation","Oculomotor n. (CN III) for 4 of 6; trochlear n. (CN IV) and abducens n. (CN VI) for one each"]]},
+{s:"Muscle flashcards",t:"card",g:"Muscles of mastication (group)",n:"Muscles of mastication",f:[["Attachment","All attach to the mandible"],["Actions","Elevation (most powerful), depression, protraction/retraction"],["Innervation","Mandibular n. (CN V3)"]]},
+{s:"Muscle flashcards",t:"card",g:"Mastication",n:"Temporalis",f:[["Distal attachment","Coronoid process of the mandible"],["Actions","Elevation; retrusion"],["Innervation","Mandibular n. (CN V3)"],["Note","Palpable at the temple"]]},
+{s:"Muscle flashcards",t:"card",g:"Mastication",n:"Masseter",f:[["Distal attachment","Ramus of the mandible (superficial side; mirrors the medial pterygoid)"],["Actions","Elevation; protrusion"],["Innervation","Mandibular n. (CN V3)"],["Note","Palpable"]]},
+{s:"Muscle flashcards",t:"card",g:"Mastication",n:"Medial pterygoid",f:[["Distal attachment","Ramus of the mandible (deep side; mirrors the masseter)"],["Actions","Elevation; protrusion"],["Innervation","Mandibular n. (CN V3)"]]},
+{s:"Muscle flashcards",t:"card",g:"Mastication",n:"Lateral pterygoid",f:[["Structure","2 heads/bellies: superior and inferior"],["Actions","Protrusion; depression (the only muscle of mastication that depresses)"],["Innervation","Mandibular n. (CN V3)"]]},
+{s:"Muscle flashcards",t:"card",g:"Tongue",n:"Extrinsic tongue muscles (4)",f:[["Attachments","Originate outside the tongue and insert into it"],["Action","Alter the position of the tongue"],["Innervation","Mostly hypoglossal n. (CN XII)"]]},
+{s:"Muscle flashcards",t:"card",g:"Tongue",n:"Intrinsic tongue muscles (4)",f:[["Attachments","Entirely within the tongue"],["Action","Alter the shape of the tongue"],["Innervation","Mostly hypoglossal n. (CN XII)"]]},
+{s:"Muscle flashcards",t:"card",g:"Neck",n:"Sternocleidomastoid",f:[["Superior attachments","Mastoid process of the temporal bone; occipital bone"],["Inferior attachments","Manubrium of the sternum; clavicle"],["Actions","Bilateral: flexes the neck. Unilateral: laterally flexes and rotates the head"],["Innervation","Accessory n. (CN XI)"]]},
+{s:"Muscle flashcards",t:"card",g:"Neck",n:"Suprahyoid muscles (4)",f:[["Location","Above the hyoid; form the floor of the mouth"],["Actions","Support the tongue; elevate the hyoid"],["Innervation","Not covered in lecture"]]},
+{s:"Muscle flashcards",t:"card",g:"Neck",n:"Infrahyoid muscles (4)",f:[["Location","Below the hyoid"],["Actions","Support and depress the hyoid; move the larynx (thyroid cartilage)"],["Innervation","Not covered in lecture"]]},
+{s:"Muscle flashcards",t:"card",g:"Back (superficial)",n:"Trapezius",f:[["Proximal attachment","External occipital protuberance and midline structures"],["Distal attachment","Clavicle, acromion, spine of scapula"],["Actions","Head: extends. Scapula: upward rotation, retraction, elevation/depression"],["Innervation","Accessory n. (CN XI)"]]},
+{s:"Muscle flashcards",t:"card",g:"Back (superficial)",n:"Latissimus dorsi",f:[["Location","Prominent muscle of the inferior, superficial back"],["Attachments","Axial skeleton → proximal humerus"],["Actions","Bigger role at the shoulder: extension, adduction, medial rotation"]]},
+{s:"Muscle flashcards",t:"card",g:"Back (deep)",n:"Erector spinae",f:[["Location","Either side of the vertebral column; largest muscle mass of the back"],["Columns","Iliocostalis (lateral), longissimus (intermediate), spinalis (medial)"],["Action","Extension of the vertebral column"],["Clinical","Commonly strained with improper lifting"]]},
+{s:"Muscle flashcards",t:"card",g:"Back (deep)",n:"Deep back muscle groups",f:[["Groups","Splenius, erector spinae, transversospinales"],["Features","Complex, with multiple origins and insertions and considerable overlap"]]}
+];
+
+// ---------- helpers ----------
+const norm = s => s.toLowerCase().replace(/\(.*?\)/g,' ').replace(/[^a-z0-9 ]/g,' ').replace(/\b(the|a|an|m|mm|n|nn|nerve|bone|bones|muscle|muscles)\b/g,' ').replace(/\s+/g,' ').trim();
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=[...Array(n+1).keys()];for(let i=1;i<=m;i++){let c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function matches(input, accepted){
+  const g = norm(input); if(!g) return false;
+  return accepted.some(ans=>{const t=norm(ans); if(g===t) return true; if(/^\d+$/.test(t)) return false; const tol = t.length>=8?2:t.length>=5?1:0; return lev(g,t)<=tol;});
+}
+const shuffle = arr => {const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let filter="all", topic="all", deck=[], idx=0;
+const topicSel=document.getElementById("topic");
+[...new Set(Q.map(q=>q.s))].forEach(t=>{const o=document.createElement("option");o.value=t;o.textContent=`${t} (${Q.filter(q=>q.s===t).length})`;topicSel.appendChild(o)});
+topicSel.onchange=()=>{topic=topicSel.value;build()};
+const FLAG_KEY="flags:"+document.title;
+const keyOf=q=>{const t=(q.t||"")+"|"+(q.p||q.n||"");let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return (h>>>0).toString(36)};
+let flags=new Set(), onlyFlagged=false;
+try{flags=new Set(JSON.parse(localStorage.getItem(FLAG_KEY)||"[]"))}catch(e){flags=new Set()}
+const isF=q=>flags.has(keyOf(q));
+function saveFlags(){try{localStorage.setItem(FLAG_KEY,JSON.stringify([...flags]))}catch(e){} updateFlagCount();}
+function updateFlagCount(){const c=Q.filter(isF).length;const el=document.getElementById("flagCount");if(el)el.textContent=c;}
+function toggleFlag(q){const k=keyOf(q);flags.has(k)?flags.delete(k):flags.add(k);saveFlags();const b=document.getElementById("flag");if(b){b.setAttribute("aria-pressed",isF(q));b.innerHTML=isF(q)?"&#9873; Flagged":"&#9873; Flag";}renderTrack();}
+const flagBtn=q=>`<button class="btn flag" id="flag" aria-pressed="${isF(q)}">${isF(q)?"&#9873; Flagged":"&#9873; Flag"}</button>`;
+
+function build(){
+  const pool = onlyFlagged ? Q.filter(q=>isF(q)&&(topic==="all"||q.s===topic)&&(q.t==="card"||filter==="all"||q.t===filter)) : Q.filter(q=> topic==="all" ? (q.t!=="card" && (filter==="all"||q.t===filter)) : (q.s===topic && (q.t==="card"||filter==="all"||q.t===filter)));
+  deck = shuffle(pool).map(q=>{
+    const item = {q, status:null, picked:null, typed:[]};
+    if(q.t==="mc"){ const order = shuffle(q.o.map((_,i)=>i)); item.order=order; }
+    return item;
+  });
+  idx=0; render();
+}
+
+const main=document.getElementById('main'), track=document.getElementById('track'), score=document.getElementById('score');
+
+function renderTrack(){
+  track.innerHTML="";
+  deck.forEach((it,i)=>{const b=document.createElement('button');b.setAttribute('aria-label',`Question ${i+1}${it.status?(it.status==="good"?", correct":", incorrect"):""}`);if(it.status)b.className=it.status;if(isF(it.q))b.classList.add("flagged");if(i===idx)b.classList.add('cur');b.onclick=()=>{idx=i;render()};track.appendChild(b)});
+  const done=deck.filter(d=>d.status).length, right=deck.filter(d=>d.status==="good").length;
+  score.innerHTML=`<b>${right}</b> correct of ${done} answered &nbsp;/&nbsp; ${deck.length} total`;
+}
+
+function render(){
+  renderTrack();
+  if(deck.length===0){main.innerHTML=`<section class="card"><p class="empty">${onlyFlagged?"Nothing flagged here yet. Flag questions or cards with the &#9873; button (or press F), then come back.":"No questions match these filters."}</p></section>`;return;}
+  if(idx>=deck.length){return renderDone()}
+  const it=deck[idx], q=it.q;
+  if(q.t==="card") return renderCard(it);
+  let html=`<section class="card" aria-live="polite"><p class="kind">Question ${idx+1} of ${deck.length}, <span>${q.t==="mc"?"multiple choice":"fill in the blank"}</span></p>`;
+  if(q.t==="fill"){
+    let n=0;
+    const parts=esc(q.p).split("___");
+    html+=`<p class="prompt">`+parts.map((p,i)=>i<parts.length-1?p+`<input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-b="${n++}" aria-label="Blank ${n}" value="${esc(it.typed[n-1]||"")}">`:p).join("")+`</p>`;
+  } else {
+    html+=`<p class="prompt">${esc(q.p)}</p><ul class="opts">`+it.order.map(oi=>`<li><button data-o="${oi}">${esc(q.o[oi])}</button></li>`).join("")+`</ul>`;
+  }
+  html+=`<div class="actions"><button class="btn" id="prev" ${idx===0?"disabled":""}>Previous</button>${flagBtn(q)}<span class="spacer"></span>`+
+        (q.t==="fill"?`<button class="btn" id="reveal">Show answer</button>`:"")+
+        `<button class="btn primary" id="go">${it.status?"Next":"Check"}</button></div><div class="feedback" id="fb"></div></section>`;
+  main.innerHTML=html;
+
+  if(q.t==="mc"){
+    main.querySelectorAll('.opts button').forEach(b=>{
+      b.onclick=()=>{ if(it.status) return; it.picked=+b.dataset.o; main.querySelectorAll('.opts button').forEach(x=>x.classList.toggle('pick',x===b)); };
+    });
+    if(it.picked!==null) main.querySelector(`.opts button[data-o="${it.picked}"]`).classList.add('pick');
+  } else {
+    const ins=main.querySelectorAll('.prompt input');
+    ins.forEach(inp=>{ const size=()=>inp.style.width=Math.max(7,Math.min(24,inp.value.length+3))+"ch"; size(); inp.addEventListener('input',()=>{it.typed[+inp.dataset.b]=inp.value;size()}); });
+    if(!it.status && ins[0]) ins[0].focus({preventScroll:true});
+    document.getElementById('reveal').onclick=()=>{ if(!it.status){ collectTyped(it); grade(it,true); } };
+  }
+  document.getElementById('prev').onclick=()=>{idx--;render()};
+  document.getElementById('go').onclick=()=>{ if(it.status){idx++;render()} else check(it) };
+  if(it.status) showFeedback(it);
+}
+
+function renderCard(it){
+  const q=it.q;
+  let html=`<section class="card" aria-live="polite"><p class="kind">Card ${idx+1} of ${deck.length}, <span>flashcard</span></p>
+  <p class="fc-group">${esc(q.g)}</p><h2 class="fc-name">${esc(q.n)}</h2>`;
+  if(!it.flipped){ html+=`<p class="fc-cue">Recall its ${q.f.map(f=>f[0].toLowerCase()).join(", ")} before flipping.</p>`; }
+  else { html+=`<dl class="fc-back">`+q.f.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")+`</dl>`; }
+  html+=`<div class="actions"><button class="btn" id="prev" ${idx===0?"disabled":""}>Previous</button>${flagBtn(q)}<span class="spacer"></span>`;
+  if(!it.flipped) html+=`<button class="btn primary" id="go">Flip card</button>`;
+  else if(!it.status) html+=`<button class="btn" id="miss">Review again</button><button class="btn primary" id="go">Got it</button>`;
+  else html+=`<span class="kind" style="margin:0 6px 0 0">${it.status==="good"?"Marked: got it":"Marked: review again"}</span><button class="btn primary" id="go">${idx===deck.length-1?"See results":"Next"}</button>`;
+  html+=`</div></section>`;
+  main.innerHTML=html;
+  document.getElementById('prev').onclick=()=>{idx--;render()};
+  const go=document.getElementById('go');
+  go.onclick=()=>{ if(!it.flipped){it.flipped=true;render()} else if(!it.status){it.status="good";idx++;render()} else {idx++;render()} };
+  const miss=document.getElementById('miss'); if(miss) miss.onclick=()=>{it.status="bad";idx++;render()};
+  go.focus({preventScroll:true});
+}
+
+function collectTyped(it){ main.querySelectorAll('.prompt input').forEach(inp=>it.typed[+inp.dataset.b]=inp.value); }
+
+function check(it){
+  const q=it.q;
+  if(q.t==="mc"){ if(it.picked===null) return flash("Choose an answer first."); it.status = it.picked===q.c?"good":"bad"; }
+  else { collectTyped(it); if(it.typed.filter(Boolean).length===0) return flash("Type an answer in the blank, or choose Show answer."); grade(it,false); return; }
+  render();
+}
+function grade(it,revealed){
+  const q=it.q;
+  it.results=q.a.map((acc,i)=>matches(it.typed[i]||"",acc));
+  it.status = !revealed && it.results.every(Boolean) ? "good" : "bad";
+  render();
+}
+function flash(msg){const fb=document.getElementById('fb');fb.className="feedback show bad";fb.innerHTML=esc(msg);}
+
+function showFeedback(it){
+  const q=it.q, fb=document.getElementById('fb');
+  document.getElementById('go').textContent = idx===deck.length-1?"See results":"Next";
+  if(q.t==="mc"){
+    main.querySelectorAll('.opts button').forEach(b=>{const o=+b.dataset.o;b.disabled=true;if(o===q.c)b.classList.add('good');else if(o===it.picked)b.classList.add('bad')});
+    fb.className=`feedback show ${it.status}`;
+    fb.innerHTML=`<strong>${it.status==="good"?"Correct.":"Not quite."}</strong>${esc(q.e)}`;
+  } else {
+    const ins=main.querySelectorAll('.prompt input');
+    ins.forEach((inp,i)=>{inp.readOnly=true;inp.classList.add(it.results&&it.results[i]&&it.status!=="bad"?"good":(it.results&&it.results[i]?"good":"bad"))});
+    const key=q.a.map(a=>a[0]).join("; ");
+    fb.className=`feedback show ${it.status}`;
+    fb.innerHTML=`<strong>${it.status==="good"?"Correct.":"Answer: <span class=\"ans\">"+esc(key)+"</span>"}</strong>${esc(q.e)}`+
+      (it.status==="bad"&&it.typed.some(Boolean)?`<br><button class="override" id="ov">Count it as correct</button>`:"");
+    const ov=document.getElementById('ov'); if(ov) ov.onclick=()=>{it.status="good";it.results=q.a.map(()=>true);render()};
+    const rv=document.getElementById('reveal'); if(rv) rv.disabled=true;
+  }
+  document.getElementById('go').focus({preventScroll:true});
+}
+
+function renderDone(){
+  const right=deck.filter(d=>d.status==="good").length, answered=deck.filter(d=>d.status).length, missed=deck.filter(d=>d.status==="bad");
+  const pct = answered?Math.round(right/answered*100):0;
+  main.innerHTML=`<section class="card done"><h2>${right} of ${deck.length} correct</h2><p>${answered<deck.length?`${deck.length-answered} left unanswered. `:""}${answered?pct+"% of answered questions.":""}</p><div class="actions">`+
+    (missed.length?`<button class="btn primary" id="retry">Retry the ${missed.length} I missed</button>`:"")+
+    ``+(Q.some(isF)&&!onlyFlagged?`<button class="btn" id="revFlag">Review flagged (${Q.filter(isF).length})</button>`:"")+`<button class="btn" id="again">Start over, shuffled</button><button class="btn" id="back">Review questions</button></div></section>`;
+  const r=document.getElementById('retry'); if(r) r.onclick=()=>{deck=shuffle(missed).map(m=>({q:m.q,status:null,picked:null,typed:[],order:m.q.t==="mc"?shuffle(m.q.o.map((_,i)=>i)):undefined}));idx=0;render()};
+  document.getElementById('again').onclick=build;
+  const rf=document.getElementById('revFlag'); if(rf) rf.onclick=()=>{onlyFlagged=true;document.getElementById('onlyFlag').setAttribute('aria-pressed','true');build()};
+  document.getElementById('back').onclick=()=>{idx=0;render()};
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=="Enter"||idx>=deck.length) return;
+  if(e.target.tagName==="BUTTON" && e.target.id!=="go" && !e.target.closest('.opts')) return;
+  if(e.target.closest && e.target.closest('.opts')) return;
+  e.preventDefault(); document.getElementById('go')?.click();
+});
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));build()});
+document.getElementById('shuffle').onclick=build;
+main.addEventListener('click',e=>{const b=e.target.closest('#flag');if(b&&deck[idx]){e.preventDefault();toggleFlag(deck[idx].q);const g=document.getElementById('go');if(g)g.focus({preventScroll:true});}});
+document.addEventListener('keydown',e=>{if((e.key==="f"||e.key==="F")&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&e.target.tagName!=="INPUT"&&e.target.tagName!=="SELECT"&&deck[idx]&&idx<deck.length){e.preventDefault();toggleFlag(deck[idx].q);}});
+document.getElementById('onlyFlag').onclick=function(){onlyFlagged=!onlyFlagged;this.setAttribute('aria-pressed',onlyFlagged);build()};
+updateFlagCount();
+build();
+</script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MSK2 Quiz: Joints & Skeletal Muscle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F4; --paper:#FFFFFF; --ink:#1D2733; --muted:#5B6878; --line:#D3DAE2;
+  --accent:#0F6E74; --accent-ink:#FFFFFF; --good:#2E7D4F; --good-bg:#E3F2E8;
+  --bad:#B3412F; --bad-bg:#F8E6E2; --blank:#FFF6D6; --blank-line:#C99A1A; --todo:#C9D1DA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141A21; --paper:#1D2530; --ink:#E6EBF0; --muted:#9AA7B5; --line:#2F3A47;
+    --accent:#4FB3B8; --accent-ink:#0B1A1B; --good:#6CC08C; --good-bg:#1D3326;
+    --bad:#E3826F; --bad-bg:#3A221D; --blank:#2E2A18; --blank-line:#D9B44A; --todo:#3A4654;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141A21; --paper:#1D2530; --ink:#E6EBF0; --muted:#9AA7B5; --line:#2F3A47;
+  --accent:#4FB3B8; --accent-ink:#0B1A1B; --good:#6CC08C; --good-bg:#1D3326;
+  --bad:#E3826F; --bad-bg:#3A221D; --blank:#2E2A18; --blank-line:#D9B44A; --todo:#3A4654;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:24px 18px 48px}
+header h1{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.75rem;line-height:1.2;margin:0 0 4px}
+header p{margin:0;color:var(--muted);font-size:.95rem}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:.88rem;padding:6px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.ghost{border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-size:.88rem;padding:6px 12px;border-radius:999px;cursor:pointer}
+.score{margin-left:auto;font-size:.9rem;color:var(--muted)}
+.score b{color:var(--ink)}
+.track{display:flex;flex-wrap:wrap;gap:3px;margin:6px 0 18px}
+.track button{width:14px;height:14px;border-radius:3px;border:0;padding:0;background:var(--todo);cursor:pointer}
+.track button.good{background:var(--good)}
+.track button.bad{background:var(--bad)}
+.track button.cur{outline:2px solid var(--ink);outline-offset:1px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 22px 18px}
+.kind{font-size:.85rem;color:var(--muted);margin:0 0 10px}
+.kind span{color:var(--accent);font-weight:600}
+.prompt{font-family:Literata,Georgia,serif;font-size:1.2rem;line-height:1.75;margin:0 0 18px}
+.prompt input{font:inherit;font-family:Figtree,system-ui,sans-serif;font-size:1rem;background:var(--blank);color:var(--ink);border:0;border-bottom:2px solid var(--blank-line);border-radius:4px 4px 0 0;padding:1px 8px;margin:0 3px;min-width:7ch;width:12ch;max-width:100%}
+.prompt input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.prompt input.good{background:var(--good-bg);border-bottom-color:var(--good)}
+.prompt input.bad{background:var(--bad-bg);border-bottom-color:var(--bad)}
+.opts{display:grid;gap:8px;margin:0 0 16px;padding:0;list-style:none}
+.opts button{width:100%;text-align:left;font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--accent)}
+.opts button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opts button.pick{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opts button.good{background:var(--good-bg);border-color:var(--good)}
+.opts button.bad{background:var(--bad-bg);border-color:var(--bad)}
+.opts button:disabled{cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font:inherit;font-weight:600;font-size:.95rem;border-radius:10px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible,.ghost:focus-visible,.seg button:focus-visible,.track button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.spacer{flex:1}
+.feedback{margin:16px 0 0;padding:12px 14px;border-radius:10px;font-size:.95rem;display:none}
+.feedback.show{display:block}
+.feedback.good{background:var(--good-bg)}
+.feedback.bad{background:var(--bad-bg)}
+.feedback strong{display:block;margin-bottom:2px}
+.feedback .ans{font-weight:600}
+.override{margin-top:8px;background:transparent;border:0;padding:0;color:var(--accent);font:inherit;font-size:.9rem;text-decoration:underline;cursor:pointer}
+.btn.flag[aria-pressed="true"]{background:var(--blank);border-color:var(--blank-line);color:var(--ink)}
+.track button.flagged{box-shadow:inset 0 -5px 0 var(--blank-line)}
+.ghost[aria-pressed="true"]{background:var(--blank);border-color:var(--blank-line)}
+.empty{color:var(--muted)}
+.done{text-align:left}
+.done h2{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.5rem;margin:0 0 6px}
+.done p{margin:0 0 16px;color:var(--muted)}
+.hint{font-size:.85rem;color:var(--muted);margin-top:14px}
+@media (max-width:520px){.prompt{font-size:1.08rem}.card{padding:18px 16px 16px}.score{margin-left:0;width:100%}}
+@media (prefers-reduced-motion:no-preference){.feedback.show{animation:in .18s ease-out}@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>MSK2: Joints &amp; Skeletal Muscle</h1>
+    <p>Multiple choice mixed with fill-in-the-blank. Lecture-style questions covering every learning objective in depth. Use the topic menu to drill one lecture at a time.</p>
+  </header>
+
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Question type">
+      <button data-filter="all" aria-pressed="true">All</button>
+      <button data-filter="mc" aria-pressed="false">Multiple choice</button>
+      <button data-filter="fill" aria-pressed="false">Fill in the blank</button>
+    </div>
+    <select class="ghost" id="topic" aria-label="Topic"><option value="all">All topics</option></select>
+    <button class="ghost" id="onlyFlag" aria-pressed="false">&#9873; Flagged only (<span id="flagCount">0</span>)</button>
+    <button class="ghost" id="shuffle">Shuffle &amp; restart</button>
+    <div class="score" id="score"></div>
+  </div>
+
+  <div class="track" id="track" aria-label="Jump to question"></div>
+
+  <main id="main"></main>
+  <p class="hint">Enter checks your answer; press Enter again to go to the next question. Spelling is forgiving, and if your wording differs but you know you were right, choose "Count it as correct." Press F or use the flag button to mark a question or card to come back to. Your flags are saved in this browser.</p>
+</div>
+
+<script>
+const Q = [
+// ---------- Joint basics & classification ----------
+{s:"Joint basics & classification",t:"mc",p:"A joint is described as 'slightly movable.' Which classification system is being used?",o:["Functional","Structural","Histological","Synovial","Cartilaginous"],c:0,e:"Functional classification is based on how much movement a joint permits. Structural classification is based on what connects the bones, and it is the course's focus."},
+{s:"Joint basics & classification",t:"mc",p:"Two bones are joined by a solid sheet of tissue with no space between them, and a biopsy shows chondrocytes in the connecting tissue. Classify the joint.",o:["Cartilaginous","Fibrous","Synovial","Synostosis","Gomphosis"],c:0,e:"No cavity plus cartilage means a cartilaginous joint. A fibrous joint would show dense irregular CT, and a synovial joint has a cavity."},
+{s:"Joint basics & classification",t:"mc",p:"Which statement about all joints is TRUE?",o:["The articulating bones never actually touch; connective tissue always lies between them","Bones touch directly in synovial joints","All joints have a synovial cavity","Fibrous joints contain hyaline cartilage","Synostoses are freely movable"],c:0,e:"Structural classification rests on the presence or absence of a synovial cavity and the type of CT holding the bones together."},
+{s:"Joint basics & classification",t:"mc",p:"Around 9 months of age the right and left frontal bones fuse, and later the epiphyseal plates close. What do both become?",o:["Synostoses","Synchondroses","Symphyses","Sutures","Syndesmoses"],c:0,e:"A synostosis is a bony, immobile joint where the gap has ossified."},
+{s:"Joint basics & classification",t:"fill",p:"An ankle sprain tears dense CT that connects the fibula to the talus. Structure type: ___",a:[["ligament","ligaments"]],e:"Ligaments are dense CT connecting bone to bone. They stabilize the joint and limit range of motion."},
+{s:"Joint basics & classification",t:"mc",p:"A surgeon reinforces a joint with a structure that stabilizes it and limits range of motion by connecting bone to bone. Which statement about this structure is correct?",o:["It is dense CT and can be an intrinsic binding structure or an extrinsic supporting band","It connects muscle to bone","It is made of hyaline cartilage","It secretes synovial fluid","It is a tube-like bursa"],c:0,e:"Ligaments connect bone to bone. The two basic types are intrinsic binding structures and extrinsic supporting bands."},
+{s:"Joint basics & classification",t:"mc",p:"A student classifies a joint by asking, \"Is there a space between the bones, and what tissue holds them together?\" Which system is this, and why does the course focus on it?",o:["Structural; it is based on what connects the bones","Functional; it is based on movement","Structural; it is based on how much the joint moves","Functional; it is based on the tissue type","Histological; it is based on cell type"],c:0,e:"Structural classification looks at the presence or absence of a synovial cavity and the type of connecting CT. Functional classification looks at how much movement is permitted."},
+{s:"Joint basics & classification",t:"mc",p:"Which correctly pairs each structural joint type with its connecting tissue and cavity status?",o:["Fibrous: dense irregular CT, no cavity; cartilaginous: cartilage, no cavity; synovial: dense CT enveloping the bones, with a cavity","Fibrous: cartilage, cavity; cartilaginous: dense CT, no cavity; synovial: bone, no cavity","All three have a synovial cavity","Fibrous: dense CT, cavity; synovial: cartilage, no cavity","Cartilaginous: dense irregular CT, cavity"],c:0,e:"Only synovial joints have a cavity. There, the dense CT surrounds the joint on the sides of the bones instead of filling the gap."},
+{s:"Joint basics & classification",t:"fill",p:"Skull sutures in advanced age can ossify into a ___.",a:[["synostosis"]],e:"A synostosis is a bony, immobile joint, like the fused frontal bones or the epiphysis and diaphysis after the plate closes."},
+{s:"Joint basics & classification",t:"mc",p:"Which joint would be classified as a synostosis?",o:["The fused epiphysis and diaphysis of an adult femur","The epiphyseal plate of a 10-year-old","An infant's coronal suture","The pubic symphysis","The interosseous membrane"],c:0,e:"A growth plate is a synchondrosis until it closes. After closure, it becomes a synostosis."},
+// ---------- Fibrous joints ----------
+{s:"Fibrous joints",t:"mc",p:"In a fibrous joint, collagen fibers:",o:["Emerge from one bone, cross the gap, and penetrate the other bone","Form a disc of fibrocartilage between hyaline-covered surfaces","Line a synovial cavity","Form a sleeve-like capsule around the joint","Attach muscle to bone"],c:0,e:"Fibrous joints: a solid mass of dense irregular CT, with no cavity."},
+{s:"Fibrous joints",t:"mc",p:"A dentist loosens a tooth by stretching the periodontal ligament. What joint is involved, and how mobile is it?",o:["Gomphosis; functionally immovable with very slight movement","Suture; freely movable","Syndesmosis; the most mobile fibrous joint","Synchondrosis; immovable","Symphysis; slightly movable"],c:0,e:"A gomphosis is a bone–tooth joint held by the periodontal ligament (sometimes considered a syndesmosis)."},
+{s:"Fibrous joints",t:"mc",p:"Which fibrous joint allows the MOST movement?",o:["Interosseous membrane between the radius and ulna","Sagittal suture of an adult","Gomphosis of a molar","Coronal suture of an infant","Epiphyseal plate"],c:0,e:"Syndesmoses have relatively long collagen fibers. The interosseous membrane is the most mobile fibrous joint, though its movement is still very slight."},
+{s:"Fibrous joints",t:"mc",p:"Why are an infant's skull sutures slightly movable when an adult's are not?",o:["They are sites of growth and shock absorption during development","They contain synovial fluid","They are synchondroses","They are covered in articular cartilage","They are held by the periodontal ligament"],c:0,e:"Sutures are held by sutural ligaments. They are immovable in adults and can become synostoses in advanced age."},
+{s:"Fibrous joints",t:"fill",p:"Joint type of the distal tibiofibular joint: ___",a:[["syndesmosis","fibrous syndesmosis"]],e:"Syndesmosis: bound by relatively long collagen fibers."},
+{s:"Fibrous joints",t:"fill",p:"Fibrous joints between skull bones: ___",a:[["sutures","suture"]],e:"Sutures, held together by sutural ligaments."},
+{s:"Fibrous joints",t:"mc",p:"Rank these fibrous joints from least to most mobile:",o:["Adult suture → gomphosis → syndesmosis","Syndesmosis → gomphosis → suture","Gomphosis → syndesmosis → suture","Suture → syndesmosis → gomphosis","All are equally immobile"],c:0,e:"Adult sutures are immovable. A gomphosis allows very slight movement. A syndesmosis, like the interosseous membrane, is the most mobile fibrous joint."},
+// ---------- Cartilaginous joints ----------
+{s:"Cartilaginous joints",t:"mc",p:"The epiphyseal plate and the joint between the manubrium and 1st rib share which features?",o:["Hyaline cartilage connecting the bones; immovable (synchondrosis)","A fibrocartilage disc; slight movement (symphysis)","Long collagen fibers; slight movement (syndesmosis)","A synovial cavity; freely movable","Ossified gap; immovable (synostosis)"],c:0,e:"Both are synchondroses. The epiphyseal plate will later become a synostosis."},
+{s:"Cartilaginous joints",t:"mc",p:"The pubic symphysis and an intervertebral disc both have:",o:["Hyaline-covered bone ends with a fibrocartilage disc between, allowing slight movement","Hyaline cartilage only, and are immovable","Dense irregular CT and no movement","A synovial cavity","Long collagen fibers only"],c:0,e:"Symphysis: slight movement."},
+{s:"Cartilaginous joints",t:"fill",p:"Cartilaginous joint type of the pubic symphysis: ___",a:[["symphysis"]],e:"Symphysis."},
+{s:"Cartilaginous joints",t:"fill",p:"Cartilage type forming the disc in a symphysis: ___",a:[["fibrocartilage","fibrous cartilage"]],e:"Fibrocartilage disc; the bone ends are covered with hyaline cartilage."},
+{s:"Cartilaginous joints",t:"mc",p:"Which pairing of joint and example is INCORRECT?",o:["Synchondrosis: pubic symphysis","Symphysis: intervertebral disc","Syndesmosis: interosseous membrane","Gomphosis: tooth in socket","Suture: sagittal suture"],c:0,e:"The pubic symphysis is a symphysis, not a synchondrosis."},
+{s:"Cartilaginous joints",t:"mc",p:"What do ALL cartilaginous joints have in common?",o:["The bones are bound by a solid sheet of cartilage, with no synovial cavity","A fibrocartilage disc","Hyaline cartilage only","Slight movement","A synovial cavity"],c:0,e:"The two types are the synchondrosis (hyaline, immovable) and the symphysis (fibrocartilage disc, slight movement)."},
+// ---------- Synovial joint structure ----------
+{s:"Synovial joint structure",t:"mc",p:"Which feature is found in ALL synovial joints but in NO fibrous or cartilaginous joints?",o:["A synovial (articular) cavity","Hyaline cartilage","Ligaments","Collagen fibers","Menisci"],c:0,e:"The cavity is the major difference. Synovial joints are the most numerous type, and all are freely movable (diarthroses)."},
+{s:"Synovial joint structure",t:"mc",p:"The articular capsule differs from the CT of a fibrous joint because it:",o:["Surrounds the joint like a sleeve rather than forming a solid sheet between the bones","Is made of hyaline cartilage","Lacks collagen","Directly binds the articular cartilages together","Has no inner layer"],c:0,e:"The capsule has two layers: the fibrous membrane and the synovial membrane."},
+{s:"Synovial joint structure",t:"mc",p:"A patient's joint cavity has too little lubricating fluid. Which layer's cells are most likely dysfunctional?",o:["Synovial membrane","Fibrous membrane","Articular cartilage","Periosteum","Labrum"],c:0,e:"The synovial membrane is the inner cellular layer of areolar tissue and secretes synovial fluid."},
+{s:"Synovial joint structure",t:"mc",p:"Which layer attaches to the periosteum of the articulating bones and is often reinforced by ligaments?",o:["Fibrous membrane","Synovial membrane","Articular cartilage","Articular disc","Bursa"],c:0,e:"The fibrous membrane is the outer layer of dense irregular CT."},
+{s:"Synovial joint structure",t:"mc",p:"A 'double-jointed' gymnast has increased range of motion. The anatomical basis and trade-off are:",o:["Greater flexibility of the capsule and ligaments; less structural stability","Extra synovial joints; more stability","Thicker articular cartilage; less motion","Additional menisci; more stability","Absent ligaments; no change in stability"],c:0,e:"Hypermobility comes from looser capsules and ligaments, not extra joints."},
+{s:"Synovial joint structure",t:"fill",p:"Main molecule (besides filtered interstitial fluid) in synovial fluid: ___",a:[["hyaluronic acid","hyaluronan","hyaluronic"]],e:"Synovial fluid is slippery and clear to pale yellow. It supplies O2 and nutrients to the articular cartilage and contains phagocytic cells."},
+{s:"Synovial joint structure",t:"mc",p:"Articular cartilage depends on synovial fluid for nutrients because it:",o:["Is mostly avascular","Is covered by periosteum","Is fibrocartilage","Binds the bones together","Contains red marrow"],c:0,e:"Articular cartilage is hyaline, a remnant of endochondral ossification. It does not bind the bones and heals poorly."},
+{s:"Synovial joint structure",t:"mc",p:"Which statement about articular cartilage is FALSE?",o:["It binds the articulating bones together","It is hyaline cartilage","It is a remnant of endochondral ossification","It heals poorly","It covers the articulating surfaces"],c:0,e:"The capsule and ligaments hold the bones together; the cartilage does not."},
+// ---------- Accessory structures ----------
+{s:"Accessory structures",t:"mc",p:"Arthroscopy of the TMJ reveals a nearly complete fibrocartilage plate dividing the cavity into two parts. What is it?",o:["Articular disc","Meniscus","Labrum","Bursa","Tendon sheath"],c:0,e:"An articular disc divides the cavity so different movements can occur in each part."},
+{s:"Accessory structures",t:"mc",p:"A knee MRI shows a tear in an incomplete, crescent-shaped fibrocartilage pad. Which function is most affected?",o:["Redistributing weight and slightly improving fit","Secreting synovial fluid","Deepening a socket","Reducing friction outside the joint","Anchoring tendons to bone"],c:0,e:"Menisci improve fit, redistribute weight, and possibly absorb shock (that last role is controversial)."},
+{s:"Accessory structures",t:"mc",p:"A hip labrum tear would most directly reduce:",o:["The depth of the socket and the fit of the femoral head","Synovial fluid production","Friction outside the joint","Blood supply to the femur","Division of the joint cavity"],c:0,e:"A labrum is a fibrocartilage lip on the socket of a ball & socket joint."},
+{s:"Accessory structures",t:"fill",p:"Lubricated sac located OUTSIDE the joint cavity where friction is high: ___",a:[["bursa","bursae"]],e:"Bursae reduce friction. Tendon sheaths are tube-like bursae around long tendons."},
+{s:"Accessory structures",t:"mc",p:"A carpet installer who kneels all day develops painful swelling in front of the knee with reduced range of motion. Most likely:",o:["Bursitis","Osteoarthritis","Meniscus tear","Gouty arthritis","Labral tear"],c:0,e:"Bursitis is inflammation of a bursa, usually from repetitive irritation."},
+{s:"Accessory structures",t:"mc",p:"Which is true of ALL accessory structures of synovial joints?",o:["They are not present in every synovial joint","They are all made of hyaline cartilage","They are all inside the joint cavity","They all secrete synovial fluid","They are present in every synovial joint"],c:0,e:"Accessory structures are typical of more complex synovial joints."},
+// ---------- Movements & types ----------
+{s:"Movements & types",t:"mc",p:"The carpal bones slide slightly past each other with no significant change in angle. Which movement is this, at which joint type?",o:["Gliding; plane","Rotation; pivot","Circumduction; condyloid","Flexion; hinge","Abduction; saddle"],c:0,e:"Gliding: slight back-and-forth or side-to-side motion."},
+{s:"Movements & types",t:"mc",p:"Raising the arm out to the side, away from the body, is:",o:["Abduction in the frontal plane","Flexion in the sagittal plane","Adduction in the frontal plane","Lateral rotation","Extension in the sagittal plane"],c:0,e:"Abduction means away from the midline and typically happens in the frontal plane."},
+{s:"Movements & types",t:"mc",p:"Bending the elbow to bring the hand toward the shoulder:",o:["Decreases the angle between bones: flexion","Increases the angle: extension","Moves toward the midline: adduction","Revolves around the long axis: rotation","Is a gliding movement"],c:0,e:"Flexion and extension typically occur in the sagittal plane."},
+{s:"Movements & types",t:"fill",p:"Flexion → abduction → extension → adduction in sequence: ___",a:[["circumduction"]],e:"Circumduction is a complex angular movement, and it can run in either order."},
+{s:"Movements & types",t:"mc",p:"Turning the thigh so the kneecap faces toward the midline is:",o:["Medial (internal) rotation","Lateral rotation","Adduction","Flexion","Circumduction"],c:0,e:"Rotation means the bone revolves around its longitudinal axis."},
+{s:"Movements & types",t:"mc",p:"A joint allows flexion/extension, abduction/adduction, and circumduction, but NOT rotation. Which joints fit?",o:["Condyloid or saddle","Ball & socket or pivot","Hinge or plane","Pivot only","Plane only"],c:0,e:"Condyloid (e.g., radiocarpal) and saddle (e.g., 1st CMC) joints are both biaxial."},
+{s:"Movements & types",t:"mc",p:"A joint moves only in one plane, like a door, and its surfaces are one convex and one concave. Which is an example?",o:["Interphalangeal joint","Radiocarpal joint","Atlanto-axial joint","Glenohumeral joint","Acromioclavicular joint"],c:0,e:"Hinge joints (elbow, ankle, interphalangeal) are uniaxial: flexion/extension."},
+{s:"Movements & types",t:"mc",p:"Shaking your head 'no' uses a joint where a pointed process turns within a ring of bone and ligament. Which type is it, and which other joint shares this type?",o:["Pivot; proximal radio-ulnar","Hinge; elbow","Plane; acromioclavicular","Saddle; 1st carpometacarpal","Ball & socket; hip"],c:0,e:"Pivot joints (atlanto-axial, proximal radio-ulnar) allow uniaxial rotation."},
+{s:"Movements & types",t:"fill",p:"Synovial joint type at the base of the thumb (1st CMC): ___",a:[["saddle"]],e:"Saddle: one saddle-shaped surface, biaxial."},
+{s:"Movements & types",t:"fill",p:"Synovial joint type of the acromioclavicular joint: ___",a:[["plane","gliding"]],e:"Plane joints have flat or slightly curved surfaces and allow gliding, possibly with some rotation. The intercarpal and intertarsal joints are other examples."},
+{s:"Movements & types",t:"mc",p:"Which joint is multiaxial?",o:["Hip","Elbow","Radiocarpal","1st carpometacarpal","Atlanto-axial"],c:0,e:"Ball & socket joints (glenohumeral, hip) allow flexion/extension, abduction/adduction, circumduction, and medial/lateral rotation."},
+{s:"Movements & types",t:"mc",p:"Joint movements are described relative to what reference?",o:["Anatomical position","The position the patient is currently in","The sitting position","The fetal position","Whichever limb is dominant"],c:0,e:"All movements are defined relative to anatomical position."},
+{s:"Movements & types",t:"mc",p:"Which best distinguishes gliding from angular movement?",o:["Gliding is slight back-and-forth or side-to-side motion with no significant change in angle; angular movement changes the angle between bones","Gliding changes the angle greatly","Angular movement occurs only at plane joints","Gliding occurs only at ball & socket joints","They are the same"],c:0,e:"Gliding is typical of plane joints. Angular movements include flexion/extension, abduction/adduction, and circumduction."},
+{s:"Movements & types",t:"fill",p:"Movement toward the midline in the frontal plane: ___",a:[["adduction"]],e:"Adduction. Abduction is movement away from the midline."},
+{s:"Movements & types",t:"mc",p:"Which is NOT a movement of a ball & socket joint?",o:["None; ball & socket joints allow flexion/extension, abduction/adduction, circumduction, and rotation","Flexion","Abduction","Medial rotation","Circumduction"],c:0,e:"Ball & socket joints are multiaxial and allow all of these movements."},
+// ---------- Arthritis ----------
+{s:"Arthritis",t:"mc",p:"Which statement best describes the relationship between rheumatism and arthritis?",o:["Arthritis is a type of rheumatism that affects joints","Rheumatism is a type of arthritis","They are unrelated","Rheumatism affects only bones","Arthritis affects only muscles"],c:0,e:"Rheumatism is any painful disorder of the body's supporting structures."},
+{s:"Arthritis",t:"mc",p:"A 45-year-old has symmetric swelling that began in the MP joints of the hands and feet and has now spread to larger joints. Blood work suggests an autoimmune process. Diagnosis?",o:["Rheumatoid arthritis","Osteoarthritis","Gouty arthritis","Bursitis","Stress fracture"],c:0,e:"RA: the immune system attacks the joints, most commonly the synovial membrane."},
+{s:"Arthritis",t:"mc",p:"After a large steak dinner, a patient wakes with a red, extremely painful big toe joint. What is the underlying pathology?",o:["Sodium urate crystal deposition from high blood uric acid","Autoimmune attack on the synovial membrane","Wear-and-tear loss of articular cartilage","Inflamed bursa","Torn meniscus"],c:0,e:"Gouty arthritis is a crystal arthritis that classically affects the 1st MTP joint."},
+{s:"Arthritis",t:"mc",p:"A 70-year-old retired carpenter has knee and hip pain that worsens with use, with no signs of an autoimmune process. Why does the damage persist?",o:["Articular cartilage breaks down and heals poorly","Urate crystals accumulate","The synovial membrane is attacked by antibodies","Bursae become infected","Ligaments ossify"],c:0,e:"Osteoarthritis is degenerative 'wear and tear' and the most common arthritis. It affects the hands, knees, hips, and vertebral column."},
+{s:"Arthritis",t:"fill",p:"Joint most commonly affected by gouty arthritis: ___",a:[["1st mtp","first mtp","big toe","1st metatarsophalangeal","first metatarsophalangeal","mtp of big toe","mp joint of 1st digit of foot","1st mp of foot"]],e:"The MP joint of the 1st digit of the foot (the big toe)."},
+{s:"Arthritis",t:"fill",p:"Any painful disorder of the body's supporting structures: ___",a:[["rheumatism"]],e:"Arthritis is a type of rheumatism that affects joints."},
+{s:"Arthritis",t:"mc",p:"Match each arthritis to the structure primarily attacked: OA, RA, gout.",o:["Articular cartilage; synovial membrane; soft tissues of the joint (urate crystals)","Synovial membrane; articular cartilage; bursae","Bursae; ligaments; articular cartilage","Urate crystals; articular cartilage; synovial membrane","Menisci; bone marrow; tendons"],c:0,e:"OA is degenerative wear and tear. RA is autoimmune. Gout is a crystal arthritis."},
+// ---------- Muscle properties, functions, types ----------
+{s:"Muscle properties, functions, types",t:"mc",p:"Which muscle property is shared with nerve cells and describes responding to a stimulus with electrical changes across the sarcolemma?",o:["Excitability","Contractility","Extensibility","Elasticity","Tonicity"],c:0,e:"Excitability. Conductivity is when a local change triggers a wave of excitation."},
+{s:"Muscle properties, functions, types",t:"mc",p:"A calf muscle is passively stretched during a lunge, then returns to its resting length. Which two properties are shown, in order?",o:["Extensibility, then elasticity","Elasticity, then extensibility","Contractility, then conductivity","Excitability, then contractility","Conductivity, then elasticity"],c:0,e:"Extensibility is the ability to stretch. Elasticity is the ability to return to the original length and shape."},
+{s:"Muscle properties, functions, types",t:"fill",p:"Muscle property: a local electrical change triggers a wave of excitation along the fiber: ___",a:[["conductivity"]],e:"Conductivity."},
+{s:"Muscle properties, functions, types",t:"mc",p:"A patient shivers in a cold room, and after a meal their skeletal muscle takes up glucose. Which muscle functions are these?",o:["Heat production; glycemic control","Stability; movement","Control of openings; heat production","Glycemic control; stability","Movement; control of openings"],c:0,e:"The functions of muscle are movement, stability, control of body openings, heat production, and glycemic control."},
+{s:"Muscle properties, functions, types",t:"mc",p:"A tissue sample is striated and under involuntary control. Its source is most likely:",o:["The heart","The biceps brachii","The stomach wall","Blood vessel walls","The diaphragm"],c:0,e:"Cardiac muscle is striated and involuntary. Skeletal muscle is striated and voluntary. Smooth muscle is non-striated and involuntary."},
+{s:"Muscle properties, functions, types",t:"mc",p:"A neurotoxin leaves muscle fibers able to respond electrically but unable to shorten. Which property is lost?",o:["Contractility","Excitability","Conductivity","Extensibility","Elasticity"],c:0,e:"Contractility is the ability to shorten when stimulated."},
+{s:"Muscle properties, functions, types",t:"mc",p:"The postural muscles keep you upright while you stand still, and sphincter muscles control when you urinate. Which functions of muscle are these?",o:["Stability; control of body openings","Movement; heat production","Glycemic control; movement","Heat production; stability","Control of openings; glycemic control"],c:0,e:"Muscle stabilizes joints, maintains posture, and controls body openings."},
+{s:"Muscle properties, functions, types",t:"mc",p:"Which pairing of muscle type and features is correct?",o:["Smooth: no striations, involuntary","Cardiac: no striations, voluntary","Skeletal: striated, involuntary","Smooth: striated, voluntary","Cardiac: no striations, involuntary"],c:0,e:"Skeletal muscle is striated and voluntary. Cardiac muscle is striated and involuntary."},
+{s:"Muscle properties, functions, types",t:"fill",p:"Muscle's main role in glycemic control is that skeletal muscle absorbs, stores, and uses ___.",a:[["glucose"]],e:"By taking up glucose, skeletal muscle can help stabilize blood glucose concentrations."},
+// ---------- CT of muscle ----------
+{s:"CT of muscle",t:"mc",p:"What actually attaches a skeletal muscle to bone?",o:["Continuous connective tissue that becomes the tendon","Muscle fibers inserting directly into bone","Sarcolemma fused to periosteum","Articular cartilage","The synovial membrane"],c:0,e:"All of the muscle's CT is continuous, and it is the CT that attaches to bone."},
+{s:"CT of muscle",t:"mc",p:"Order the connective tissues from most microscopic to most external:",o:["Endomysium → perimysium → epimysium → fascia","Perimysium → endomysium → epimysium → fascia","Epimysium → perimysium → endomysium → fascia","Fascia → epimysium → perimysium → endomysium","Endomysium → epimysium → perimysium → fascia"],c:0,e:"Endo- (single cell) → peri- (fascicle) → epi- (muscle belly) → fascia (groups of muscles)."},
+{s:"CT of muscle",t:"fill",p:"CT layer surrounding a fascicle: ___",a:[["perimysium"]],e:"Perimysium."},
+{s:"CT of muscle",t:"mc",p:"The muscles of one leg compartment share similar actions and the same nerve supply. Which tissue defines that compartment?",o:["Fascia","Epimysium","Perimysium","Aponeurosis","Endomysium"],c:0,e:"Fascia is grossly visible CT surrounding groups of muscles that share function and neurovascular supply."},
+{s:"CT of muscle",t:"mc",p:"A soccer player's muscle strain is slow to heal. The injury most likely involves a structure that is:",o:["A tendon, which is poorly vascularized","The endomysium, which lacks collagen","Articular cartilage","The sarcoplasmic reticulum","A bursa"],c:0,e:"Tendons are highly organized collagen with poor blood supply, and muscle strains often affect them."},
+{s:"CT of muscle",t:"fill",p:"Flattened, broad sheet of tendon: ___",a:[["aponeurosis"]],e:"Aponeurosis."},
+{s:"CT of muscle",t:"fill",p:"The endomysium, perimysium, and epimysium are all ___ with each other and with the tendon.",a:[["continuous"]],e:"The CT is continuous, and it is the CT that actually attaches the muscle to bone."},
+{s:"CT of muscle",t:"mc",p:"A pathologist looks at a single muscle cell and the thin CT wrapping it. Which layer is this?",o:["Endomysium","Perimysium","Epimysium","Fascia","Tendon"],c:0,e:"Endo- means within."},
+{s:"CT of muscle",t:"mc",p:"Which layer surrounds the ENTIRE muscle belly?",o:["Epimysium","Endomysium","Perimysium","Aponeurosis","Sarcolemma"],c:0,e:"Epi- means upon. Beyond the epimysium, fascia surrounds groups of muscles."},
+// ---------- Myofibers ----------
+{s:"Myofibers",t:"mc",p:"Why is a skeletal muscle fiber multinucleate?",o:["It forms from the fusion of 100+ myoblasts","It divides repeatedly without cytokinesis in adults","It absorbs satellite neurons","Nuclei migrate in from the endomysium","Each sarcomere has its own nucleus"],c:0,e:"Myoblasts are small mesodermal cells."},
+{s:"Myofibers",t:"mc",p:"After months of heavy resistance training, an athlete's muscles are larger. What happened at the cellular level?",o:["Existing fibers enlarged by adding myofibrils and organelles (hypertrophy)","Mature fibers divided to make new fibers","Fibroblasts converted to muscle cells","Sarcomeres got longer at rest","Endomysium thickened into new fibers"],c:0,e:"Mature muscle cells can't divide. Forceful, repetitive activity causes hypertrophy."},
+{s:"Myofibers",t:"fill",p:"Plasma membrane of a muscle fiber: ___",a:[["sarcolemma"]],e:"Sarcolemma. T tubules are infoldings of it that penetrate the cell."},
+{s:"Myofibers",t:"mc",p:"A drug prevents Ca²⁺ storage in relaxed muscle. Which organelle is targeted?",o:["Sarcoplasmic reticulum","Sarcolemma","Sarcoplasm","Actin","Dystrophin"],c:0,e:"The SR is smooth ER forming a network around each myofibril. Its terminal cisternae store calcium."},
+{s:"Myofibers",t:"fill",p:"One T tubule plus two terminal cisternae: ___",a:[["triad"]],e:"Triad."},
+{s:"Myofibers",t:"mc",p:"Which protein pairing is correct?",o:["Thick filament: myosin; thin filament: actin + tropomyosin/troponin","Thick filament: actin; thin filament: myosin","Elastic filament: dystrophin","Accessory protein: titin","Thin filament: titin + myosin"],c:0,e:"Titin is the elastic filament. Dystrophin is an accessory protein linking the myofilaments to the sarcolemma and endomysium."},
+{s:"Myofibers",t:"mc",p:"Duchenne muscular dystrophy involves a missing protein that links the outermost myofilaments to the sarcolemma. Which protein?",o:["Dystrophin","Titin","Troponin","Tropomyosin","Myosin"],c:0,e:"Dystrophin connects, through a series of links, to the endomysium."},
+{s:"Myofibers",t:"fill",p:"Huge springy elastic protein in the sarcomere: ___",a:[["titin"]],e:"Titin."},
+{s:"Myofibers",t:"mc",p:"Under a microscope, the light bands of a muscle fiber shorten during contraction but the dark bands do not. What does this tell you?",o:["Thick filaments (A band) don't change length; thin filaments slide past them","Myosin filaments shorten","Actin filaments shorten","Z discs disappear","Sarcomeres lengthen"],c:0,e:"The myofilaments themselves don't shorten. They slide past each other, so the sarcomeres and the whole muscle shorten."},
+{s:"Myofibers",t:"fill",p:"Functional contractile unit, from one Z disc to the next: ___",a:[["sarcomere"]],e:"Sarcomere. The Z disc bisects the I band and provides anchorage."},
+{s:"Myofibers",t:"fill",p:"Small mesodermal cells that fuse to form a muscle fiber: ___",a:[["myoblasts","myoblast"]],e:"More than 100 myoblasts fuse, which is why the fiber is multinucleate."},
+{s:"Myofibers",t:"fill",p:"Enlargement of existing muscle fibers: ___",a:[["hypertrophy"]],e:"Hypertrophy increases myofibrils and organelles and results from forceful, repetitive activity."},
+{s:"Myofibers",t:"mc",p:"A signal at the sarcolemma must reach deep inside a thick muscle fiber. Which structure carries it inward?",o:["Transverse (T) tubules","Terminal cisternae","Myofibrils","Z discs","Endomysium"],c:0,e:"T tubules are tubular infoldings of the sarcolemma that penetrate the cell."},
+{s:"Myofibers",t:"mc",p:"Long protein cords running the full length of a muscle fiber and made of myofilaments are:",o:["Myofibrils","Fascicles","T tubules","Sarcomeres only","Endomysium"],c:0,e:"Myofibrils are made of myofilaments. The SR forms a network around each myofibril."},
+{s:"Myofibers",t:"fill",p:"Cytoplasm of a muscle fiber: ___",a:[["sarcoplasm"]],e:"The sarcoplasm is filled with numerous organelles."},
+{s:"Myofibers",t:"mc",p:"Which proteins convert ATP's chemical energy into the mechanical energy of contraction?",o:["Myosin and actin","Titin and dystrophin","Tropomyosin and troponin","Dystrophin and actin","Titin and myosin"],c:0,e:"Myosin and actin are the contractile proteins. Tropomyosin and troponin are regulatory proteins."},
+{s:"Myofibers",t:"mc",p:"Which correctly describes the striations of skeletal muscle?",o:["Dark A band = thick filaments; light I band = thin filaments, bisected by the Z disc","Dark I band = thin filaments; light A band = thick filaments","Z discs sit in the middle of the A band","The A band contains only titin","Striations come from the endomysium"],c:0,e:"A sarcomere runs from one Z disc to the next."},
+{s:"Myofibers",t:"mc",p:"A sarcomere shortens during contraction. What happens to the length of the thick and thin filaments?",o:["They stay the same length and slide past each other","Both shorten","Only the thin filaments shorten","Only the thick filaments shorten","Both lengthen"],c:0,e:"This is the sliding filament mechanism. Sarcomeres shorten, so the whole muscle shortens."},
+// ---------- Contraction & functional groups ----------
+{s:"Contraction & functional groups",t:"mc",p:"Holding a plank position with no visible movement, the core muscles are performing:",o:["Isometric contraction","Concentric contraction","Eccentric contraction","Reflexive contraction","Circumduction"],c:0,e:"Isometric: tension develops without a change in length, and energy is still expended."},
+{s:"Contraction & functional groups",t:"mc",p:"While running downhill, the quadriceps lengthen under load to control knee flexion. Which contraction is this, and why does it matter clinically?",o:["Eccentric; injuries are more common","Concentric; injuries are more common","Isometric; no energy is used","Eccentric; it produces no tension","Tonic; it is involuntary"],c:0,e:"Eccentric contraction is isotonic lengthening. Muscle injuries happen more often during it."},
+{s:"Contraction & functional groups",t:"fill",p:"Isotonic contraction in which the muscle shortens: ___",a:[["concentric"]],e:"Concentric."},
+{s:"Contraction & functional groups",t:"mc",p:"A doctor taps the patellar tendon and the leg kicks. Compare this with the constant low-level tension in postural muscles.",o:["Reflexive (produces movement); tonic (no movement)","Tonic; reflexive","Isometric; eccentric","Concentric; isometric","Voluntary; reflexive"],c:0,e:"Reflexive contractions are involuntary and produce movement. Tonic contraction is muscle tone."},
+{s:"Contraction & functional groups",t:"mc",p:"During elbow flexion, the triceps brachii keeps some tension to control the speed of movement. Its role is:",o:["Antagonist","Prime mover","Synergist","Fixator","Agonist"],c:0,e:"An antagonist opposes the prime mover. It can relax completely but more typically limits speed or range."},
+{s:"Contraction & functional groups",t:"mc",p:"While you do a biceps curl, muscles hold the scapula steady so the biceps pulls effectively on the forearm. Those scapular muscles act as:",o:["Fixators","Prime movers","Antagonists","Synergists modifying direction","Reflexive contractors"],c:0,e:"To 'fix' a bone means to hold it steady."},
+{s:"Contraction & functional groups",t:"mc",p:"Which best describes a synergist?",o:["Aids the prime mover, often by stabilizing a joint or modifying the direction of movement","Produces the most force","Opposes the prime mover","Prevents a bone from moving at all","Contracts only reflexively"],c:0,e:"A synergist can also have a redundant action."},
+{s:"Contraction & functional groups",t:"fill",p:"Muscle producing the most force during a given joint action: ___",a:[["prime mover","agonist"]],e:"Prime mover."},
+{s:"Contraction & functional groups",t:"mc",p:"Which contraction does NOT produce external movement?",o:["Tonic","Reflexive","Concentric","Eccentric","Isotonic"],c:0,e:"Tonic contraction is muscle tone. Muscles are almost always slightly contracted. (An isometric contraction also produces no external movement.)"},
+{s:"Contraction & functional groups",t:"mc",p:"Which statement about isotonic contraction is correct?",o:["The muscle changes length while keeping constant tension","The muscle develops tension without changing length","No energy is used","It is always involuntary","It only lengthens the muscle"],c:0,e:"Isotonic contractions come in two types: concentric (shortening) and eccentric (lengthening)."}
+];
+
+// ---------- helpers ----------
+const norm = s => s.toLowerCase().replace(/\(.*?\)/g,' ').replace(/[^a-z0-9 ]/g,' ').replace(/\b(the|a|an|m|mm|n|nn|nerve|bone|bones|muscle|muscles)\b/g,' ').replace(/\s+/g,' ').trim();
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=[...Array(n+1).keys()];for(let i=1;i<=m;i++){let c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function matches(input, accepted){
+  const g = norm(input); if(!g) return false;
+  return accepted.some(ans=>{const t=norm(ans); if(g===t) return true; if(/^\d+$/.test(t)) return false; const tol = t.length>=8?2:t.length>=5?1:0; return lev(g,t)<=tol;});
+}
+const shuffle = arr => {const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let filter="all", topic="all", deck=[], idx=0;
+const topicSel=document.getElementById("topic");
+[...new Set(Q.map(q=>q.s))].forEach(t=>{const o=document.createElement("option");o.value=t;o.textContent=`${t} (${Q.filter(q=>q.s===t).length})`;topicSel.appendChild(o)});
+topicSel.onchange=()=>{topic=topicSel.value;build()};
+const FLAG_KEY="flags:"+document.title;
+const keyOf=q=>{const t=(q.t||"")+"|"+(q.p||q.n||"");let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return (h>>>0).toString(36)};
+let flags=new Set(), onlyFlagged=false;
+try{flags=new Set(JSON.parse(localStorage.getItem(FLAG_KEY)||"[]"))}catch(e){flags=new Set()}
+const isF=q=>flags.has(keyOf(q));
+function saveFlags(){try{localStorage.setItem(FLAG_KEY,JSON.stringify([...flags]))}catch(e){} updateFlagCount();}
+function updateFlagCount(){const c=Q.filter(isF).length;const el=document.getElementById("flagCount");if(el)el.textContent=c;}
+function toggleFlag(q){const k=keyOf(q);flags.has(k)?flags.delete(k):flags.add(k);saveFlags();const b=document.getElementById("flag");if(b){b.setAttribute("aria-pressed",isF(q));b.innerHTML=isF(q)?"&#9873; Flagged":"&#9873; Flag";}renderTrack();}
+const flagBtn=q=>`<button class="btn flag" id="flag" aria-pressed="${isF(q)}">${isF(q)?"&#9873; Flagged":"&#9873; Flag"}</button>`;
+
+function build(){
+  const pool = onlyFlagged ? Q.filter(q=>isF(q)&&(topic==="all"||q.s===topic)&&(q.t==="card"||filter==="all"||q.t===filter)) : Q.filter(q=>(filter==="all"||q.t===filter)&&(topic==="all"||q.s===topic));
+  deck = shuffle(pool).map(q=>{
+    const item = {q, status:null, picked:null, typed:[]};
+    if(q.t==="mc"){ const order = shuffle(q.o.map((_,i)=>i)); item.order=order; }
+    return item;
+  });
+  idx=0; render();
+}
+
+const main=document.getElementById('main'), track=document.getElementById('track'), score=document.getElementById('score');
+
+function renderTrack(){
+  track.innerHTML="";
+  deck.forEach((it,i)=>{const b=document.createElement('button');b.setAttribute('aria-label',`Question ${i+1}${it.status?(it.status==="good"?", correct":", incorrect"):""}`);if(it.status)b.className=it.status;if(isF(it.q))b.classList.add("flagged");if(i===idx)b.classList.add('cur');b.onclick=()=>{idx=i;render()};track.appendChild(b)});
+  const done=deck.filter(d=>d.status).length, right=deck.filter(d=>d.status==="good").length;
+  score.innerHTML=`<b>${right}</b> correct of ${done} answered &nbsp;/&nbsp; ${deck.length} total`;
+}
+
+function render(){
+  renderTrack();
+  if(deck.length===0){main.innerHTML=`<section class="card"><p class="empty">${onlyFlagged?"Nothing flagged here yet. Flag questions or cards with the &#9873; button (or press F), then come back.":"No questions match these filters."}</p></section>`;return;}
+  if(idx>=deck.length){return renderDone()}
+  const it=deck[idx], q=it.q;
+  let html=`<section class="card" aria-live="polite"><p class="kind">Question ${idx+1} of ${deck.length}, <span>${q.t==="mc"?"multiple choice":"fill in the blank"}</span></p>`;
+  if(q.t==="fill"){
+    let n=0;
+    const parts=esc(q.p).split("___");
+    html+=`<p class="prompt">`+parts.map((p,i)=>i<parts.length-1?p+`<input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-b="${n++}" aria-label="Blank ${n}" value="${esc(it.typed[n-1]||"")}">`:p).join("")+`</p>`;
+  } else {
+    html+=`<p class="prompt">${esc(q.p)}</p><ul class="opts">`+it.order.map(oi=>`<li><button data-o="${oi}">${esc(q.o[oi])}</button></li>`).join("")+`</ul>`;
+  }
+  html+=`<div class="actions"><button class="btn" id="prev" ${idx===0?"disabled":""}>Previous</button>${flagBtn(q)}<span class="spacer"></span>`+
+        (q.t==="fill"?`<button class="btn" id="reveal">Show answer</button>`:"")+
+        `<button class="btn primary" id="go">${it.status?"Next":"Check"}</button></div><div class="feedback" id="fb"></div></section>`;
+  main.innerHTML=html;
+
+  if(q.t==="mc"){
+    main.querySelectorAll('.opts button').forEach(b=>{
+      b.onclick=()=>{ if(it.status) return; it.picked=+b.dataset.o; main.querySelectorAll('.opts button').forEach(x=>x.classList.toggle('pick',x===b)); };
+    });
+    if(it.picked!==null) main.querySelector(`.opts button[data-o="${it.picked}"]`).classList.add('pick');
+  } else {
+    const ins=main.querySelectorAll('.prompt input');
+    ins.forEach(inp=>{ const size=()=>inp.style.width=Math.max(7,Math.min(24,inp.value.length+3))+"ch"; size(); inp.addEventListener('input',()=>{it.typed[+inp.dataset.b]=inp.value;size()}); });
+    if(!it.status && ins[0]) ins[0].focus({preventScroll:true});
+    document.getElementById('reveal').onclick=()=>{ if(!it.status){ collectTyped(it); grade(it,true); } };
+  }
+  document.getElementById('prev').onclick=()=>{idx--;render()};
+  document.getElementById('go').onclick=()=>{ if(it.status){idx++;render()} else check(it) };
+  if(it.status) showFeedback(it);
+}
+
+function collectTyped(it){ main.querySelectorAll('.prompt input').forEach(inp=>it.typed[+inp.dataset.b]=inp.value); }
+
+function check(it){
+  const q=it.q;
+  if(q.t==="mc"){ if(it.picked===null) return flash("Choose an answer first."); it.status = it.picked===q.c?"good":"bad"; }
+  else { collectTyped(it); if(it.typed.filter(Boolean).length===0) return flash("Type an answer in the blank, or choose Show answer."); grade(it,false); return; }
+  render();
+}
+function grade(it,revealed){
+  const q=it.q;
+  it.results=q.a.map((acc,i)=>matches(it.typed[i]||"",acc));
+  it.status = !revealed && it.results.every(Boolean) ? "good" : "bad";
+  render();
+}
+function flash(msg){const fb=document.getElementById('fb');fb.className="feedback show bad";fb.innerHTML=esc(msg);}
+
+function showFeedback(it){
+  const q=it.q, fb=document.getElementById('fb');
+  document.getElementById('go').textContent = idx===deck.length-1?"See results":"Next";
+  if(q.t==="mc"){
+    main.querySelectorAll('.opts button').forEach(b=>{const o=+b.dataset.o;b.disabled=true;if(o===q.c)b.classList.add('good');else if(o===it.picked)b.classList.add('bad')});
+    fb.className=`feedback show ${it.status}`;
+    fb.innerHTML=`<strong>${it.status==="good"?"Correct.":"Not quite."}</strong>${esc(q.e)}`;
+  } else {
+    const ins=main.querySelectorAll('.prompt input');
+    ins.forEach((inp,i)=>{inp.readOnly=true;inp.classList.add(it.results&&it.results[i]&&it.status!=="bad"?"good":(it.results&&it.results[i]?"good":"bad"))});
+    const key=q.a.map(a=>a[0]).join("; ");
+    fb.className=`feedback show ${it.status}`;
+    fb.innerHTML=`<strong>${it.status==="good"?"Correct.":"Answer: <span class=\"ans\">"+esc(key)+"</span>"}</strong>${esc(q.e)}`+
+      (it.status==="bad"&&it.typed.some(Boolean)?`<br><button class="override" id="ov">Count it as correct</button>`:"");
+    const ov=document.getElementById('ov'); if(ov) ov.onclick=()=>{it.status="good";it.results=q.a.map(()=>true);render()};
+    const rv=document.getElementById('reveal'); if(rv) rv.disabled=true;
+  }
+  document.getElementById('go').focus({preventScroll:true});
+}
+
+function renderDone(){
+  const right=deck.filter(d=>d.status==="good").length, answered=deck.filter(d=>d.status).length, missed=deck.filter(d=>d.status==="bad");
+  const pct = answered?Math.round(right/answered*100):0;
+  main.innerHTML=`<section class="card done"><h2>${right} of ${deck.length} correct</h2><p>${answered<deck.length?`${deck.length-answered} left unanswered. `:""}${answered?pct+"% of answered questions.":""}</p><div class="actions">`+
+    (missed.length?`<button class="btn primary" id="retry">Retry the ${missed.length} I missed</button>`:"")+
+    ``+(Q.some(isF)&&!onlyFlagged?`<button class="btn" id="revFlag">Review flagged (${Q.filter(isF).length})</button>`:"")+`<button class="btn" id="again">Start over, shuffled</button><button class="btn" id="back">Review questions</button></div></section>`;
+  const r=document.getElementById('retry'); if(r) r.onclick=()=>{deck=shuffle(missed).map(m=>({q:m.q,status:null,picked:null,typed:[],order:m.q.t==="mc"?shuffle(m.q.o.map((_,i)=>i)):undefined}));idx=0;render()};
+  document.getElementById('again').onclick=build;
+  const rf=document.getElementById('revFlag'); if(rf) rf.onclick=()=>{onlyFlagged=true;document.getElementById('onlyFlag').setAttribute('aria-pressed','true');build()};
+  document.getElementById('back').onclick=()=>{idx=0;render()};
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=="Enter"||idx>=deck.length) return;
+  if(e.target.tagName==="BUTTON" && e.target.id!=="go" && !e.target.closest('.opts')) return;
+  if(e.target.closest && e.target.closest('.opts')) return;
+  e.preventDefault(); document.getElementById('go')?.click();
+});
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));build()});
+document.getElementById('shuffle').onclick=build;
+main.addEventListener('click',e=>{const b=e.target.closest('#flag');if(b&&deck[idx]){e.preventDefault();toggleFlag(deck[idx].q);const g=document.getElementById('go');if(g)g.focus({preventScroll:true});}});
+document.addEventListener('keydown',e=>{if((e.key==="f"||e.key==="F")&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&e.target.tagName!=="INPUT"&&e.target.tagName!=="SELECT"&&deck[idx]&&idx<deck.length){e.preventDefault();toggleFlag(deck[idx].q);}});
+document.getElementById('onlyFlag').onclick=function(){onlyFlagged=!onlyFlagged;this.setAttribute('aria-pressed',onlyFlagged);build()};
+updateFlagCount();
+build();
+</script>
+</body>
+</html>

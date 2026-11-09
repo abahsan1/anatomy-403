@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MSK5 Quiz: Pelvis & Lower Limb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F4; --paper:#FFFFFF; --ink:#1D2733; --muted:#5B6878; --line:#D3DAE2;
+  --accent:#0F6E74; --accent-ink:#FFFFFF; --good:#2E7D4F; --good-bg:#E3F2E8;
+  --bad:#B3412F; --bad-bg:#F8E6E2; --blank:#FFF6D6; --blank-line:#C99A1A; --todo:#C9D1DA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141A21; --paper:#1D2530; --ink:#E6EBF0; --muted:#9AA7B5; --line:#2F3A47;
+    --accent:#4FB3B8; --accent-ink:#0B1A1B; --good:#6CC08C; --good-bg:#1D3326;
+    --bad:#E3826F; --bad-bg:#3A221D; --blank:#2E2A18; --blank-line:#D9B44A; --todo:#3A4654;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141A21; --paper:#1D2530; --ink:#E6EBF0; --muted:#9AA7B5; --line:#2F3A47;
+  --accent:#4FB3B8; --accent-ink:#0B1A1B; --good:#6CC08C; --good-bg:#1D3326;
+  --bad:#E3826F; --bad-bg:#3A221D; --blank:#2E2A18; --blank-line:#D9B44A; --todo:#3A4654;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:24px 18px 48px}
+header h1{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.75rem;line-height:1.2;margin:0 0 4px}
+header p{margin:0;color:var(--muted);font-size:.95rem}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:.88rem;padding:6px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.ghost{border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-size:.88rem;padding:6px 12px;border-radius:999px;cursor:pointer}
+.score{margin-left:auto;font-size:.9rem;color:var(--muted)}
+.score b{color:var(--ink)}
+.track{display:flex;flex-wrap:wrap;gap:3px;margin:6px 0 18px}
+.track button{width:14px;height:14px;border-radius:3px;border:0;padding:0;background:var(--todo);cursor:pointer}
+.track button.good{background:var(--good)}
+.track button.bad{background:var(--bad)}
+.track button.cur{outline:2px solid var(--ink);outline-offset:1px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 22px 18px}
+.kind{font-size:.85rem;color:var(--muted);margin:0 0 10px}
+.kind span{color:var(--accent);font-weight:600}
+.prompt{font-family:Literata,Georgia,serif;font-size:1.2rem;line-height:1.75;margin:0 0 18px}
+.prompt input{font:inherit;font-family:Figtree,system-ui,sans-serif;font-size:1rem;background:var(--blank);color:var(--ink);border:0;border-bottom:2px solid var(--blank-line);border-radius:4px 4px 0 0;padding:1px 8px;margin:0 3px;min-width:7ch;width:12ch;max-width:100%}
+.prompt input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.prompt input.good{background:var(--good-bg);border-bottom-color:var(--good)}
+.prompt input.bad{background:var(--bad-bg);border-bottom-color:var(--bad)}
+.opts{display:grid;gap:8px;margin:0 0 16px;padding:0;list-style:none}
+.opts button{width:100%;text-align:left;font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--accent)}
+.opts button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opts button.pick{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opts button.good{background:var(--good-bg);border-color:var(--good)}
+.opts button.bad{background:var(--bad-bg);border-color:var(--bad)}
+.opts button:disabled{cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font:inherit;font-weight:600;font-size:.95rem;border-radius:10px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible,.ghost:focus-visible,.seg button:focus-visible,.track button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.spacer{flex:1}
+.feedback{margin:16px 0 0;padding:12px 14px;border-radius:10px;font-size:.95rem;display:none}
+.feedback.show{display:block}
+.feedback.good{background:var(--good-bg)}
+.feedback.bad{background:var(--bad-bg)}
+.feedback strong{display:block;margin-bottom:2px}
+.feedback .ans{font-weight:600}
+.override{margin-top:8px;background:transparent;border:0;padding:0;color:var(--accent);font:inherit;font-size:.9rem;text-decoration:underline;cursor:pointer}
+.fc-group{font-size:.85rem;color:var(--muted);margin:0 0 4px}
+.fc-name{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.6rem;line-height:1.25;margin:0 0 10px}
+.fc-cue{color:var(--muted);margin:0 0 18px}
+.fc-back{display:grid;grid-template-columns:minmax(110px,auto) 1fr;gap:8px 16px;margin:0 0 18px;padding:14px 0 0;border-top:1px solid var(--line)}
+.fc-back dt{font-size:.85rem;color:var(--accent);font-weight:600;padding-top:2px}
+.fc-back dd{margin:0}
+@media (max-width:520px){.fc-back{grid-template-columns:1fr;gap:2px 0}.fc-back dd{margin-bottom:8px}}
+.btn.flag[aria-pressed="true"]{background:var(--blank);border-color:var(--blank-line);color:var(--ink)}
+.track button.flagged{box-shadow:inset 0 -5px 0 var(--blank-line)}
+.ghost[aria-pressed="true"]{background:var(--blank);border-color:var(--blank-line)}
+.empty{color:var(--muted)}
+.done{text-align:left}
+.done h2{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.5rem;margin:0 0 6px}
+.done p{margin:0 0 16px;color:var(--muted)}
+.hint{font-size:.85rem;color:var(--muted);margin-top:14px}
+@media (max-width:520px){.prompt{font-size:1.08rem}.card{padding:18px 16px 16px}.score{margin-left:0;width:100%}}
+@media (prefers-reduced-motion:no-preference){.feedback.show{animation:in .18s ease-out}@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>MSK5: Pelvis &amp; Lower Limb</h1>
+    <p>Multiple choice mixed with fill-in-the-blank. Lecture-style questions covering every learning objective in depth. Use the topic menu to drill one lecture at a time, or choose "Muscle flashcards" to review attachments, actions, and innervation.</p>
+  </header>
+
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Question type">
+      <button data-filter="all" aria-pressed="true">All</button>
+      <button data-filter="mc" aria-pressed="false">Multiple choice</button>
+      <button data-filter="fill" aria-pressed="false">Fill in the blank</button>
+    </div>
+    <select class="ghost" id="topic" aria-label="Topic"><option value="all">All topics</option></select>
+    <button class="ghost" id="onlyFlag" aria-pressed="false">&#9873; Flagged only (<span id="flagCount">0</span>)</button>
+    <button class="ghost" id="shuffle">Shuffle &amp; restart</button>
+    <div class="score" id="score"></div>
+  </div>
+
+  <div class="track" id="track" aria-label="Jump to question"></div>
+
+  <main id="main"></main>
+  <p class="hint">Enter checks your answer; press Enter again to go to the next question. Spelling is forgiving, and if your wording differs but you know you were right, choose "Count it as correct." Press F or use the flag button to mark a question or card to come back to. Your flags are saved in this browser.</p>
+</div>
+
+<script>
+const Q = [
+// ---------- Bones & joints of the pelvis ----------
+{s:"Bones & joints of the pelvis",t:"mc",p:"Which structure is attached to the pelvic girdle but NOT considered a structural component of it?",o:["Coccyx","Sacrum","Right hip bone","Left hip bone","Ilium"],c:0,e:"The pelvic girdle is made of the 2 hip (coxal) bones and the sacrum."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"Which is NOT a function of the pelvic girdle?",o:["Housing the spinal cord","Transferring the weight of the upper body to the lower limbs","Connecting the vertebral column to the appendicular skeleton","Containing and protecting the abdominopelvic viscera","Providing attachment for the erectile bodies of the external genitalia"],c:0,e:"The pelvic girdle also provides muscle attachment points. The spinal cord ends around L2."},
+{s:"Bones & joints of the pelvis",t:"fill",p:"The pelvic brim runs from the sacral ___ to the superior part of the pubic symphysis.",a:[["promontory"]],e:"The pelvic brim is the bony edge surrounding and defining the pelvic inlet."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"Which is NOT a boundary of the pelvic outlet?",o:["Sacral promontory","Pubic arch","Ischial tuberosities","Sacrotuberous ligaments","Tip of the coccyx"],c:0,e:"Outlet: pubic arch (anterior), ischial tuberosities (lateral), sacrotuberous ligaments (posterolateral), tip of coccyx (posterior). The promontory belongs to the brim/inlet."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"An obstetrician measures the space the baby must pass through during delivery. Which region is this, and what does it normally contain?",o:["True (lesser) pelvis, between the inlet and outlet; pelvic viscera","False (greater) pelvis, above the brim; abdominal viscera","True pelvis, above the brim; abdominal viscera","False pelvis, below the outlet; the perineum","The acetabulum; the femoral head"],c:0,e:"The true pelvis has major obstetrical and gynecological significance."},
+{s:"Bones & joints of the pelvis",t:"fill",p:"Pelvis superior to the pelvic brim that holds abdominal viscera: ___ pelvis",a:[["false","greater"]],e:"The false (greater) pelvis."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"The hip bone is formed by the fusion of which bones, and what deep socket does it contain?",o:["Ilium, ischium, pubis; acetabulum","Ilium, sacrum, pubis; obturator foramen","Ischium, coccyx, pubis; acetabulum","Ilium, ischium, sacrum; greater sciatic notch","Pubis, femur, ilium; acetabulum"],c:0,e:"The acetabulum articulates with the head of the femur to form the hip joint."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"The sciatic n. and piriformis m. pass through a notch formed by which bones?",o:["Ilium and ischium (greater sciatic notch)","Ischium and pubis","Pubis and sacrum","Sacrum and coccyx","Ilium and pubis"],c:0,e:"The greater sciatic notch."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"A cyclist has pain at the 'sit bone' where the hamstrings originate. Which landmark is this, and which ligament also attaches there?",o:["Ischial tuberosity; sacrotuberous ligament","Iliac crest; inguinal ligament","Pubic tubercle; iliofemoral ligament","Greater trochanter; ischiofemoral ligament","Acetabulum; pubofemoral ligament"],c:0,e:"The ischial tuberosity is on the posteroinferior portion of the hip bone (the ischium)."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"The obturator foramen is formed by ___ and is closed by the ___.",o:["Ischium and pubis; obturator membrane","Ilium and ischium; sacrotuberous ligament","Pubis and sacrum; pelvic diaphragm","Ilium and pubis; iliofemoral ligament","Ischium and sacrum; obturator membrane"],c:0,e:"The obturator foramen is formed by the ischium and pubis."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"Which pairing of hip bone part and description is correct?",o:["Ilium: largest part, with a thickened superior border (iliac crest)","Pubis: largest, posteroinferior part","Ischium: smallest, anteromedial part","Ilium: forms the symphyseal surface","Pubis: bears the ischial tuberosity"],c:0,e:"Ilium: largest. Ischium: posteroinferior. Pubis: anteromedial and smallest, with the symphyseal surface."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"Which statement about the sacrum is correct?",o:["It is 5 fused vertebrae; its superior portion bears weight but its inferior portion does not","It is 4 fused vertebrae that all bear weight","Its promontory is the posterior edge of S5","It contains the spinal cord proper","It is not part of the pelvic girdle"],c:0,e:"The sacral promontory is the anterior projecting edge of the body of S1."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"An anesthesiologist accesses the sacral canal through an opening at its inferior end. What is this opening, and what does the canal contain?",o:["Sacral hiatus (absent lamina and spinous process of S5); the cauda equina","Sacral foramina; the spinal cord","Sacral promontory; the cauda equina","Obturator foramen; spinal nerve roots","Greater sciatic notch; the sciatic n."],c:0,e:"The spinal cord ends around L2, so the sacral canal (a continuation of the vertebral canal) carries spinal nerve roots, the cauda equina."},
+{s:"Bones & joints of the pelvis",t:"fill",p:"Sacral openings where the ventral and dorsal rami exit: ___",a:[["sacral foramina","foramina","anterior and posterior sacral foramina"]],e:"The sacral foramina, anterior and posterior."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"Which statement about the coccyx is correct?",o:["It is 4 fused rudimentary vertebrae; Co1 may remain separate; it anchors muscles and ligaments","It is a weight-bearing part of the pelvic girdle","It is 5 fused vertebrae","It forms part of the pelvic brim","It articulates with the hip bones"],c:0,e:"The tip of the coccyx forms the posterior boundary of the pelvic outlet."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"The sacro-iliac joint is best classified as:",o:["A weight-bearing compound joint, part synovial (atypical plane) and part syndesmosis","A pure ball & socket joint","A symphysis","A synchondrosis","A hinge joint"],c:0,e:"It is formed by the auricular surfaces of the hip bone and the sacrum."},
+{s:"Bones & joints of the pelvis",t:"fill",p:"Articulating surfaces of the SI joint: ___ surfaces of the hip bone and sacrum",a:[["auricular"]],e:"Auricular surfaces."},
+{s:"Bones & joints of the pelvis",t:"mc",p:"The pubic symphysis is which type of joint?",o:["Cartilaginous symphysis","Fibrous syndesmosis","Synovial plane","Synchondrosis","Synostosis"],c:0,e:"The symphyseal surfaces of the two pubic bones meet in the anterior midline."},
+// ---------- Muscles of the pelvis ----------
+{s:"Muscles of the pelvis",t:"mc",p:"The piriformis is called 'key to the hip.' What are its attachments and actions?",o:["Sacrum → greater trochanter; lateral rotation and abduction of the hip","Ilium → lesser trochanter; hip flexion","Ischial tuberosity → tibia; knee flexion","Sacrum → linea aspera; adduction","Coccyx → greater trochanter; medial rotation"],c:0,e:"The piriformis traverses the greater sciatic foramen."},
+{s:"Muscles of the pelvis",t:"mc",p:"The pelvic diaphragm consists of:",o:["Levator ani and (ischio)coccygeus","Piriformis and levator ani","Obturator internus and coccygeus","Gluteus maximus and levator ani","Iliacus and psoas major"],c:0,e:"This sling of muscles separates the pelvic cavity from the perineum, with openings for the urethra, vagina, and rectum/anal canal."},
+{s:"Muscles of the pelvis",t:"mc",p:"After a difficult vaginal delivery, which pelvic floor component is most likely injured?",o:["The most medial portions of the levator ani, around the vaginal canal","The (ischio)coccygeus","The piriformis","The sacrotuberous ligament","The obturator membrane"],c:0,e:"The levator ani is the most commonly injured component of the pelvic floor."},
+{s:"Muscles of the pelvis",t:"fill",p:"Largest portion of the pelvic diaphragm: ___",a:[["levator ani"]],e:"The levator ani can be divided into additional parts."},
+{s:"Muscles of the pelvis",t:"mc",p:"Which pelvic diaphragm muscle forms its posterior portion and plays a similar supportive role to the levator ani?",o:["(Ischio)coccygeus","Piriformis","Obturator internus","Gluteus minimus","Psoas major"],c:0,e:"The perineal muscles are covered in the reproductive portion of the course."},
+// ---------- Bones of the lower limb ----------
+{s:"Bones of the lower limb",t:"mc",p:"What are the four main regions of the lower limb?",o:["Gluteal, thigh (femoral), leg (crural), ankle and foot","Hip, knee, ankle, foot","Pelvic, femoral, tibial, pedal","Gluteal, knee, leg, toes","Thigh, knee, shin, ankle"],c:0,e:"Lower limb functions: support body weight, locomotion, and balance."},
+{s:"Bones of the lower limb",t:"mc",p:"The femur articulates with which bones?",o:["Hip bone, patella, tibia","Hip bone, tibia, fibula","Sacrum, patella, tibia","Hip bone, fibula, talus","Patella, tibia, calcaneus"],c:0,e:"The femur is the longest and heaviest bone. It forms the hip, patellofemoral, and knee joints."},
+{s:"Bones of the lower limb",t:"mc",p:"An elderly woman falls and is told she 'broke her hip.' Which part of the femur is most likely fractured?",o:["Neck","Greater trochanter","Linea aspera","Medial condyle","Lesser trochanter"],c:0,e:"The neck is the constricted area distal to the head."},
+{s:"Bones of the lower limb",t:"mc",p:"Which muscles attach distally to the greater trochanter vs. the lesser trochanter?",o:["Greater: gluteus medius/minimus and lateral rotators (incl. piriformis); lesser: iliopsoas","Greater: iliopsoas; lesser: gluteus medius","Greater: adductors; lesser: hamstrings","Greater: quadriceps; lesser: sartorius","Greater: gluteus maximus; lesser: piriformis"],c:0,e:"The greater trochanter is a massive lateral projection. The lesser trochanter is smaller and posterior."},
+{s:"Bones of the lower limb",t:"fill",p:"Vertical ridge on the posterior femur where the adductors attach: ___",a:[["linea aspera"]],e:"Linea aspera."},
+{s:"Bones of the lower limb",t:"mc",p:"The femoral condyles are:",o:["Bulbous articular projections, more prominent posteriorly, that articulate with the tibial condyles","Flat surfaces that articulate with the fibula","Attachment sites for the iliopsoas","Found on the proximal femur","Part of the hip joint"],c:0,e:"They form the knee joint."},
+{s:"Bones of the lower limb",t:"mc",p:"Which statement about the patella is correct?",o:["It is the largest sesamoid bone, forms within the quadriceps femoris tendon, and articulates with the femur","It articulates with the tibia","It forms within the hamstring tendon","It is part of the pelvic girdle","It is the smallest sesamoid bone"],c:0,e:"The patella articulates anteriorly with the femur at the patellofemoral joint."},
+{s:"Bones of the lower limb",t:"mc",p:"Which pairing of leg bone and features is correct?",o:["Tibia: larger, medial, weight-bearing; fibula: smaller, lateral, muscle attachments","Fibula: weight-bearing, medial","Tibia: lateral, muscle attachments only","Fibula: forms the medial malleolus","Tibia: forms the lateral malleolus"],c:0,e:"The tibia is the 'shin bone.'"},
+{s:"Bones of the lower limb",t:"mc",p:"The quadriceps femoris tendon (via the patellar ligament) attaches distally to the:",o:["Tibial tuberosity","Head of the fibula","Medial malleolus","Linea aspera","Lateral tibial condyle"],c:0,e:"The tibial tuberosity is on the anterior proximal tibia."},
+{s:"Bones of the lower limb",t:"mc",p:"The medial and lateral 'ankle bones' you can palpate are, respectively:",o:["Medial malleolus of the tibia; lateral malleolus of the fibula","Medial malleolus of the fibula; lateral malleolus of the tibia","Both are parts of the talus","Both are parts of the calcaneus","Medial condyle; lateral condyle"],c:0,e:"Both malleoli are distal, inferior projections."},
+{s:"Bones of the lower limb",t:"fill",p:"Proximal end of the fibula: ___",a:[["head"]],e:"The head of the fibula."},
+{s:"Bones of the lower limb",t:"mc",p:"A roofer lands on his heels after a fall. Which tarsal bone should be evaluated, and which tarsal forms the ankle joint with the tibia and fibula?",o:["Calcaneus; talus","Talus; calcaneus","Navicular; cuboid","Calcaneus; cuboid","Talus; navicular"],c:0,e:"The calcaneus is the weight-bearing 'heel bone.' The talus is the 'ankle bone' and forms the talocrural joint."},
+{s:"Bones of the lower limb",t:"fill",p:"Number of tarsal bones per limb: ___",a:[["7","seven"]],e:"Seven, much larger than the carpals."},
+{s:"Bones of the lower limb",t:"mc",p:"How are the metatarsals numbered, and what do they articulate with?",o:["1–5 medial to lateral; distal tarsals (TMT joints) and proximal phalanges (MTP joints)","1–5 lateral to medial; proximal tarsals and middle phalanges","1–5 medial to lateral; talus and distal phalanges","1–5 lateral to medial; calcaneus and proximal phalanges","They aren't numbered"],c:0,e:"The 1st metatarsal is on the big toe side."},
+{s:"Bones of the lower limb",t:"mc",p:"Which toe lacks an intermediate phalanx, and so has no DIP joint?",o:["1st (big toe)","2nd","3rd","5th","None"],c:0,e:"There are 5 proximal, 4 intermediate, and 5 distal phalanges. Interphalangeal joints: PIP and DIP."},
+// ---------- Joints of the hip & knee ----------
+{s:"Joints of the hip & knee",t:"mc",p:"The hip joint's articular surfaces and joint type are:",o:["Acetabulum and femoral head; ball & socket","Acetabulum and greater trochanter; hinge","Femoral head and sacrum; plane","Femoral condyles and tibia; modified hinge","Ilium and femoral neck; condyloid"],c:0,e:"The hip allows flexion/extension, abduction/adduction, circumduction, and medial/lateral rotation."},
+{s:"Joints of the hip & knee",t:"mc",p:"You can stand upright for a long time without much muscle effort, partly because a strong anterior ligament prevents hip hyperextension. Which ligament?",o:["Iliofemoral","Pubofemoral","Ischiofemoral","Patellar","Sacrotuberous"],c:0,e:"The iliofemoral ligament is called the 'strongest' ligament in the body. It is anterior and superficial."},
+{s:"Joints of the hip & knee",t:"fill",p:"Three hip joint ligaments: iliofemoral, ___, ___",a:[["pubofemoral","ischiofemoral"],["ischiofemoral","pubofemoral"]],e:"Iliofemoral, pubofemoral, ischiofemoral."},
+{s:"Joints of the hip & knee",t:"mc",p:"The knee region's single joint capsule contains:",o:["The right and left femorotibial joints and the femoropatellar joint","One femorotibial joint and the tibiofibular joint","The hip and knee joints","The patellofemoral joint only","The femorotibial and talocrural joints"],c:0,e:"The femorotibial surfaces are the medial and lateral condyles of the femur and tibia."},
+{s:"Joints of the hip & knee",t:"mc",p:"The knee is a modified hinge joint. Which rotation 'locks' it in full extension, and which 'unlocks' it?",o:["Medial rotation locks; lateral rotation unlocks","Lateral locks; medial unlocks","Flexion locks; extension unlocks","Abduction locks; adduction unlocks","The knee cannot rotate"],c:0,e:"The main movements are flexion and extension, with slight gliding and rotation."},
+{s:"Joints of the hip & knee",t:"mc",p:"Why is the medial meniscus often torn together with the tibial (medial) collateral ligament?",o:["The TCL is attached to the medial meniscus","They are the same structure","The medial meniscus attaches to the FCL","Both are inside the ACL","The meniscus is part of the patellar ligament"],c:0,e:"The collateral ligaments are the fibular/lateral (FCL/LCL) and the tibial/medial (TCL/MCL)."},
+{s:"Joints of the hip & knee",t:"mc",p:"The anterior knee capsule is incomplete. Which ligament provides most of the anterior protection?",o:["Patellar ligament (patella → tibial tuberosity)","ACL","PCL","FCL","TCL"],c:0,e:"The patellar ligament is the distal portion of the quadriceps femoris tendon."},
+{s:"Joints of the hip & knee",t:"mc",p:"On exam, the tibia slides excessively forward relative to the femur. Which ligament is torn, and how commonly is it injured?",o:["ACL; weaker and more commonly injured","PCL; more commonly injured","ACL; rarely injured","PCL; rarely injured","TCL; prevents anterior displacement"],c:0,e:"The ACL prevents anterior displacement of the tibia, and the PCL prevents posterior displacement. The cruciates lie within the joint capsule."},
+{s:"Joints of the hip & knee",t:"mc",p:"A dashboard injury pushes the tibia backward. Which ligament resists this?",o:["PCL","ACL","FCL","Patellar ligament","Iliofemoral"],c:0,e:"The PCL prevents posterior displacement of the tibia."},
+{s:"Joints of the hip & knee",t:"mc",p:"The menisci are:",o:["Crescent-shaped fibrocartilage plates on the tibial condyles","Hyaline cartilage on the femoral head","Ligaments inside the hip","Bursae around the patella","Complete articular discs"],c:0,e:"The medial meniscus is attached to the TCL."},
+{s:"Joints of the hip & knee",t:"mc",p:"A football player takes a blow to the lateral side of an extended knee. The 'terrible triad' injures:",o:["TCL, medial meniscus, and ACL","FCL, lateral meniscus, and PCL","ACL, PCL, and patellar ligament","TCL, lateral meniscus, and PCL","Iliofemoral, pubofemoral, and ischiofemoral ligaments"],c:0,e:"The terrible triad can also come from excessive twisting. Ligament sprains are common in contact sports."},
+{s:"Joints of the hip & knee",t:"fill",p:"Knee rotation that 'locks' the knee: ___ rotation",a:[["medial"]],e:"Medial rotation locks the knee. Lateral rotation unlocks it."},
+// ---------- Joints of the ankle region ----------
+{s:"Joints of the ankle region",t:"mc",p:"What are the three tibiofibular joints?",o:["Superior tibiofibular (synovial plane), the interosseous membrane, and the inferior tibiofibular joint (syndesmoses)","Three synovial hinge joints","The talocrural, subtalar, and transverse tarsal joints","Superior, middle, and inferior synovial joints","The knee, ankle, and interosseous joints"],c:0,e:"The interosseous membrane and the inferior tibiofibular joint are the tibiofibular syndesmoses."},
+{s:"Joints of the ankle region",t:"mc",p:"A 'high ankle sprain' injures which ligaments, and how does it compare with a typical sprain?",o:["Ligaments of the tibiofibular syndesmoses; more serious, with longer healing","The ATFL; milder","The deltoid ligament; heals faster","The patellar ligament; more serious","The plantar aponeurosis; heals faster"],c:0,e:"High ankle sprains are generally more serious than typical sprains."},
+{s:"Joints of the ankle region",t:"mc",p:"What are the articular surfaces of the talocrural (ankle) joint?",o:["The distal tibia (greater surface area) and fibula, including both malleoli, with the talus","The calcaneus and talus","The talus and navicular","The tibia and calcaneus only","The fibula and cuboid"],c:0,e:"It is a hinge joint that allows plantarflexion and dorsiflexion."},
+{s:"Joints of the ankle region",t:"mc",p:"Turning the sole of the foot inward (inversion) mainly occurs at which joints?",o:["Subtalar and transverse tarsal joints","Talocrural joint","Superior tibiofibular joint","Knee joint","Metatarsophalangeal joints"],c:0,e:"The talocrural joint handles plantarflexion and dorsiflexion. Inversion and eversion occur at the subtalar and transverse tarsal joints."},
+{s:"Joints of the ankle region",t:"mc",p:"Which ligament group interweaves on the medial malleolus, is more robust, and stabilizes the ankle during eversion?",o:["Deltoid (medial) ligaments","Lateral ligaments","Tibiofibular syndesmosis","Patellar ligament","Plantar aponeurosis"],c:0,e:"The deltoid ligaments are more robust than the lateral ligaments."},
+{s:"Joints of the ankle region",t:"mc",p:"Which statement about the lateral ankle ligaments is correct?",o:["Three separate ligaments attach to the lateral malleolus without interweaving and stabilize the ankle during inversion","They interweave on the medial malleolus","They stabilize during eversion","They are a single ligament","They are the most robust ankle ligaments"],c:0,e:"The anterior talofibular ligament (ATFL) is the most commonly injured."},
+{s:"Joints of the ankle region",t:"mc",p:"A basketball player rolls the ankle, turning the sole inward. What is the mechanism, and which ligament is most likely damaged?",o:["Over-inversion; ATFL","Over-eversion; deltoid ligament","Over-inversion; deltoid ligament","Hyperextension; iliofemoral","Over-eversion; ATFL"],c:0,e:"Ankle sprains are among the most common musculoskeletal injuries. Their severity depends on how much ligament is damaged."},
+{s:"Joints of the ankle region",t:"fill",p:"Most commonly injured ankle ligament: ___",a:[["atfl","anterior talofibular","anterior talofibular ligament"]],e:"The anterior talofibular ligament (ATFL)."},
+// ---------- Muscles of the gluteal region ----------
+{s:"Muscles of the gluteal region",t:"mc",p:"Order the gluteal muscles from superficial to deep:",o:["Maximus, medius, minimus","Minimus, medius, maximus","Medius, maximus, minimus","Maximus, minimus, medius","Piriformis, maximus, medius"],c:0,e:"All three act on the hip joint."},
+{s:"Muscles of the gluteal region",t:"mc",p:"What is the distal attachment of the gluteus maximus?",o:["Iliotibial (IT) tract/band","Greater trochanter","Lesser trochanter","Linea aspera only","Tibial tuberosity"],c:0,e:"The gluteus maximus is innervated by the inferior gluteal n. It extends and laterally rotates the hip."},
+{s:"Muscles of the gluteal region",t:"mc",p:"A patient struggles to rise from a chair and climb stairs, both of which need powerful hip extension. Which nerve is most likely compressed?",o:["Inferior gluteal n.","Superior gluteal n.","Femoral n.","Obturator n.","Deep fibular n."],c:0,e:"The inferior gluteal n. supplies the gluteus maximus."},
+{s:"Muscles of the gluteal region",t:"mc",p:"The gluteus medius and minimus attach distally to the ___ and are innervated by the ___.",o:["Greater trochanter; superior gluteal n.","IT tract; inferior gluteal n.","Lesser trochanter; femoral n.","Linea aspera; obturator n.","Greater trochanter; inferior gluteal n."],c:0,e:"They stabilize the hip, abduct it, and medially rotate it."},
+{s:"Muscles of the gluteal region",t:"mc",p:"Standing on the right leg, a patient's left hip drops because the right hip can't stabilize. Which muscles and nerve are weak?",o:["Right gluteus medius/minimus; right superior gluteal n.","Right gluteus maximus; inferior gluteal n.","Left adductors; obturator n.","Right hamstrings; tibial n.","Left quadriceps; femoral n."],c:0,e:"The gluteus medius and minimus stabilize the hip joint and abduct it."},
+{s:"Muscles of the gluteal region",t:"fill",p:"Nerve to the gluteus medius and minimus: ___",a:[["superior gluteal"]],e:"Superior gluteal n."},
+{s:"Muscles of the gluteal region",t:"mc",p:"The piriformis and the other muscles deep to the gluteus maximus mainly perform:",o:["Lateral rotation of the hip","Medial rotation of the hip","Hip flexion","Knee extension","Adduction"],c:0,e:"They are the lateral rotators of the hip."},
+// ---------- Muscles of the thigh ----------
+{s:"Muscles of the thigh",t:"mc",p:"Which statement about the iliopsoas is correct?",o:["Psoas major and iliacus share a common tendon on the lesser trochanter; they flex the hip and can move the trunk","It attaches to the greater trochanter and abducts the hip","Its bellies lie in the posterior thigh","It extends the knee","It is innervated by the obturator n."],c:0,e:"It belongs to the anterior compartment, but its muscle bellies lie in the abdomen and pelvis."},
+{s:"Muscles of the thigh",t:"mc",p:"What are the distal attachment, actions, and innervation of the sartorius?",o:["Proximal tibia; weak hip flexion, abduction, and lateral rotation plus knee flexion; femoral n.","Tibial tuberosity; knee extension; femoral n.","Linea aspera; adduction; obturator n.","Ischial tuberosity; hip extension; tibial n.","Lesser trochanter; hip flexion; obturator n."],c:0,e:"The sartorius is the longest muscle in the body and is superficial. Its actions are relatively weak and synergistic."},
+{s:"Muscles of the thigh",t:"mc",p:"After a femoral n. injury, a patient can't straighten the knee. Which muscle and attachment are involved?",o:["Quadriceps femoris; tibial tuberosity","Hamstrings; ischial tuberosity","Sartorius; proximal tibia","Gastrocnemius; calcaneus","Adductor magnus; linea aspera"],c:0,e:"The quadriceps femoris is the major knee extensor, and the patella forms within its tendon."},
+{s:"Muscles of the thigh",t:"fill",p:"Quadriceps heads: rectus femoris, vastus ___, vastus ___, vastus ___",a:[["lateralis","intermedius","medialis"],["intermedius","lateralis","medialis"],["medialis","lateralis","intermedius"]],e:"Rectus femoris plus the vastus lateralis, intermedius, and medialis."},
+{s:"Muscles of the thigh",t:"mc",p:"Which describes the medial compartment of the thigh?",o:["Adductor longus, brevis, magnus, and gracilis; mostly attach to the linea aspera; adduct and flex the hip; mostly the obturator n.","Hamstrings; knee flexion; tibial n.","Quadriceps; knee extension; femoral n.","Gluteals; hip extension; gluteal nn.","Iliopsoas; hip flexion; femoral n."],c:0,e:"These are primarily adductor muscles."},
+{s:"Muscles of the thigh",t:"mc",p:"A hockey player feels sudden pain high in the inner thigh during a stride. A 'groin pull' involves:",o:["Strain or tearing of tendinous attachments of the adductor and flexor muscles in the anteromedial thigh","A hamstring tear at the ischial tuberosity","A quadriceps tear at the tibial tuberosity","An ACL sprain","A gluteus medius tear"],c:0,e:"The 'groin' is the anteromedial thigh."},
+{s:"Muscles of the thigh",t:"mc",p:"Which correctly describes the hamstrings?",o:["Biceps femoris (lateral), semitendinosus (medial, superficial), semimembranosus (medial, deep); ischial tuberosity; knee flexion and hip extension; mostly the tibial division of the sciatic n.","Three quadriceps heads; tibial tuberosity; knee extension; femoral n.","Adductors; linea aspera; adduction; obturator n.","Gluteals; IT tract; hip extension; inferior gluteal n.","Biceps femoris (medial); knee extension; femoral n."],c:0,e:"The hamstrings form the posterior compartment of the thigh."},
+{s:"Muscles of the thigh",t:"mc",p:"In the upper limb, 'radial n. = posterior.' Which nerve plays the posterior role in the lower limb (thigh and leg)?",o:["Tibial n.","Femoral n.","Obturator n.","Common fibular n.","Superior gluteal n."],c:0,e:"The tibial n. supplies the posterior thigh (via the sciatic), the posterior leg, and the plantar foot."},
+{s:"Muscles of the thigh",t:"fill",p:"Nerve of the medial thigh compartment: ___",a:[["obturator"]],e:"Obturator n. (mostly)."},
+{s:"Muscles of the thigh",t:"fill",p:"Nerve of the anterior thigh compartment: ___",a:[["femoral"]],e:"Femoral n. (quadriceps, sartorius)."},
+{s:"Muscles of the thigh",t:"mc",p:"A sprinter's hamstring tears at its origin. Which movements will be weak?",o:["Knee flexion and hip extension","Knee extension and hip flexion","Hip adduction and flexion","Ankle plantarflexion","Hip abduction"],c:0,e:"The hamstrings attach proximally to the ischial tuberosity."},
+// ---------- Muscles of the leg & foot ----------
+{s:"Muscles of the leg & foot",t:"mc",p:"Which describes the anterior compartment of the leg?",o:["4 muscles (tibialis anterior most prominent); deep fibular n.; dorsiflexion, digit extension, inversion/eversion","2 muscles; superficial fibular n.; eversion","Gastrocnemius and soleus; tibial n.; plantarflexion","Popliteus; tibial n.; knee flexion","Fibularis longus; eversion; tibial n."],c:0,e:"The tibialis anterior is the most prominent muscle of the anterior compartment."},
+{s:"Muscles of the leg & foot",t:"mc",p:"A new runner who increased mileage fast has pain and edema along the distal two-thirds of the tibia. What is the mechanism?",o:["Shin splints: microtrauma of the tibialis anterior, possibly damaging the periosteum","Achilles tendon rupture","High ankle sprain","Plantar fasciitis","Terrible triad"],c:0,e:"Shin splints are microtrauma of the tibialis anterior. (A stress fracture is also possible in runners.)"},
+{s:"Muscles of the leg & foot",t:"mc",p:"A patient's toes drag because they can't dorsiflex the ankle. Which nerve is most likely injured?",o:["Deep fibular n.","Superficial fibular n.","Tibial n.","Femoral n.","Obturator n."],c:0,e:"The deep fibular n. supplies the anterior compartment of the leg."},
+{s:"Muscles of the leg & foot",t:"mc",p:"The lateral compartment of the leg:",o:["Fibularis longus and brevis; eversion plus plantarflexion; superficial fibular n.","Tibialis anterior; dorsiflexion; deep fibular n.","Gastrocnemius; plantarflexion; tibial n.","Popliteus; knee flexion; tibial n.","Fibularis longus; inversion; deep fibular n."],c:0,e:"The lateral compartment has 2 muscles."},
+{s:"Muscles of the leg & foot",t:"mc",p:"A lateral knee injury damages the superficial fibular n. Which action is most affected?",o:["Eversion of the foot","Dorsiflexion","Toe extension","Inversion","Knee flexion"],c:0,e:"The superficial fibular n. supplies the fibularis longus and brevis."},
+{s:"Muscles of the leg & foot",t:"mc",p:"The superficial posterior leg muscles attach to the calcaneus via the ___ and are innervated by the ___.",o:["Calcaneal (Achilles) tendon; tibial n.","Patellar ligament; femoral n.","Plantar aponeurosis; plantar nn.","IT tract; inferior gluteal n.","Calcaneal tendon; deep fibular n."],c:0,e:"These are the gastrocnemius (superficial, 2 heads) and the soleus (deep to it)."},
+{s:"Muscles of the leg & foot",t:"mc",p:"Which superficial posterior leg muscle also flexes the knee?",o:["Gastrocnemius","Soleus","Tibialis anterior","Fibularis longus","Sartorius"],c:0,e:"Both plantarflex the ankle, but only the gastrocnemius flexes the knee."},
+{s:"Muscles of the leg & foot",t:"fill",p:"Tendon joining gastrocnemius and soleus to the calcaneus: ___",a:[["calcaneal","calcaneal tendon","achilles","achilles tendon"]],e:"The calcaneal (Achilles) tendon."},
+{s:"Muscles of the leg & foot",t:"mc",p:"The deep posterior compartment of the leg performs all EXCEPT:",o:["Dorsiflexion of the ankle","Flexion of the digits","Plantarflexion","Inversion","Knee flexion (popliteus)"],c:0,e:"Dorsiflexion belongs to the anterior compartment. The deep posterior compartment is innervated by the tibial n."},
+{s:"Muscles of the leg & foot",t:"mc",p:"The dorsal muscles of the foot:",o:["Are only 2; extend the digits; deep fibular n.","Are 4 layers; flex the digits; plantar nn.","Evert the foot; superficial fibular n.","Plantarflex; tibial n.","Abduct the digits; tibial n."],c:0,e:"The dorsal foot has only 2 muscles, innervated by the deep fibular n."},
+{s:"Muscles of the leg & foot",t:"mc",p:"A runner has sharp heel pain with the first steps each morning. Which structure is involved, and what are its roles?",o:["Plantar aponeurosis; protects the sole and supports the medial longitudinal arch","Calcaneal tendon; plantarflexion","Deltoid ligament; stabilizes eversion","ATFL; stabilizes inversion","Patellar ligament; anterior knee support"],c:0,e:"This is plantar fasciitis. The plantar aponeurosis is the central part of the plantar fascia, running from the calcaneus to the digital sheaths."},
+{s:"Muscles of the leg & foot",t:"mc",p:"Which describes the plantar muscles of the foot?",o:["3–4 layers; flex digits, abduct/adduct digits, with lumbricals and interossei extending the IP joints; medial and lateral plantar nn. (from the tibial n.)","2 muscles; extend digits; deep fibular n.","Evert the foot; superficial fibular n.","One layer; plantarflex; femoral n.","Invert the foot; obturator n."],c:0,e:"The plantar nerves are branches of the tibial n."},
+{s:"Muscles of the leg & foot",t:"fill",p:"Nerves to the plantar foot muscles: medial and lateral ___ nerves",a:[["plantar"]],e:"The medial and lateral plantar nerves."},
+{s:"Muscles of the leg & foot",t:"mc",p:"A complete tibial n. injury in the leg would spare which action?",o:["Dorsiflexion of the ankle","Plantarflexion","Toe flexion","Inversion (deep posterior)","Plantar foot muscle actions"],c:0,e:"Dorsiflexion is performed by the anterior compartment, supplied by the deep fibular n."},
+// ---------- Muscle flashcards ----------
+{s:"Muscle flashcards",t:"card",g:"Pelvis",n:"Piriformis",f:[["Attachments","Sacrum → greater trochanter of the femur"],["Passes through","Greater sciatic foramen"],["Actions","Lateral rotation and abduction of the hip"],["Note","'Key to the hip'; one of the lateral rotators deep to the gluteus maximus"]]},
+{s:"Muscle flashcards",t:"card",g:"Pelvic diaphragm",n:"Levator ani",f:[["Location","Largest portion of the pelvic diaphragm; separates the pelvic cavity from the perineum"],["Function","Pelvic floor support, with openings for the urethra, vagina, and rectum/anal canal"],["Clinical","The most commonly injured pelvic floor component (medial portions around the vaginal canal, especially in childbirth)"]]},
+{s:"Muscle flashcards",t:"card",g:"Pelvic diaphragm",n:"(Ischio)coccygeus",f:[["Location","Posterior portion of the pelvic diaphragm"],["Function","Supportive role similar to the levator ani"]]},
+{s:"Muscle flashcards",t:"card",g:"Gluteal",n:"Gluteus maximus",f:[["Position","Most superficial gluteal muscle"],["Distal attachment","Iliotibial (IT) tract/band"],["Actions","Extension and lateral rotation of the hip"],["Innervation","Inferior gluteal n."]]},
+{s:"Muscle flashcards",t:"card",g:"Gluteal",n:"Gluteus medius & minimus",f:[["Position","Deep to the gluteus maximus (medius, then minimus)"],["Distal attachment","Greater trochanter of the femur"],["Actions","Stabilize, abduct, and medially rotate the hip"],["Innervation","Superior gluteal n."]]},
+{s:"Muscle flashcards",t:"card",g:"Gluteal",n:"Lateral rotators of the hip",f:[["Includes","Piriformis and others"],["Position","Deep to the gluteus maximus"],["Distal attachment","Greater trochanter (e.g., piriformis)"],["Action","Mainly lateral rotation of the hip"]]},
+{s:"Muscle flashcards",t:"card",g:"Thigh (anterior)",n:"Iliopsoas",f:[["Parts","Psoas major and iliacus (bellies in the abdomen and pelvis) with a common tendon"],["Distal attachment","Lesser trochanter of the femur"],["Action","Flexion of the hip; can also move the trunk"]]},
+{s:"Muscle flashcards",t:"card",g:"Thigh (anterior)",n:"Sartorius",f:[["Features","Longest muscle in the body; superficial"],["Distal attachment","Proximal tibia"],["Actions","Weak/synergistic: hip flexion, abduction, and lateral rotation; knee flexion"],["Innervation","Femoral n."]]},
+{s:"Muscle flashcards",t:"card",g:"Thigh (anterior)",n:"Quadriceps femoris",f:[["Heads","Rectus femoris; vastus lateralis, intermedius, and medialis"],["Distal attachment","Tibial tuberosity (common tendon; patella forms within it; the patellar ligament continues it)"],["Action","Major extensor of the knee"],["Innervation","Femoral n."]]},
+{s:"Muscle flashcards",t:"card",g:"Thigh (medial)",n:"Medial compartment (adductors)",f:[["Muscles","Adductor longus, brevis, magnus; gracilis"],["Distal attachment","Most on the linea aspera of the femur"],["Actions","Adduction of the hip (major); flexion of the hip"],["Innervation","Obturator n. (mostly)"],["Clinical","Groin pull: strain of adductor/flexor tendinous attachments"]]},
+{s:"Muscle flashcards",t:"card",g:"Thigh (posterior)",n:"Hamstrings",f:[["Muscles","Biceps femoris (lateral); semitendinosus (medial, superficial); semimembranosus (medial, deep)"],["Proximal attachment","Ischial tuberosity"],["Actions","Flexion of the knee; extension of the hip"],["Innervation","Tibial division of the sciatic n. (mostly)"]]},
+{s:"Muscle flashcards",t:"card",g:"Leg (anterior)",n:"Anterior compartment of the leg",f:[["Muscles","4; the tibialis anterior is most prominent"],["Actions","Dorsiflexion of the ankle; extension of the digits; inversion/eversion"],["Innervation","Deep fibular n."],["Clinical","Shin splints: tibialis anterior microtrauma, with pain and edema in the distal 2/3 of the tibia"]]},
+{s:"Muscle flashcards",t:"card",g:"Leg (lateral)",n:"Fibularis longus & brevis",f:[["Compartment","Lateral compartment of the leg"],["Actions","Eversion of the foot (major); plantarflexion of the ankle"],["Innervation","Superficial fibular n."]]},
+{s:"Muscle flashcards",t:"card",g:"Leg (superficial posterior)",n:"Gastrocnemius",f:[["Features","Superficial; 2 heads"],["Distal attachment","Calcaneus via the calcaneal (Achilles) tendon"],["Actions","Plantarflexion of the ankle; flexion of the knee"],["Innervation","Tibial n."]]},
+{s:"Muscle flashcards",t:"card",g:"Leg (superficial posterior)",n:"Soleus",f:[["Position","Deep to the gastrocnemius"],["Distal attachment","Calcaneus via the calcaneal (Achilles) tendon"],["Action","Plantarflexion of the ankle"],["Innervation","Tibial n."]]},
+{s:"Muscle flashcards",t:"card",g:"Leg (deep posterior)",n:"Deep posterior compartment of the leg",f:[["Includes","Popliteus and other deep muscles"],["Actions","Flexion of the digits; plantarflexion; inversion of the foot; knee flexion (popliteus)"],["Innervation","Tibial n."]]},
+{s:"Muscle flashcards",t:"card",g:"Foot",n:"Dorsal muscles of the foot",f:[["Number","Only 2"],["Action","Extend the digits"],["Innervation","Deep fibular n."]]},
+{s:"Muscle flashcards",t:"card",g:"Foot",n:"Plantar muscles of the foot",f:[["Organization","3–4 layers"],["Actions","Flexion of the digits; abduction/adduction of the digits; lumbricals and interossei also extend the IP joints"],["Innervation","Medial and lateral plantar nn. (branches of the tibial n.)"]]},
+{s:"Muscle flashcards",t:"card",g:"Nerve summary",n:"Lower limb nerves by region",f:[["Gluteal","Gluteus maximus: inferior gluteal n. Gluteus medius/minimus: superior gluteal n."],["Thigh","Anterior: femoral n. Medial: obturator n. Posterior: tibial division of the sciatic n."],["Leg","Anterior: deep fibular n. Lateral: superficial fibular n. Posterior: tibial n."],["Foot","Dorsal: deep fibular n. Plantar: medial and lateral plantar nn. (tibial)"]]}
+];
+
+// ---------- helpers ----------
+const norm = s => s.toLowerCase().replace(/\(.*?\)/g,' ').replace(/[^a-z0-9 ]/g,' ').replace(/\b(the|a|an|m|mm|n|nn|nerve|bone|bones|muscle|muscles)\b/g,' ').replace(/\s+/g,' ').trim();
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=[...Array(n+1).keys()];for(let i=1;i<=m;i++){let c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function matches(input, accepted){
+  const g = norm(input); if(!g) return false;
+  return accepted.some(ans=>{const t=norm(ans); if(g===t) return true; if(/^\d+$/.test(t)) return false; const tol = t.length>=8?2:t.length>=5?1:0; return lev(g,t)<=tol;});
+}
+const shuffle = arr => {const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let filter="all", topic="all", deck=[], idx=0;
+const topicSel=document.getElementById("topic");
+[...new Set(Q.map(q=>q.s))].forEach(t=>{const o=document.createElement("option");o.value=t;o.textContent=`${t} (${Q.filter(q=>q.s===t).length})`;topicSel.appendChild(o)});
+topicSel.onchange=()=>{topic=topicSel.value;build()};
+const FLAG_KEY="flags:"+document.title;
+const keyOf=q=>{const t=(q.t||"")+"|"+(q.p||q.n||"");let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return (h>>>0).toString(36)};
+let flags=new Set(), onlyFlagged=false;
+try{flags=new Set(JSON.parse(localStorage.getItem(FLAG_KEY)||"[]"))}catch(e){flags=new Set()}
+const isF=q=>flags.has(keyOf(q));
+function saveFlags(){try{localStorage.setItem(FLAG_KEY,JSON.stringify([...flags]))}catch(e){} updateFlagCount();}
+function updateFlagCount(){const c=Q.filter(isF).length;const el=document.getElementById("flagCount");if(el)el.textContent=c;}
+function toggleFlag(q){const k=keyOf(q);flags.has(k)?flags.delete(k):flags.add(k);saveFlags();const b=document.getElementById("flag");if(b){b.setAttribute("aria-pressed",isF(q));b.innerHTML=isF(q)?"&#9873; Flagged":"&#9873; Flag";}renderTrack();}
+const flagBtn=q=>`<button class="btn flag" id="flag" aria-pressed="${isF(q)}">${isF(q)?"&#9873; Flagged":"&#9873; Flag"}</button>`;
+
+function build(){
+  const pool = onlyFlagged ? Q.filter(q=>isF(q)&&(topic==="all"||q.s===topic)&&(q.t==="card"||filter==="all"||q.t===filter)) : Q.filter(q=> topic==="all" ? (q.t!=="card" && (filter==="all"||q.t===filter)) : (q.s===topic && (q.t==="card"||filter==="all"||q.t===filter)));
+  deck = shuffle(pool).map(q=>{
+    const item = {q, status:null, picked:null, typed:[]};
+    if(q.t==="mc"){ const order = shuffle(q.o.map((_,i)=>i)); item.order=order; }
+    return item;
+  });
+  idx=0; render();
+}
+
+const main=document.getElementById('main'), track=document.getElementById('track'), score=document.getElementById('score');
+
+function renderTrack(){
+  track.innerHTML="";
+  deck.forEach((it,i)=>{const b=document.createElement('button');b.setAttribute('aria-label',`Question ${i+1}${it.status?(it.status==="good"?", correct":", incorrect"):""}`);if(it.status)b.className=it.status;if(isF(it.q))b.classList.add("flagged");if(i===idx)b.classList.add('cur');b.onclick=()=>{idx=i;render()};track.appendChild(b)});
+  const done=deck.filter(d=>d.status).length, right=deck.filter(d=>d.status==="good").length;
+  score.innerHTML=`<b>${right}</b> correct of ${done} answered &nbsp;/&nbsp; ${deck.length} total`;
+}
+
+function render(){
+  renderTrack();
+  if(deck.length===0){main.innerHTML=`<section class="card"><p class="empty">${onlyFlagged?"Nothing flagged here yet. Flag questions or cards with the &#9873; button (or press F), then come back.":"No questions match these filters."}</p></section>`;return;}
+  if(idx>=deck.length){return renderDone()}
+  const it=deck[idx], q=it.q;
+  if(q.t==="card") return renderCard(it);
+  let html=`<section class="card" aria-live="polite"><p class="kind">Question ${idx+1} of ${deck.length}, <span>${q.t==="mc"?"multiple choice":"fill in the blank"}</span></p>`;
+  if(q.t==="fill"){
+    let n=0;
+    const parts=esc(q.p).split("___");
+    html+=`<p class="prompt">`+parts.map((p,i)=>i<parts.length-1?p+`<input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-b="${n++}" aria-label="Blank ${n}" value="${esc(it.typed[n-1]||"")}">`:p).join("")+`</p>`;
+  } else {
+    html+=`<p class="prompt">${esc(q.p)}</p><ul class="opts">`+it.order.map(oi=>`<li><button data-o="${oi}">${esc(q.o[oi])}</button></li>`).join("")+`</ul>`;
+  }
+  html+=`<div class="actions"><button class="btn" id="prev" ${idx===0?"disabled":""}>Previous</button>${flagBtn(q)}<span class="spacer"></span>`+
+        (q.t==="fill"?`<button class="btn" id="reveal">Show answer</button>`:"")+
+        `<button class="btn primary" id="go">${it.status?"Next":"Check"}</button></div><div class="feedback" id="fb"></div></section>`;
+  main.innerHTML=html;
+
+  if(q.t==="mc"){
+    main.querySelectorAll('.opts button').forEach(b=>{
+      b.onclick=()=>{ if(it.status) return; it.picked=+b.dataset.o; main.querySelectorAll('.opts button').forEach(x=>x.classList.toggle('pick',x===b)); };
+    });
+    if(it.picked!==null) main.querySelector(`.opts button[data-o="${it.picked}"]`).classList.add('pick');
+  } else {
+    const ins=main.querySelectorAll('.prompt input');
+    ins.forEach(inp=>{ const size=()=>inp.style.width=Math.max(7,Math.min(24,inp.value.length+3))+"ch"; size(); inp.addEventListener('input',()=>{it.typed[+inp.dataset.b]=inp.value;size()}); });
+    if(!it.status && ins[0]) ins[0].focus({preventScroll:true});
+    document.getElementById('reveal').onclick=()=>{ if(!it.status){ collectTyped(it); grade(it,true); } };
+  }
+  document.getElementById('prev').onclick=()=>{idx--;render()};
+  document.getElementById('go').onclick=()=>{ if(it.status){idx++;render()} else check(it) };
+  if(it.status) showFeedback(it);
+}
+
+function renderCard(it){
+  const q=it.q;
+  let html=`<section class="card" aria-live="polite"><p class="kind">Card ${idx+1} of ${deck.length}, <span>flashcard</span></p>
+  <p class="fc-group">${esc(q.g)}</p><h2 class="fc-name">${esc(q.n)}</h2>`;
+  if(!it.flipped){ html+=`<p class="fc-cue">Recall its ${q.f.map(f=>f[0].toLowerCase()).join(", ")} before flipping.</p>`; }
+  else { html+=`<dl class="fc-back">`+q.f.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")+`</dl>`; }
+  html+=`<div class="actions"><button class="btn" id="prev" ${idx===0?"disabled":""}>Previous</button>${flagBtn(q)}<span class="spacer"></span>`;
+  if(!it.flipped) html+=`<button class="btn primary" id="go">Flip card</button>`;
+  else if(!it.status) html+=`<button class="btn" id="miss">Review again</button><button class="btn primary" id="go">Got it</button>`;
+  else html+=`<span class="kind" style="margin:0 6px 0 0">${it.status==="good"?"Marked: got it":"Marked: review again"}</span><button class="btn primary" id="go">${idx===deck.length-1?"See results":"Next"}</button>`;
+  html+=`</div></section>`;
+  main.innerHTML=html;
+  document.getElementById('prev').onclick=()=>{idx--;render()};
+  const go=document.getElementById('go');
+  go.onclick=()=>{ if(!it.flipped){it.flipped=true;render()} else if(!it.status){it.status="good";idx++;render()} else {idx++;render()} };
+  const miss=document.getElementById('miss'); if(miss) miss.onclick=()=>{it.status="bad";idx++;render()};
+  go.focus({preventScroll:true});
+}
+
+function collectTyped(it){ main.querySelectorAll('.prompt input').forEach(inp=>it.typed[+inp.dataset.b]=inp.value); }
+
+function check(it){
+  const q=it.q;
+  if(q.t==="mc"){ if(it.picked===null) return flash("Choose an answer first."); it.status = it.picked===q.c?"good":"bad"; }
+  else { collectTyped(it); if(it.typed.filter(Boolean).length===0) return flash("Type an answer in the blank, or choose Show answer."); grade(it,false); return; }
+  render();
+}
+function grade(it,revealed){
+  const q=it.q;
+  it.results=q.a.map((acc,i)=>matches(it.typed[i]||"",acc));
+  it.status = !revealed && it.results.every(Boolean) ? "good" : "bad";
+  render();
+}
+function flash(msg){const fb=document.getElementById('fb');fb.className="feedback show bad";fb.innerHTML=esc(msg);}
+
+function showFeedback(it){
+  const q=it.q, fb=document.getElementById('fb');
+  document.getElementById('go').textContent = idx===deck.length-1?"See results":"Next";
+  if(q.t==="mc"){
+    main.querySelectorAll('.opts button').forEach(b=>{const o=+b.dataset.o;b.disabled=true;if(o===q.c)b.classList.add('good');else if(o===it.picked)b.classList.add('bad')});
+    fb.className=`feedback show ${it.status}`;
+    fb.innerHTML=`<strong>${it.status==="good"?"Correct.":"Not quite."}</strong>${esc(q.e)}`;
+  } else {
+    const ins=main.querySelectorAll('.prompt input');
+    ins.forEach((inp,i)=>{inp.readOnly=true;inp.classList.add(it.results&&it.results[i]&&it.status!=="bad"?"good":(it.results&&it.results[i]?"good":"bad"))});
+    const key=q.a.map(a=>a[0]).join("; ");
+    fb.className=`feedback show ${it.status}`;
+    fb.innerHTML=`<strong>${it.status==="good"?"Correct.":"Answer: <span class=\"ans\">"+esc(key)+"</span>"}</strong>${esc(q.e)}`+
+      (it.status==="bad"&&it.typed.some(Boolean)?`<br><button class="override" id="ov">Count it as correct</button>`:"");
+    const ov=document.getElementById('ov'); if(ov) ov.onclick=()=>{it.status="good";it.results=q.a.map(()=>true);render()};
+    const rv=document.getElementById('reveal'); if(rv) rv.disabled=true;
+  }
+  document.getElementById('go').focus({preventScroll:true});
+}
+
+function renderDone(){
+  const right=deck.filter(d=>d.status==="good").length, answered=deck.filter(d=>d.status).length, missed=deck.filter(d=>d.status==="bad");
+  const pct = answered?Math.round(right/answered*100):0;
+  main.innerHTML=`<section class="card done"><h2>${right} of ${deck.length} correct</h2><p>${answered<deck.length?`${deck.length-answered} left unanswered. `:""}${answered?pct+"% of answered questions.":""}</p><div class="actions">`+
+    (missed.length?`<button class="btn primary" id="retry">Retry the ${missed.length} I missed</button>`:"")+
+    ``+(Q.some(isF)&&!onlyFlagged?`<button class="btn" id="revFlag">Review flagged (${Q.filter(isF).length})</button>`:"")+`<button class="btn" id="again">Start over, shuffled</button><button class="btn" id="back">Review questions</button></div></section>`;
+  const r=document.getElementById('retry'); if(r) r.onclick=()=>{deck=shuffle(missed).map(m=>({q:m.q,status:null,picked:null,typed:[],order:m.q.t==="mc"?shuffle(m.q.o.map((_,i)=>i)):undefined}));idx=0;render()};
+  document.getElementById('again').onclick=build;
+  const rf=document.getElementById('revFlag'); if(rf) rf.onclick=()=>{onlyFlagged=true;document.getElementById('onlyFlag').setAttribute('aria-pressed','true');build()};
+  document.getElementById('back').onclick=()=>{idx=0;render()};
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=="Enter"||idx>=deck.length) return;
+  if(e.target.tagName==="BUTTON" && e.target.id!=="go" && !e.target.closest('.opts')) return;
+  if(e.target.closest && e.target.closest('.opts')) return;
+  e.preventDefault(); document.getElementById('go')?.click();
+});
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));build()});
+document.getElementById('shuffle').onclick=build;
+main.addEventListener('click',e=>{const b=e.target.closest('#flag');if(b&&deck[idx]){e.preventDefault();toggleFlag(deck[idx].q);const g=document.getElementById('go');if(g)g.focus({preventScroll:true});}});
+document.addEventListener('keydown',e=>{if((e.key==="f"||e.key==="F")&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&e.target.tagName!=="INPUT"&&e.target.tagName!=="SELECT"&&deck[idx]&&idx<deck.length){e.preventDefault();toggleFlag(deck[idx].q);}});
+document.getElementById('onlyFlag').onclick=function(){onlyFlagged=!onlyFlagged;this.setAttribute('aria-pressed',onlyFlagged);build()};
+updateFlagCount();
+build();
+</script>
+</body>
+</html>

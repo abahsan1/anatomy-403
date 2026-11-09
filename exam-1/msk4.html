@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MSK4 Quiz: Thorax, Abdomen & Upper Limb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F4; --paper:#FFFFFF; --ink:#1D2733; --muted:#5B6878; --line:#D3DAE2;
+  --accent:#0F6E74; --accent-ink:#FFFFFF; --good:#2E7D4F; --good-bg:#E3F2E8;
+  --bad:#B3412F; --bad-bg:#F8E6E2; --blank:#FFF6D6; --blank-line:#C99A1A; --todo:#C9D1DA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141A21; --paper:#1D2530; --ink:#E6EBF0; --muted:#9AA7B5; --line:#2F3A47;
+    --accent:#4FB3B8; --accent-ink:#0B1A1B; --good:#6CC08C; --good-bg:#1D3326;
+    --bad:#E3826F; --bad-bg:#3A221D; --blank:#2E2A18; --blank-line:#D9B44A; --todo:#3A4654;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141A21; --paper:#1D2530; --ink:#E6EBF0; --muted:#9AA7B5; --line:#2F3A47;
+  --accent:#4FB3B8; --accent-ink:#0B1A1B; --good:#6CC08C; --good-bg:#1D3326;
+  --bad:#E3826F; --bad-bg:#3A221D; --blank:#2E2A18; --blank-line:#D9B44A; --todo:#3A4654;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:24px 18px 48px}
+header h1{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.75rem;line-height:1.2;margin:0 0 4px}
+header p{margin:0;color:var(--muted);font-size:.95rem}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:.88rem;padding:6px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.ghost{border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-size:.88rem;padding:6px 12px;border-radius:999px;cursor:pointer}
+.score{margin-left:auto;font-size:.9rem;color:var(--muted)}
+.score b{color:var(--ink)}
+.track{display:flex;flex-wrap:wrap;gap:3px;margin:6px 0 18px}
+.track button{width:14px;height:14px;border-radius:3px;border:0;padding:0;background:var(--todo);cursor:pointer}
+.track button.good{background:var(--good)}
+.track button.bad{background:var(--bad)}
+.track button.cur{outline:2px solid var(--ink);outline-offset:1px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 22px 18px}
+.kind{font-size:.85rem;color:var(--muted);margin:0 0 10px}
+.kind span{color:var(--accent);font-weight:600}
+.prompt{font-family:Literata,Georgia,serif;font-size:1.2rem;line-height:1.75;margin:0 0 18px}
+.prompt input{font:inherit;font-family:Figtree,system-ui,sans-serif;font-size:1rem;background:var(--blank);color:var(--ink);border:0;border-bottom:2px solid var(--blank-line);border-radius:4px 4px 0 0;padding:1px 8px;margin:0 3px;min-width:7ch;width:12ch;max-width:100%}
+.prompt input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.prompt input.good{background:var(--good-bg);border-bottom-color:var(--good)}
+.prompt input.bad{background:var(--bad-bg);border-bottom-color:var(--bad)}
+.opts{display:grid;gap:8px;margin:0 0 16px;padding:0;list-style:none}
+.opts button{width:100%;text-align:left;font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--accent)}
+.opts button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opts button.pick{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opts button.good{background:var(--good-bg);border-color:var(--good)}
+.opts button.bad{background:var(--bad-bg);border-color:var(--bad)}
+.opts button:disabled{cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font:inherit;font-weight:600;font-size:.95rem;border-radius:10px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible,.ghost:focus-visible,.seg button:focus-visible,.track button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.spacer{flex:1}
+.feedback{margin:16px 0 0;padding:12px 14px;border-radius:10px;font-size:.95rem;display:none}
+.feedback.show{display:block}
+.feedback.good{background:var(--good-bg)}
+.feedback.bad{background:var(--bad-bg)}
+.feedback strong{display:block;margin-bottom:2px}
+.feedback .ans{font-weight:600}
+.override{margin-top:8px;background:transparent;border:0;padding:0;color:var(--accent);font:inherit;font-size:.9rem;text-decoration:underline;cursor:pointer}
+.fc-group{font-size:.85rem;color:var(--muted);margin:0 0 4px}
+.fc-name{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.6rem;line-height:1.25;margin:0 0 10px}
+.fc-cue{color:var(--muted);margin:0 0 18px}
+.fc-back{display:grid;grid-template-columns:minmax(110px,auto) 1fr;gap:8px 16px;margin:0 0 18px;padding:14px 0 0;border-top:1px solid var(--line)}
+.fc-back dt{font-size:.85rem;color:var(--accent);font-weight:600;padding-top:2px}
+.fc-back dd{margin:0}
+@media (max-width:520px){.fc-back{grid-template-columns:1fr;gap:2px 0}.fc-back dd{margin-bottom:8px}}
+.btn.flag[aria-pressed="true"]{background:var(--blank);border-color:var(--blank-line);color:var(--ink)}
+.track button.flagged{box-shadow:inset 0 -5px 0 var(--blank-line)}
+.ghost[aria-pressed="true"]{background:var(--blank);border-color:var(--blank-line)}
+.empty{color:var(--muted)}
+.done{text-align:left}
+.done h2{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.5rem;margin:0 0 6px}
+.done p{margin:0 0 16px;color:var(--muted)}
+.hint{font-size:.85rem;color:var(--muted);margin-top:14px}
+@media (max-width:520px){.prompt{font-size:1.08rem}.card{padding:18px 16px 16px}.score{margin-left:0;width:100%}}
+@media (prefers-reduced-motion:no-preference){.feedback.show{animation:in .18s ease-out}@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>MSK4: Thorax, Abdomen &amp; Upper Limb</h1>
+    <p>Multiple choice mixed with fill-in-the-blank. Lecture-style questions covering every learning objective in depth. Use the topic menu to drill one lecture at a time, or choose "Muscle flashcards" to review attachments, actions, and innervation.</p>
+  </header>
+
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Question type">
+      <button data-filter="all" aria-pressed="true">All</button>
+      <button data-filter="mc" aria-pressed="false">Multiple choice</button>
+      <button data-filter="fill" aria-pressed="false">Fill in the blank</button>
+    </div>
+    <select class="ghost" id="topic" aria-label="Topic"><option value="all">All topics</option></select>
+    <button class="ghost" id="onlyFlag" aria-pressed="false">&#9873; Flagged only (<span id="flagCount">0</span>)</button>
+    <button class="ghost" id="shuffle">Shuffle &amp; restart</button>
+    <div class="score" id="score"></div>
+  </div>
+
+  <div class="track" id="track" aria-label="Jump to question"></div>
+
+  <main id="main"></main>
+  <p class="hint">Enter checks your answer; press Enter again to go to the next question. Spelling is forgiving, and if your wording differs but you know you were right, choose "Count it as correct." Press F or use the flag button to mark a question or card to come back to. Your flags are saved in this browser.</p>
+</div>
+
+<script>
+const Q = [
+// ---------- Bones of the thorax ----------
+{s:"Bones of the thorax",t:"mc",p:"Which is NOT a function of the thoracic cage?",o:["Producing most red blood cells for the upper limb","Protecting thoracic organs","A role in respiration","Providing attachment points"],c:0,e:"Thoracic cage (sternum, ribs, thoracic vertebrae): protection, respiration (expanded and compressed by respiratory muscles), and attachment."},
+{s:"Bones of the thorax",t:"fill",p:"Sternum, superior to inferior: ___, ___, ___.",a:[["manubrium"],["body"],["xiphoid process","xiphoid"]],e:"Manubrium, body, xiphoid process."},
+{s:"Bones of the thorax",t:"fill",p:"Rib at the level of the sternal angle: ___",a:[["2","second","2nd","rib 2"]],e:"The sternal angle is the manubrium–body junction, at the level of rib 2."},
+{s:"Bones of the thorax",t:"fill",p:"Palpable superior midline depression of the manubrium: ___",a:[["jugular notch","suprasternal notch","jugular","suprasternal"]],e:"Jugular (suprasternal) notch. The aortic arch and trachea lie deep to it."},
+{s:"Bones of the thorax",t:"mc",p:"The clavicular notches of the sternum form which joints?",o:["Sternoclavicular","Acromioclavicular","Costochondral","Glenohumeral"],c:0,e:"The clavicular notches on the manubrium articulate with the clavicles."},
+{s:"Bones of the thorax",t:"fill",p:"Ribs 8–10: ___ ribs.",a:[["false"]],e:"True (1–7) attach directly via costal cartilage. False (8–10) connect indirectly and form the costal margin. Floating (11–12) don't reach the sternum."},
+{s:"Bones of the thorax",t:"mc",p:"The 4th intercostal space lies between:",o:["Ribs 4 and 5","Ribs 3 and 4","Ribs 4 and 6","The 4th rib and the sternum"],c:0,e:"Intercostal spaces are named for the rib forming their superior border."},
+{s:"Bones of the thorax",t:"mc",p:"The head of a rib articulates with the ____ of a thoracic vertebra; the tubercle articulates with the ____.",o:["Vertebral body (costal facets); transverse process","Transverse process; vertebral body","Spinous process; lamina","Pedicle; spinous process"],c:0,e:"Head ↔ costal facets on the bodies. Tubercle ↔ facet on the transverse process."},
+{s:"Bones of the thorax",t:"mc",p:"Which rib is the broadest, shortest, and most sharply curved, and anchors the anterior scalene m.?",o:["1st rib","2nd rib","7th rib","12th rib"],c:0,e:"Much of the 1st rib lies above the level of the clavicle."},
+// ---------- Muscles of the thorax ----------
+{s:"Muscles of the thorax",t:"fill",p:"Elevate the ribs during inhalation: ___",a:[["external intercostal","external intercostals","external intercostal muscles"]],e:"External intercostals (11 pairs). Internal intercostals draw ribs together in forced exhalation."},
+{s:"Muscles of the thorax",t:"fill",p:"Diaphragm innervation: ___ nerve, spinal levels ___.",a:[["phrenic"],["c3-c5","c3 c5","c3 4 5","c3 c4 c5","c345","c3 to c5","3 4 5","c3-5","c3 5"]],e:"\"C3, 4, & 5 keep the diaphragm alive.\" Phrenic n."},
+{s:"Muscles of the thorax",t:"fill",p:"Diaphragm opening for the IVC: ___",a:[["caval opening","caval","caval foramen"]],e:"Caval opening: IVC. Esophageal hiatus: esophagus + vagus nn. Aortic hiatus: descending aorta + thoracic duct."},
+{s:"Muscles of the thorax",t:"mc",p:"Which structures pass through the aortic hiatus?",o:["Descending aorta and thoracic duct","Esophagus and vagus nn.","IVC only","Phrenic nn."],c:0,e:"Aortic hiatus: descending aorta + thoracic duct."},
+{s:"Muscles of the thorax",t:"mc",p:"Which pair travels through the esophageal hiatus?",o:["Esophagus and vagus nn.","Esophagus and thoracic duct","Aorta and vagus nn.","IVC and phrenic n."],c:0,e:"Esophageal hiatus: esophagus and the vagus nerves (CN X)."},
+// ---------- Muscles of the abdomen ----------
+{s:"Muscles of the abdomen",t:"fill",p:"Anterolateral abdominal wall, superficial to deep: ___, ___, ___.",a:[["external oblique"],["internal oblique"],["transversus abdominis","transverse abdominis"]],e:"All three support/compress the viscera and flex and laterally flex the trunk."},
+{s:"Muscles of the abdomen",t:"fill",p:"Midline raphe where the aponeuroses of both sides interweave: ___",a:[["linea alba"]],e:"Linea alba separates the two rectus abdominis muscles."},
+{s:"Muscles of the abdomen",t:"mc",p:"The rectus sheath is formed by:",o:["The aponeuroses of the anterolateral abdominal muscles","The epimysium of rectus abdominis only","Costal cartilages","The linea alba alone"],c:0,e:"The rectus sheath encloses the rectus abdominis."},
+{s:"Muscles of the abdomen",t:"mc",p:"The tendinous intersections of rectus abdominis:",o:["Anchor the muscle to the anterior rectus sheath","Attach it to the xiphoid process only","Separate the left and right rectus muscles","Mark where the obliques insert"],c:0,e:"Rectus abdominis flexes the trunk and compresses the viscera."},
+// ---------- Pectoral girdle ----------
+{s:"Pectoral girdle",t:"mc",p:"The four regions of the upper limb are:",o:["Shoulder, arm, forearm, hand","Shoulder, elbow, wrist, hand","Pectoral, brachial, carpal, digital","Clavicle, humerus, radius, ulna"],c:0,e:"Shoulder, arm (brachium), forearm (antebrachium), hand. Functions: mobility, grasping, fine motor skills."},
+{s:"Pectoral girdle",t:"fill",p:"Bones of the pectoral girdle: ___ and ___.",a:[["clavicle"],["scapula"]],e:"They attach the axial skeleton to the free upper limb, held in place by axio-appendicular muscles."},
+{s:"Pectoral girdle",t:"fill",p:"Joint formed by the medial end of the clavicle: ___",a:[["sternoclavicular","sc joint","sc"]],e:"Sternal (medial) end is rounded → sternoclavicular. Acromial (lateral) end is flattened → AC joint."},
+{s:"Pectoral girdle",t:"mc",p:"The clavicle most often fractures at its:",o:["Midregion","Sternal end","Acromial end","Coracoid attachment"],c:0,e:"Among the most frequently fractured bones, especially in children, from direct trauma or FOOSH."},
+{s:"Pectoral girdle",t:"fill",p:"Scapular process projecting anterolaterally; anchors pectoralis minor and the short head of biceps: ___",a:[["coracoid process","coracoid"]],e:"Coracoid process."},
+{s:"Pectoral girdle",t:"mc",p:"The \"point of the shoulder,\" the lateral continuation of the scapular spine, is the:",o:["Acromion","Coracoid process","Glenoid fossa","Greater tubercle"],c:0,e:"Acromion articulates with the clavicle at the AC joint."},
+{s:"Pectoral girdle",t:"fill",p:"Shallow scapular socket for the humeral head: ___",a:[["glenoid fossa","glenoid cavity","glenoid"]],e:"Glenoid fossa (cavity) → glenohumeral joint."},
+// ---------- Arm & forearm bones ----------
+{s:"Arm & forearm bones",t:"fill",p:"Fracture site on the humerus that endangers the axillary n.: ___",a:[["surgical neck"]],e:"Surgical neck: constriction distal to the tubercles. The anatomical neck is just distal to the head."},
+{s:"Arm & forearm bones",t:"fill",p:"Groove traversed by the long head of biceps brachii: ___",a:[["intertubercular sulcus","bicipital groove","intertubercular groove","intertubercular"]],e:"Intertubercular sulcus (bicipital groove), between the greater and lesser tubercles."},
+{s:"Arm & forearm bones",t:"mc",p:"How many rotator cuff muscles attach to the greater tubercle?",o:["3","1","2","4"],c:0,e:"Greater tubercle: supraspinatus, infraspinatus, teres minor. Lesser tubercle: subscapularis."},
+{s:"Arm & forearm bones",t:"fill",p:"Nerve running behind the medial epicondyle (\"funny bone\"): ___",a:[["ulnar"]],e:"Medial epicondyle: forearm flexor origin. Lateral epicondyle: extensor origin."},
+{s:"Arm & forearm bones",t:"fill",p:"Humeral condyle that articulates with the radial head: ___",a:[["capitulum"]],e:"Capitulum (lateral) ↔ radial head. Trochlea (medial) ↔ trochlear notch of ulna."},
+{s:"Arm & forearm bones",t:"mc",p:"The olecranon fossa of the humerus:",o:["Accommodates the olecranon of the ulna during full elbow extension","Articulates with the radial head","Is the proximal attachment of the flexors","Contains the ulnar n."],c:0,e:"It's a posterior depression, not an articular surface."},
+{s:"Arm & forearm bones",t:"fill",p:"Ulnar landmark where brachialis inserts: ___",a:[["coronoid process","coronoid"]],e:"Coronoid process: anterior projection at the end of the trochlear notch."},
+{s:"Arm & forearm bones",t:"mc",p:"The radial notch of the ulna articulates with:",o:["The head of the radius","The capitulum","The trochlea","The scaphoid"],c:0,e:"Radial notch + radial head = proximal radio-ulnar joint."},
+{s:"Arm & forearm bones",t:"fill",p:"Distal attachment of biceps brachii: ___",a:[["radial tuberosity"]],e:"Radial tuberosity: medial projection just distal to the radial head."},
+{s:"Arm & forearm bones",t:"fill",p:"Distal radius fracture from forced wrist extension (FOOSH), common with osteoporosis: ___ fracture",a:[["colles","colles'","colles's"]],e:"Colles fracture."},
+{s:"Arm & forearm bones",t:"mc",p:"Which forearm bone is lateral, and which primarily forms the wrist joint?",o:["Radius; radius","Ulna; radius","Radius; ulna","Ulna; ulna"],c:0,e:"Ulna: medial, elbow joint. Radius: lateral, wrist joint."},
+// ---------- Wrist & hand bones ----------
+{s:"Wrist & hand bones",t:"fill",p:"Most frequently fractured carpal: ___",a:[["scaphoid"]],e:"Often from a FOOSH, often missed on early X-ray, and at risk of avascular necrosis."},
+{s:"Wrist & hand bones",t:"mc",p:"Which proximal-row carpal does NOT articulate with the radius?",o:["Pisiform","Scaphoid","Lunate","Triquetrum"],c:0,e:"The pisiform is a sesamoid bone."},
+{s:"Wrist & hand bones",t:"mc",p:"Which carpal row articulates with the metacarpals?",o:["Distal row","Proximal row","Both rows equally","Neither; metacarpals articulate with the radius"],c:0,e:"4 carpals per row. Proximal row ↔ radius (mostly); distal row ↔ metacarpals."},
+{s:"Wrist & hand bones",t:"fill",p:"Nerve compressed in carpal tunnel syndrome: ___",a:[["median"]],e:"Causes tingling, lost sensation, and progressive weakness of thumb muscles."},
+{s:"Wrist & hand bones",t:"fill",p:"Roof of the carpal tunnel: ___",a:[["flexor retinaculum","transverse carpal ligament"]],e:"Floor: carpal bones. Roof: flexor retinaculum / transverse carpal ligament. Contents: long flexor tendons + sheaths, median n."},
+{s:"Wrist & hand bones",t:"mc",p:"Metacarpals are numbered:",o:["1–5, lateral to medial (thumb = 1)","1–5, medial to lateral (little finger = 1)","From distal to proximal","Only for digits 2–5"],c:0,e:"Proximally they form CMC joints, distally MP joints."},
+{s:"Wrist & hand bones",t:"fill",p:"Total phalanges in one hand: ___",a:[["14","fourteen"]],e:"5 proximal + 4 intermediate + 5 distal. The thumb has no intermediate phalanx."},
+{s:"Wrist & hand bones",t:"mc",p:"The thumb has no:",o:["DIP joint","MP joint","Proximal phalanx","Distal phalanx"],c:0,e:"No intermediate phalanx, so the thumb has only one IP joint."},
+// ---------- Joints of the shoulder ----------
+{s:"Joints of the shoulder",t:"mc",p:"Three joints allow full shoulder motion. Which is the \"true\" shoulder joint?",o:["Glenohumeral","Sternoclavicular","Acromioclavicular","Scapulothoracic"],c:0,e:"Sternoclavicular, acromioclavicular, and glenohumeral."},
+{s:"Joints of the shoulder",t:"fill",p:"AC joint type: ___",a:[["plane","gliding"]],e:"Plane synovial joint; gliding movements of the scapula."},
+{s:"Joints of the shoulder",t:"fill",p:"Clinical name for AC joint dislocation: ___",a:[["shoulder separation","separated shoulder","separation"]],e:"Degree depends on which ligaments are disrupted. Mechanism: direct blow or FOOSH."},
+{s:"Joints of the shoulder",t:"mc",p:"The glenoid labrum:",o:["Deepens the glenoid cavity slightly","Is a bursa that reduces friction","Attaches the rotator cuff to the humerus","Forms the AC joint"],c:0,e:"Fibrocartilaginous lip. Bursae here are a common site of bursitis."},
+{s:"Joints of the shoulder",t:"mc",p:"The rotator cuff encircles the glenohumeral joint EXCEPT:",o:["Inferiorly","Superiorly","Anteriorly","Posteriorly"],c:0,e:"This is why most dislocations go inferiorly."},
+{s:"Joints of the shoulder",t:"fill",p:"Most common clinical description of a shoulder dislocation: ___",a:[["anterior"]],e:"Most occur inferiorly but are described clinically as anterior (most common) or posterior."},
+// ---------- Elbow & wrist joints ----------
+{s:"Elbow & wrist joints",t:"mc",p:"Which three joints share one articular capsule at the elbow?",o:["Humero-ulnar, humeroradial, proximal radio-ulnar","Humero-ulnar, humeroradial, distal radio-ulnar","Humeroradial, radiocarpal, proximal radio-ulnar","Glenohumeral, humero-ulnar, humeroradial"],c:0,e:"The humero-ulnar joint is the true elbow joint."},
+{s:"Elbow & wrist joints",t:"fill",p:"Humero-ulnar joint type: ___",a:[["hinge"]],e:"Hinge synovial: flexion/extension. Radial and ulnar collateral ligaments are capsule thickenings."},
+{s:"Elbow & wrist joints",t:"fill",p:"Proximal radio-ulnar joint type: ___; its movements: ___ and ___.",a:[["pivot"],["pronation"],["supination"]],e:"Pivot: radial head in the radial notch."},
+{s:"Elbow & wrist joints",t:"fill",p:"Ligament encircling the radial head: ___",a:[["anular ligament","annular ligament","anular","annular"]],e:"Anular ligament forms a collar around the radial head."},
+{s:"Elbow & wrist joints",t:"mc",p:"In \"pulled elbow\" (radial head subluxation), the radial head:",o:["Moves distal to the anular ligament","Moves proximal into the olecranon fossa","Fractures at the radial tuberosity","Dislocates from the capitulum posteriorly"],c:0,e:"Subluxation = incomplete dislocation."},
+{s:"Elbow & wrist joints",t:"fill",p:"Radiocarpal joint type: ___",a:[["condyloid","ellipsoid","condylar"]],e:"Condyloid: flexion/extension, abduction (radial deviation)/adduction (ulnar deviation), circumduction."},
+{s:"Elbow & wrist joints",t:"mc",p:"Which is NOT an articulating part of the radiocarpal joint?",o:["Pisiform","Distal end of the radius","Scaphoid and lunate","Articular disc of the distal radio-ulnar joint"],c:0,e:"Proximal row of carpals except the pisiform, plus the distal radius and the articular disc."},
+// ---------- Axio-appendicular & shoulder muscles ----------
+{s:"Axio-appendicular & shoulder muscles",t:"fill",p:"Heads of pectoralis major: ___ and ___.",a:[["clavicular"],["sternocostal"]],e:"Actions: adducts, medially rotates, flexes/extends the shoulder."},
+{s:"Axio-appendicular & shoulder muscles",t:"mc",p:"Pectoralis minor attaches distally to the:",o:["Coracoid process","Greater tubercle","Acromion","Intertubercular sulcus"],c:0,e:"It stabilizes and protracts the scapula."},
+{s:"Axio-appendicular & shoulder muscles",t:"fill",p:"Nerve injured in a \"winged scapula\": ___",a:[["long thoracic"]],e:"Long thoracic n. → serratus anterior weakness or paralysis."},
+{s:"Axio-appendicular & shoulder muscles",t:"mc",p:"The main action of serratus anterior is:",o:["Protraction of the scapula","Retraction of the scapula","Elevation of the scapula","Medial rotation of the shoulder"],c:0,e:"Innervated by the long thoracic n."},
+{s:"Axio-appendicular & shoulder muscles",t:"fill",p:"Trapezius innervation: ___",a:[["accessory","spinal accessory","cn xi","cn 11","xi"]],e:"Accessory n. (CN XI). Proximal: external occipital protuberance and midline. Distal: clavicle, acromion, spine of scapula."},
+{s:"Axio-appendicular & shoulder muscles",t:"mc",p:"Which is NOT an action of trapezius on the scapula?",o:["Protraction","Upward rotation","Retraction","Elevation/depression"],c:0,e:"Protraction belongs to serratus anterior (and pectoralis minor)."},
+{s:"Axio-appendicular & shoulder muscles",t:"mc",p:"Latissimus dorsi acts at the shoulder to:",o:["Extend, adduct, and medially rotate","Flex, abduct, and laterally rotate","Only abduct","Protract the scapula"],c:0,e:"Axial skeleton to proximal humerus."},
+{s:"Axio-appendicular & shoulder muscles",t:"fill",p:"Deltoid innervation: ___",a:[["axillary"]],e:"Three parts: clavicular, acromial, spinal. Actions: abduction, flexion/extension, medial/lateral rotation."},
+{s:"Axio-appendicular & shoulder muscles",t:"mc",p:"Axillary n. damage would leave which shoulder action LEAST affected?",o:["Adduction","Abduction","Flexion","Extension"],c:0,e:"Deltoid abducts, flexes, extends, and rotates. Adduction relies on pectoralis major and latissimus dorsi."},
+{s:"Axio-appendicular & shoulder muscles",t:"fill",p:"Rotator cuff muscle that initiates abduction: ___",a:[["supraspinatus"]],e:"Its tendon is also the most commonly injured."},
+{s:"Axio-appendicular & shoulder muscles",t:"fill",p:"Only rotator cuff muscle on the lesser tubercle: ___",a:[["subscapularis"]],e:"Subscapularis: anterior, medial rotation."},
+{s:"Axio-appendicular & shoulder muscles",t:"mc",p:"Which two rotator cuff muscles laterally rotate the shoulder?",o:["Infraspinatus and teres minor","Supraspinatus and subscapularis","Subscapularis and teres minor","Supraspinatus and infraspinatus"],c:0,e:"Supraspinatus initiates abduction; subscapularis medially rotates."},
+{s:"Axio-appendicular & shoulder muscles",t:"mc",p:"A rotator cuff tear mainly causes:",o:["Shoulder instability and possibly reduced ROM from inflammation","Winged scapula","Loss of elbow flexion","Carpal tunnel symptoms"],c:0,e:"The cuff is the main source of glenohumeral stability."},
+// ---------- Arm, forearm & hand muscles ----------
+{s:"Arm, forearm & hand muscles",t:"mc",p:"A muscle compartment is best defined as:",o:["A group of muscles sharing neurovascular supply and actions, enclosed in deep fascia","All muscles crossing a single joint","Muscles with the same fiber type","Any muscle with two heads"],c:0,e:"Compartments are often separated by intermuscular septa."},
+{s:"Arm, forearm & hand muscles",t:"fill",p:"Nerve of the anterior compartment of the arm: ___",a:[["musculocutaneous"]],e:"Musculocutaneous n.: biceps brachii and brachialis (elbow flexion, supination)."},
+{s:"Arm, forearm & hand muscles",t:"fill",p:"Nerve of the posterior compartments of the arm and forearm: ___",a:[["radial"]],e:"Radial n.: triceps, forearm extensors, brachioradialis."},
+{s:"Arm, forearm & hand muscles",t:"mc",p:"Biceps brachii is a \"3-joint muscle.\" Which joints?",o:["Shoulder, elbow, proximal radio-ulnar","Shoulder, elbow, wrist","Elbow, wrist, distal radio-ulnar","Sternoclavicular, shoulder, elbow"],c:0,e:"Primary actions: flexes and supinates the forearm."},
+{s:"Arm, forearm & hand muscles",t:"fill",p:"Usual prime mover of elbow flexion: ___",a:[["brachialis"]],e:"Deep to biceps; humerus to coronoid process of the ulna."},
+{s:"Arm, forearm & hand muscles",t:"fill",p:"Distal attachment of triceps brachii: ___",a:[["olecranon","olecranon process"]],e:"Three heads: long, medial, lateral. Extends the forearm."},
+{s:"Arm, forearm & hand muscles",t:"mc",p:"Proximal attachment of the anterior forearm (flexor) compartment:",o:["Medial epicondyle, via the common flexor tendon","Lateral epicondyle, via the common extensor tendon","Coronoid process","Radial tuberosity"],c:0,e:"Innervation mainly median n. Actions: flex wrist and hand, pronate."},
+{s:"Arm, forearm & hand muscles",t:"fill",p:"Flexor carpi ulnaris innervation: ___",a:[["ulnar"]],e:"FCU: flexes and adducts (ulnar deviation) the wrist. FCR: flexes and abducts."},
+{s:"Arm, forearm & hand muscles",t:"mc",p:"Flexor digitorum profundus differs from superficialis because it:",o:["Attaches to distal phalanges and also flexes the DIP joints","Attaches to intermediate phalanges","Only flexes the MP joints","Is innervated only by the radial n."],c:0,e:"FDS: intermediate phalanges 2–5, MP + PIP. FDP: distal phalanges 2–5, MP + PIP + DIP; median and ulnar nn."},
+{s:"Arm, forearm & hand muscles",t:"mc",p:"Pronator teres vs. pronator quadratus:",o:["Teres is proximal and superficial; quadratus is distal and deep","Teres is distal and deep; quadratus is proximal and superficial","Both attach distally to the ulna","Both are in the posterior compartment"],c:0,e:"Both attach distally to the radius, the bone that moves in pronation."},
+{s:"Arm, forearm & hand muscles",t:"fill",p:"Elbow flexor that belongs to the posterior compartment: ___",a:[["brachioradialis"]],e:"Brachioradialis: radial n., flexion of the forearm."},
+{s:"Arm, forearm & hand muscles",t:"fill",p:"Proximal attachment of the forearm extensors: ___",a:[["lateral epicondyle"]],e:"Via the common extensor tendon."},
+{s:"Arm, forearm & hand muscles",t:"mc",p:"Which muscle extends and abducts the wrist?",o:["Extensor carpi radialis longus","Extensor carpi ulnaris","Extensor digitorum","Flexor carpi radialis"],c:0,e:"ECRL/B: extend + abduct. ECU: extend + adduct. Extensor digitorum: extends MP, PIP, DIP of digits 2–5."},
+{s:"Arm, forearm & hand muscles",t:"mc",p:"The deep layer of the posterior forearm mainly moves:",o:["Digit 1 (thumb)","Digits 2–5","The elbow","The wrist only"],c:0,e:"Superficial layer: wrist and digits 2–5."},
+{s:"Arm, forearm & hand muscles",t:"fill",p:"Thenar compartment innervation: ___. Hypothenar: ___.",a:[["median"],["ulnar"]],e:"Thenar: digit 1. Hypothenar: digit 5. Both are intrinsic hand muscles, mostly on the palmar side."},
+// ---------- Muscle flashcards ----------
+{s:"Muscle flashcards",t:"card",g:"Thorax",n:"External intercostals",f:[["Location","Span the intercostal spaces between ribs (11 pairs)"],["Action","Elevate the ribs during inhalation"],["Also","Maintain tonus of the intercostal spaces"]]},
+{s:"Muscle flashcards",t:"card",g:"Thorax",n:"Internal intercostals",f:[["Location","Span the intercostal spaces, deep to the externals (11 pairs); innermost intercostals lie deeper still"],["Action","Draw the ribs together during forced exhalation"]]},
+{s:"Muscle flashcards",t:"card",g:"Thorax",n:"Diaphragm",f:[["Location","Separates the thoracic and abdominal cavities"],["Action","Chief muscle of inspiration"],["Innervation","Phrenic n. (C3, 4, 5 keep the diaphragm alive)"],["Openings","Caval opening: IVC. Esophageal hiatus: esophagus + vagus nn. Aortic hiatus: descending aorta + thoracic duct"]]},
+{s:"Muscle flashcards",t:"card",g:"Abdomen",n:"Anterolateral abdominal muscles",f:[["Layers","External oblique (superficial), internal oblique (intermediate), transversus abdominis (deepest)"],["Attachments","Their aponeuroses form the rectus sheath and interweave at the linea alba"],["Actions","Support and compress the abdominal viscera; flex the trunk; laterally flex the trunk"]]},
+{s:"Muscle flashcards",t:"card",g:"Abdomen",n:"Rectus abdominis",f:[["Location","Long, strap-like, enclosed in the rectus sheath; the left and right muscles are separated by the linea alba"],["Tendinous intersections","Anchor the muscle to the anterior rectus sheath"],["Actions","Flexes the trunk; compresses the abdominal viscera"]]},
+{s:"Muscle flashcards",t:"card",g:"Axio-appendicular",n:"Pectoralis major",f:[["Location","Anterior thorax"],["Proximal attachments (2 heads)","Clavicular head; sternocostal head"],["Distal attachment","Proximal humerus"],["Actions","Adducts, medially rotates, and flexes/extends the shoulder"]]},
+{s:"Muscle flashcards",t:"card",g:"Axio-appendicular",n:"Pectoralis minor",f:[["Distal attachment","Coracoid process of the scapula"],["Actions","Stabilizes the scapula; protracts the scapula"]]},
+{s:"Muscle flashcards",t:"card",g:"Axio-appendicular",n:"Serratus anterior",f:[["Action","Protraction of the scapula"],["Innervation","Long thoracic n."],["Clinical","Nerve injury → weak serratus anterior → winged scapula"]]},
+{s:"Muscle flashcards",t:"card",g:"Axio-appendicular",n:"Trapezius",f:[["Proximal attachment","External occipital protuberance and midline structures"],["Distal attachment","Clavicle, acromion, spine of scapula"],["Actions","Scapula: upward rotation, retraction, elevation/depression. Head: extension"],["Innervation","Accessory n. (CN XI)"]]},
+{s:"Muscle flashcards",t:"card",g:"Axio-appendicular",n:"Latissimus dorsi",f:[["Proximal attachment","Axial skeletal structures"],["Distal attachment","Proximal humerus"],["Actions","Extension, adduction, and medial rotation of the shoulder"]]},
+{s:"Muscle flashcards",t:"card",g:"Shoulder",n:"Deltoid",f:[["Parts","Clavicular, acromial, spinal"],["Actions","Abduction; flexion/extension; medial/lateral rotation of the shoulder"],["Innervation","Axillary n."],["Clinical","Surgical neck fracture of the humerus can endanger the axillary n."]]},
+{s:"Muscle flashcards",t:"card",g:"Rotator cuff",n:"Supraspinatus",f:[["Location","Posterior (belly above the spine of the scapula)"],["Distal attachment","Greater tubercle of the humerus"],["Action","Initiates abduction of the shoulder"],["Clinical","Most commonly injured rotator cuff tendon"]]},
+{s:"Muscle flashcards",t:"card",g:"Rotator cuff",n:"Infraspinatus",f:[["Location","Posterior"],["Distal attachment","Greater tubercle of the humerus"],["Action","Lateral rotation of the shoulder"]]},
+{s:"Muscle flashcards",t:"card",g:"Rotator cuff",n:"Teres minor",f:[["Location","Posterior"],["Distal attachment","Greater tubercle of the humerus"],["Action","Lateral rotation of the shoulder"]]},
+{s:"Muscle flashcards",t:"card",g:"Rotator cuff",n:"Subscapularis",f:[["Location","Anterior (the only anterior rotator cuff muscle)"],["Distal attachment","Lesser tubercle of the humerus"],["Action","Medial rotation of the shoulder"]]},
+{s:"Muscle flashcards",t:"card",g:"Rotator cuff",n:"Rotator cuff (as a unit)",f:[["Muscles","Supraspinatus, infraspinatus, teres minor (greater tubercle); subscapularis (lesser tubercle)"],["Function","Musculotendinous cuff that is the main source of shoulder stability; encircles the joint except inferiorly"]]},
+{s:"Muscle flashcards",t:"card",g:"Arm compartments",n:"Anterior vs. posterior compartment of the arm",f:[["Anterior","Elbow flexors and supinator of the forearm. Musculocutaneous n."],["Posterior","Elbow extensor. Radial n."]]},
+{s:"Muscle flashcards",t:"card",g:"Arm (anterior)",n:"Biceps brachii",f:[["Proximal attachments","Scapula (short head from the coracoid process)"],["Distal attachment","Radial tuberosity of the radius"],["Joints crossed","Shoulder, elbow, proximal radio-ulnar (a '3-joint muscle')"],["Actions","Flexes the forearm; supinates the forearm"],["Innervation","Musculocutaneous n."]]},
+{s:"Muscle flashcards",t:"card",g:"Arm (anterior)",n:"Brachialis",f:[["Location","Deep to the biceps brachii"],["Proximal attachment","Humerus"],["Distal attachment","Coronoid process of the ulna"],["Action","Flexes the forearm (typically the prime mover)"],["Innervation","Musculocutaneous n."]]},
+{s:"Muscle flashcards",t:"card",g:"Arm (posterior)",n:"Triceps brachii",f:[["Heads","Long, medial, lateral"],["Distal attachment","Olecranon of the ulna"],["Action","Extends the forearm"],["Innervation","Radial n."]]},
+{s:"Muscle flashcards",t:"card",g:"Forearm compartments",n:"Anterior vs. posterior compartment of the forearm",f:[["Anterior","Proximal attachment: medial epicondyle (common flexor tendon). Flex the wrist and hand; pronate. Primarily median n."],["Posterior","Proximal attachment: lateral epicondyle (common extensor tendon). Extend the wrist and hand; supinate. Radial n."]]},
+{s:"Muscle flashcards",t:"card",g:"Forearm (anterior, superficial)",n:"Flexor carpi radialis",f:[["Proximal attachment","Medial epicondyle (common flexor tendon)"],["Actions","Flexion and abduction (radial deviation) of the wrist"],["Innervation","Median n. (anterior compartment nerve)"]]},
+{s:"Muscle flashcards",t:"card",g:"Forearm (anterior, superficial)",n:"Flexor carpi ulnaris",f:[["Proximal attachment","Medial epicondyle (common flexor tendon)"],["Actions","Flexion and adduction (ulnar deviation) of the wrist"],["Innervation","Ulnar n. (an exception in the anterior compartment)"]]},
+{s:"Muscle flashcards",t:"card",g:"Forearm (anterior, intermediate)",n:"Flexor digitorum superficialis",f:[["Distal attachment","Intermediate phalanges of digits 2–5"],["Actions","Flexes the MP and PIP joints of digits 2–5"],["Innervation","Median n. (anterior compartment nerve)"]]},
+{s:"Muscle flashcards",t:"card",g:"Forearm (anterior, deep)",n:"Flexor digitorum profundus",f:[["Distal attachment","Distal phalanges of digits 2–5"],["Actions","Flexes the MP, PIP, and DIP joints of digits 2–5"],["Innervation","Median and ulnar nn."]]},
+{s:"Muscle flashcards",t:"card",g:"Forearm (anterior)",n:"Pronator teres & pronator quadratus",f:[["Location","Anterior compartment. Teres: proximal and superficial. Quadratus: distal and deep"],["Distal attachment","Radius (the bone that moves during pronation)"],["Action","Pronation of the forearm"],["Innervation","Median n. (anterior compartment nerve)"]]},
+{s:"Muscle flashcards",t:"card",g:"Forearm (posterior)",n:"Brachioradialis",f:[["Compartment","Considered part of the posterior compartment"],["Action","Flexion of the forearm (at the elbow)"],["Innervation","Radial n."]]},
+{s:"Muscle flashcards",t:"card",g:"Forearm (posterior, superficial)",n:"Extensor carpi radialis longus & brevis",f:[["Proximal attachment","Lateral epicondyle (common extensor tendon)"],["Actions","Extend and abduct the wrist"],["Innervation","Radial n."]]},
+{s:"Muscle flashcards",t:"card",g:"Forearm (posterior, superficial)",n:"Extensor digitorum",f:[["Proximal attachment","Lateral epicondyle (common extensor tendon)"],["Actions","Extends the MP, PIP, and DIP joints of digits 2–5"],["Innervation","Radial n."]]},
+{s:"Muscle flashcards",t:"card",g:"Forearm (posterior, superficial)",n:"Extensor carpi ulnaris",f:[["Proximal attachment","Lateral epicondyle (common extensor tendon)"],["Actions","Extends and adducts the wrist"],["Innervation","Radial n."]]},
+{s:"Muscle flashcards",t:"card",g:"Forearm (posterior, deep)",n:"Deep posterior forearm muscles",f:[["Action","Primarily move digit 1 (the thumb)"],["Innervation","Radial n."]]},
+{s:"Muscle flashcards",t:"card",g:"Hand",n:"Thenar compartment",f:[["Location","Intrinsic hand muscles, palmar side"],["Digit","1 (thumb)"],["Innervation","Median n."],["Clinical","Carpal tunnel syndrome → progressive thumb muscle weakness"]]},
+{s:"Muscle flashcards",t:"card",g:"Hand",n:"Hypothenar compartment",f:[["Location","Intrinsic hand muscles, palmar side"],["Digit","5 (little finger)"],["Innervation","Ulnar n."]]}
+];
+
+// ---------- helpers ----------
+const norm = s => s.toLowerCase().replace(/\(.*?\)/g,' ').replace(/[^a-z0-9 ]/g,' ').replace(/\b(the|a|an|m|mm|n|nn|nerve|bone|bones|muscle|muscles)\b/g,' ').replace(/\s+/g,' ').trim();
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=[...Array(n+1).keys()];for(let i=1;i<=m;i++){let c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function matches(input, accepted){
+  const g = norm(input); if(!g) return false;
+  return accepted.some(ans=>{const t=norm(ans); if(g===t) return true; if(/^\d+$/.test(t)) return false; const tol = t.length>=8?2:t.length>=5?1:0; return lev(g,t)<=tol;});
+}
+const shuffle = arr => {const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let filter="all", topic="all", deck=[], idx=0;
+const topicSel=document.getElementById("topic");
+[...new Set(Q.map(q=>q.s))].forEach(t=>{const o=document.createElement("option");o.value=t;o.textContent=`${t} (${Q.filter(q=>q.s===t).length})`;topicSel.appendChild(o)});
+topicSel.onchange=()=>{topic=topicSel.value;build()};
+const FLAG_KEY="flags:"+document.title;
+const keyOf=q=>{const t=(q.t||"")+"|"+(q.p||q.n||"");let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return (h>>>0).toString(36)};
+let flags=new Set(), onlyFlagged=false;
+try{flags=new Set(JSON.parse(localStorage.getItem(FLAG_KEY)||"[]"))}catch(e){flags=new Set()}
+const isF=q=>flags.has(keyOf(q));
+function saveFlags(){try{localStorage.setItem(FLAG_KEY,JSON.stringify([...flags]))}catch(e){} updateFlagCount();}
+function updateFlagCount(){const c=Q.filter(isF).length;const el=document.getElementById("flagCount");if(el)el.textContent=c;}
+function toggleFlag(q){const k=keyOf(q);flags.has(k)?flags.delete(k):flags.add(k);saveFlags();const b=document.getElementById("flag");if(b){b.setAttribute("aria-pressed",isF(q));b.innerHTML=isF(q)?"&#9873; Flagged":"&#9873; Flag";}renderTrack();}
+const flagBtn=q=>`<button class="btn flag" id="flag" aria-pressed="${isF(q)}">${isF(q)?"&#9873; Flagged":"&#9873; Flag"}</button>`;
+
+function build(){
+  const pool = onlyFlagged ? Q.filter(q=>isF(q)&&(topic==="all"||q.s===topic)&&(q.t==="card"||filter==="all"||q.t===filter)) : Q.filter(q=> topic==="all" ? (q.t!=="card" && (filter==="all"||q.t===filter)) : (q.s===topic && (q.t==="card"||filter==="all"||q.t===filter)));
+  deck = shuffle(pool).map(q=>{
+    const item = {q, status:null, picked:null, typed:[]};
+    if(q.t==="mc"){ const order = shuffle(q.o.map((_,i)=>i)); item.order=order; }
+    return item;
+  });
+  idx=0; render();
+}
+
+const main=document.getElementById('main'), track=document.getElementById('track'), score=document.getElementById('score');
+
+function renderTrack(){
+  track.innerHTML="";
+  deck.forEach((it,i)=>{const b=document.createElement('button');b.setAttribute('aria-label',`Question ${i+1}${it.status?(it.status==="good"?", correct":", incorrect"):""}`);if(it.status)b.className=it.status;if(isF(it.q))b.classList.add("flagged");if(i===idx)b.classList.add('cur');b.onclick=()=>{idx=i;render()};track.appendChild(b)});
+  const done=deck.filter(d=>d.status).length, right=deck.filter(d=>d.status==="good").length;
+  score.innerHTML=`<b>${right}</b> correct of ${done} answered &nbsp;/&nbsp; ${deck.length} total`;
+}
+
+function render(){
+  renderTrack();
+  if(deck.length===0){main.innerHTML=`<section class="card"><p class="empty">${onlyFlagged?"Nothing flagged here yet. Flag questions or cards with the &#9873; button (or press F), then come back.":"No questions match these filters."}</p></section>`;return;}
+  if(idx>=deck.length){return renderDone()}
+  const it=deck[idx], q=it.q;
+  if(q.t==="card") return renderCard(it);
+  let html=`<section class="card" aria-live="polite"><p class="kind">Question ${idx+1} of ${deck.length}, <span>${q.t==="mc"?"multiple choice":"fill in the blank"}</span></p>`;
+  if(q.t==="fill"){
+    let n=0;
+    const parts=esc(q.p).split("___");
+    html+=`<p class="prompt">`+parts.map((p,i)=>i<parts.length-1?p+`<input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-b="${n++}" aria-label="Blank ${n}" value="${esc(it.typed[n-1]||"")}">`:p).join("")+`</p>`;
+  } else {
+    html+=`<p class="prompt">${esc(q.p)}</p><ul class="opts">`+it.order.map(oi=>`<li><button data-o="${oi}">${esc(q.o[oi])}</button></li>`).join("")+`</ul>`;
+  }
+  html+=`<div class="actions"><button class="btn" id="prev" ${idx===0?"disabled":""}>Previous</button>${flagBtn(q)}<span class="spacer"></span>`+
+        (q.t==="fill"?`<button class="btn" id="reveal">Show answer</button>`:"")+
+        `<button class="btn primary" id="go">${it.status?"Next":"Check"}</button></div><div class="feedback" id="fb"></div></section>`;
+  main.innerHTML=html;
+
+  if(q.t==="mc"){
+    main.querySelectorAll('.opts button').forEach(b=>{
+      b.onclick=()=>{ if(it.status) return; it.picked=+b.dataset.o; main.querySelectorAll('.opts button').forEach(x=>x.classList.toggle('pick',x===b)); };
+    });
+    if(it.picked!==null) main.querySelector(`.opts button[data-o="${it.picked}"]`).classList.add('pick');
+  } else {
+    const ins=main.querySelectorAll('.prompt input');
+    ins.forEach(inp=>{ const size=()=>inp.style.width=Math.max(7,Math.min(24,inp.value.length+3))+"ch"; size(); inp.addEventListener('input',()=>{it.typed[+inp.dataset.b]=inp.value;size()}); });
+    if(!it.status && ins[0]) ins[0].focus({preventScroll:true});
+    document.getElementById('reveal').onclick=()=>{ if(!it.status){ collectTyped(it); grade(it,true); } };
+  }
+  document.getElementById('prev').onclick=()=>{idx--;render()};
+  document.getElementById('go').onclick=()=>{ if(it.status){idx++;render()} else check(it) };
+  if(it.status) showFeedback(it);
+}
+
+function renderCard(it){
+  const q=it.q;
+  let html=`<section class="card" aria-live="polite"><p class="kind">Card ${idx+1} of ${deck.length}, <span>flashcard</span></p>
+  <p class="fc-group">${esc(q.g)}</p><h2 class="fc-name">${esc(q.n)}</h2>`;
+  if(!it.flipped){ html+=`<p class="fc-cue">Recall its ${q.f.map(f=>f[0].toLowerCase()).join(", ")} before flipping.</p>`; }
+  else { html+=`<dl class="fc-back">`+q.f.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")+`</dl>`; }
+  html+=`<div class="actions"><button class="btn" id="prev" ${idx===0?"disabled":""}>Previous</button>${flagBtn(q)}<span class="spacer"></span>`;
+  if(!it.flipped) html+=`<button class="btn primary" id="go">Flip card</button>`;
+  else if(!it.status) html+=`<button class="btn" id="miss">Review again</button><button class="btn primary" id="go">Got it</button>`;
+  else html+=`<span class="kind" style="margin:0 6px 0 0">${it.status==="good"?"Marked: got it":"Marked: review again"}</span><button class="btn primary" id="go">${idx===deck.length-1?"See results":"Next"}</button>`;
+  html+=`</div></section>`;
+  main.innerHTML=html;
+  document.getElementById('prev').onclick=()=>{idx--;render()};
+  const go=document.getElementById('go');
+  go.onclick=()=>{ if(!it.flipped){it.flipped=true;render()} else if(!it.status){it.status="good";idx++;render()} else {idx++;render()} };
+  const miss=document.getElementById('miss'); if(miss) miss.onclick=()=>{it.status="bad";idx++;render()};
+  go.focus({preventScroll:true});
+}
+
+function collectTyped(it){ main.querySelectorAll('.prompt input').forEach(inp=>it.typed[+inp.dataset.b]=inp.value); }
+
+function check(it){
+  const q=it.q;
+  if(q.t==="mc"){ if(it.picked===null) return flash("Choose an answer first."); it.status = it.picked===q.c?"good":"bad"; }
+  else { collectTyped(it); if(it.typed.filter(Boolean).length===0) return flash("Type an answer in the blank, or choose Show answer."); grade(it,false); return; }
+  render();
+}
+function grade(it,revealed){
+  const q=it.q;
+  it.results=q.a.map((acc,i)=>matches(it.typed[i]||"",acc));
+  it.status = !revealed && it.results.every(Boolean) ? "good" : "bad";
+  render();
+}
+function flash(msg){const fb=document.getElementById('fb');fb.className="feedback show bad";fb.innerHTML=esc(msg);}
+
+function showFeedback(it){
+  const q=it.q, fb=document.getElementById('fb');
+  document.getElementById('go').textContent = idx===deck.length-1?"See results":"Next";
+  if(q.t==="mc"){
+    main.querySelectorAll('.opts button').forEach(b=>{const o=+b.dataset.o;b.disabled=true;if(o===q.c)b.classList.add('good');else if(o===it.picked)b.classList.add('bad')});
+    fb.className=`feedback show ${it.status}`;
+    fb.innerHTML=`<strong>${it.status==="good"?"Correct.":"Not quite."}</strong>${esc(q.e)}`;
+  } else {
+    const ins=main.querySelectorAll('.prompt input');
+    ins.forEach((inp,i)=>{inp.readOnly=true;inp.classList.add(it.results&&it.results[i]&&it.status!=="bad"?"good":(it.results&&it.results[i]?"good":"bad"))});
+    const key=q.a.map(a=>a[0]).join("; ");
+    fb.className=`feedback show ${it.status}`;
+    fb.innerHTML=`<strong>${it.status==="good"?"Correct.":"Answer: <span class=\"ans\">"+esc(key)+"</span>"}</strong>${esc(q.e)}`+
+      (it.status==="bad"&&it.typed.some(Boolean)?`<br><button class="override" id="ov">Count it as correct</button>`:"");
+    const ov=document.getElementById('ov'); if(ov) ov.onclick=()=>{it.status="good";it.results=q.a.map(()=>true);render()};
+    const rv=document.getElementById('reveal'); if(rv) rv.disabled=true;
+  }
+  document.getElementById('go').focus({preventScroll:true});
+}
+
+function renderDone(){
+  const right=deck.filter(d=>d.status==="good").length, answered=deck.filter(d=>d.status).length, missed=deck.filter(d=>d.status==="bad");
+  const pct = answered?Math.round(right/answered*100):0;
+  main.innerHTML=`<section class="card done"><h2>${right} of ${deck.length} correct</h2><p>${answered<deck.length?`${deck.length-answered} left unanswered. `:""}${answered?pct+"% of answered questions.":""}</p><div class="actions">`+
+    (missed.length?`<button class="btn primary" id="retry">Retry the ${missed.length} I missed</button>`:"")+
+    ``+(Q.some(isF)&&!onlyFlagged?`<button class="btn" id="revFlag">Review flagged (${Q.filter(isF).length})</button>`:"")+`<button class="btn" id="again">Start over, shuffled</button><button class="btn" id="back">Review questions</button></div></section>`;
+  const r=document.getElementById('retry'); if(r) r.onclick=()=>{deck=shuffle(missed).map(m=>({q:m.q,status:null,picked:null,typed:[],order:m.q.t==="mc"?shuffle(m.q.o.map((_,i)=>i)):undefined}));idx=0;render()};
+  document.getElementById('again').onclick=build;
+  const rf=document.getElementById('revFlag'); if(rf) rf.onclick=()=>{onlyFlagged=true;document.getElementById('onlyFlag').setAttribute('aria-pressed','true');build()};
+  document.getElementById('back').onclick=()=>{idx=0;render()};
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=="Enter"||idx>=deck.length) return;
+  if(e.target.tagName==="BUTTON" && e.target.id!=="go" && !e.target.closest('.opts')) return;
+  if(e.target.closest && e.target.closest('.opts')) return;
+  e.preventDefault(); document.getElementById('go')?.click();
+});
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));build()});
+document.getElementById('shuffle').onclick=build;
+main.addEventListener('click',e=>{const b=e.target.closest('#flag');if(b&&deck[idx]){e.preventDefault();toggleFlag(deck[idx].q);const g=document.getElementById('go');if(g)g.focus({preventScroll:true});}});
+document.addEventListener('keydown',e=>{if((e.key==="f"||e.key==="F")&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&e.target.tagName!=="INPUT"&&e.target.tagName!=="SELECT"&&deck[idx]&&idx<deck.length){e.preventDefault();toggleFlag(deck[idx].q);}});
+document.getElementById('onlyFlag').onclick=function(){onlyFlagged=!onlyFlagged;this.setAttribute('aria-pressed',onlyFlagged);build()};
+updateFlagCount();
+build();
+</script>
+</body>
+</html>

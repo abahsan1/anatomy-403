@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Anatomy 403 Practice</title>
+<meta name="description" content="Practice quizzes, fill-in-the-blank and flashcards for Anatomy 403, one set per exam.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@700&family=Spectral:wght@400;500&family=Libre+Franklin:wght@500&display=swap">
+<style>
+/* Hallmark · shape: app screen · genre: editorial · theme: Newsprint (matches the Cardio page)
+ * nav: none, one page of exam listings · signature: the exam listings set as agate rows, item counts at the right edge · states: static
+ * axes: light/slab-serif/warm · posture: restrained · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S3 R4 V4 · weakest: S, a plain index, so the counts in agate carry the page */
+/* Layout: a broadsheet listings page. Masthead, double rule, then one ruled section per exam. */
+:root{
+  color-scheme:light;
+  --paper:oklch(94% 0.011 92); --paper-2:oklch(90.5% 0.015 88);
+  --ink:oklch(17% 0.012 60); --muted:oklch(44% 0.014 60);
+  --rule:oklch(68% 0.016 75); --rule-2:oklch(34% 0.012 60);
+  --accent:oklch(44% 0.13 32); --focus:oklch(48% 0.17 32);
+  --font-display:"Zilla Slab", ui-serif, Georgia, serif;
+  --font-body:"Spectral", ui-serif, Georgia, serif;
+  --font-agate:"Libre Franklin", ui-sans-serif, system-ui, sans-serif;
+  --space-2xs:4px; --space-xs:8px; --space-sm:12px; --space-md:16px; --space-lg:24px; --space-xl:40px; --space-2xl:64px;
+  --text-sm:0.875rem; --text-md:1rem; --text-lg:1.2rem;
+  --dur-micro:120ms; --ease-out:cubic-bezier(0.16,1,0.3,1);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:oklch(19% 0.01 60); --paper-2:oklch(23% 0.012 60);
+  --ink:oklch(92% 0.012 88); --muted:oklch(72% 0.014 80);
+  --rule:oklch(40% 0.014 70); --rule-2:oklch(72% 0.012 80);
+  --accent:oklch(72% 0.12 38); --focus:oklch(74% 0.14 38); color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:oklch(19% 0.01 60); --paper-2:oklch(23% 0.012 60);
+  --ink:oklch(92% 0.012 88); --muted:oklch(72% 0.014 80);
+  --rule:oklch(40% 0.014 70); --rule-2:oklch(72% 0.012 80);
+  --accent:oklch(72% 0.12 38); --focus:oklch(74% 0.14 38); color-scheme:dark; }
+*,*::before,*::after{box-sizing:border-box}
+html,body{overflow-x:clip}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+::selection{background:color-mix(in oklab,var(--accent) 22%,transparent)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+h1,h2{margin:0;font-family:var(--font-display);font-weight:700;letter-spacing:-0.02em;line-height:1.08;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+.shell{max-width:860px;margin:0 auto;padding-left:max(var(--space-md),env(safe-area-inset-left,0px));padding-right:max(var(--space-md),env(safe-area-inset-right,0px));padding-block:var(--space-xl) var(--space-2xl)}
+.mast h1{font-size:clamp(2rem,6vw,3rem)}
+.mast p{margin-top:var(--space-xs);color:var(--muted);max-width:56ch}
+.dbl{height:2px;border:0;margin:var(--space-lg) 0 0;border-block:1px solid var(--rule-2);box-sizing:content-box}
+section{margin-top:var(--space-xl)}
+section h2{font-size:var(--text-lg)}
+section > p{margin-top:var(--space-2xs);color:var(--muted);font-size:var(--text-sm)}
+.list{margin:var(--space-sm) 0 0;padding:0;list-style:none;border-top:1px solid var(--rule-2)}
+.list li{border-bottom:1px solid var(--rule)}
+.list a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-md);align-items:baseline;padding:var(--space-sm) var(--space-xs);color:var(--ink);text-decoration:none;transition:background-color var(--dur-micro) var(--ease-out)}
+@media (hover:hover){.list a:hover{background:var(--paper-2)} .list a:hover b{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:0.16em}}
+.list a:active{background:var(--paper-2)}
+.list b{font:700 var(--text-md)/1.25 var(--font-display)}
+.list span{display:block;font-size:var(--text-sm);color:var(--muted);margin-top:2px}
+.list .n{font:500 var(--text-sm)/1.3 var(--font-agate);font-variant-numeric:tabular-nums;color:var(--muted);text-align:right;white-space:nowrap}
+.soon{padding:var(--space-sm) var(--space-xs);color:var(--muted);font-size:var(--text-sm)}
+footer{margin-top:var(--space-2xl);padding-top:var(--space-md);border-top:1px solid var(--rule);font-size:var(--text-sm);color:var(--muted)}
+footer p{max-width:64ch}
+@media (prefers-reduced-motion: reduce){*{transition-duration:0.01ms !important}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="mast">
+    <h1>Anatomy 403 Practice</h1>
+    <p>Practice questions, fill-in-the-blank sentences and flashcards for each exam. Flags and progress save in your browser.</p>
+  </header>
+  <hr class="dbl">
+
+  <section aria-labelledby="e1">
+    <h2 id="e1">Exam 1. Musculoskeletal</h2>
+    <p>Multiple choice mixed with fill-in-the-blank, plus muscle flashcards in MSK3 to MSK5.</p>
+    <ul class="list">
+      <li><a href="exam-1/msk1.html"><span class="t"><b>MSK1. Skeletal system basics</b><span>Bone tissue, growth, remodeling, osteoporosis, fractures</span></span><span class="n">112 questions</span></a></li>
+      <li><a href="exam-1/msk2.html"><span class="t"><b>MSK2. Joints and skeletal muscle</b><span>Joint types, synovial joints, arthritis, muscle structure and contraction</span></span><span class="n">105 questions</span></a></li>
+      <li><a href="exam-1/msk3.html"><span class="t"><b>MSK3. Head, neck and back</b><span>Skull, face, vertebral column and their muscles</span></span><span class="n">92 questions, 19 cards</span></a></li>
+      <li><a href="exam-1/msk4.html"><span class="t"><b>MSK4. Thorax, abdomen and upper limb</b><span>Thoracic cage, abdominal wall, pectoral girdle, arm and hand</span></span><span class="n">85 questions, 33 cards</span></a></li>
+      <li><a href="exam-1/msk5.html"><span class="t"><b>MSK5. Pelvis and lower limb</b><span>Pelvic girdle, hip, knee, ankle, thigh, leg and foot</span></span><span class="n">90 questions, 19 cards</span></a></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="e2">
+    <h2 id="e2">Exam 2. Neuroanatomy</h2>
+    <p>Neuro 1 to 6, with multiple choice, fill in the blank, lab-image identification and flashcards.</p>
+    <ul class="list">
+      <li><a href="exam-2/neuro.html"><span class="t"><b>Neuro Exam 2 Practice</b><span>Brain, spinal cord, brain stem and cranial nerves, motor and autonomics, special senses, limbic system</span></span><span class="n">6 lectures</span></a></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="e3">
+    <h2 id="e3">Exam 3. Cardiovascular and respiratory</h2>
+    <p>One question per learning objective. Misses and flags go straight into your flashcards.</p>
+    <ul class="list">
+      <li><a href="exam-3/cardio.html"><span class="t"><b>Cardio Exam Practice</b><span>Lecture 1, the heart: pericardium, chambers, valves, coronary vessels, conduction, auscultation</span></span><span class="n">137 items</span></a></li>
+    </ul>
+    <p class="soon">Lectures 2 to 6 are added as they are covered.</p>
+  </section>
+
+  <footer>
+    <p>Study material written from the Anatomy 403 lectures. Questions are practice only and may contain mistakes; check against your own notes.</p>
+  </footer>
+</div>
+</body>
+</html>

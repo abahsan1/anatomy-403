@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MSK1 Quiz: Skeletal System Basics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F4; --paper:#FFFFFF; --ink:#1D2733; --muted:#5B6878; --line:#D3DAE2;
+  --accent:#0F6E74; --accent-ink:#FFFFFF; --good:#2E7D4F; --good-bg:#E3F2E8;
+  --bad:#B3412F; --bad-bg:#F8E6E2; --blank:#FFF6D6; --blank-line:#C99A1A; --todo:#C9D1DA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141A21; --paper:#1D2530; --ink:#E6EBF0; --muted:#9AA7B5; --line:#2F3A47;
+    --accent:#4FB3B8; --accent-ink:#0B1A1B; --good:#6CC08C; --good-bg:#1D3326;
+    --bad:#E3826F; --bad-bg:#3A221D; --blank:#2E2A18; --blank-line:#D9B44A; --todo:#3A4654;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141A21; --paper:#1D2530; --ink:#E6EBF0; --muted:#9AA7B5; --line:#2F3A47;
+  --accent:#4FB3B8; --accent-ink:#0B1A1B; --good:#6CC08C; --good-bg:#1D3326;
+  --bad:#E3826F; --bad-bg:#3A221D; --blank:#2E2A18; --blank-line:#D9B44A; --todo:#3A4654;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:24px 18px 48px}
+header h1{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.75rem;line-height:1.2;margin:0 0 4px}
+header p{margin:0;color:var(--muted);font-size:.95rem}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--paper)}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:.88rem;padding:6px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.ghost{border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-size:.88rem;padding:6px 12px;border-radius:999px;cursor:pointer}
+.score{margin-left:auto;font-size:.9rem;color:var(--muted)}
+.score b{color:var(--ink)}
+.track{display:flex;flex-wrap:wrap;gap:3px;margin:6px 0 18px}
+.track button{width:14px;height:14px;border-radius:3px;border:0;padding:0;background:var(--todo);cursor:pointer}
+.track button.good{background:var(--good)}
+.track button.bad{background:var(--bad)}
+.track button.cur{outline:2px solid var(--ink);outline-offset:1px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 22px 18px}
+.kind{font-size:.85rem;color:var(--muted);margin:0 0 10px}
+.kind span{color:var(--accent);font-weight:600}
+.prompt{font-family:Literata,Georgia,serif;font-size:1.2rem;line-height:1.75;margin:0 0 18px}
+.prompt input{font:inherit;font-family:Figtree,system-ui,sans-serif;font-size:1rem;background:var(--blank);color:var(--ink);border:0;border-bottom:2px solid var(--blank-line);border-radius:4px 4px 0 0;padding:1px 8px;margin:0 3px;min-width:7ch;width:12ch;max-width:100%}
+.prompt input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.prompt input.good{background:var(--good-bg);border-bottom-color:var(--good)}
+.prompt input.bad{background:var(--bad-bg);border-bottom-color:var(--bad)}
+.opts{display:grid;gap:8px;margin:0 0 16px;padding:0;list-style:none}
+.opts button{width:100%;text-align:left;font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--accent)}
+.opts button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opts button.pick{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opts button.good{background:var(--good-bg);border-color:var(--good)}
+.opts button.bad{background:var(--bad-bg);border-color:var(--bad)}
+.opts button:disabled{cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font:inherit;font-weight:600;font-size:.95rem;border-radius:10px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible,.ghost:focus-visible,.seg button:focus-visible,.track button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.spacer{flex:1}
+.feedback{margin:16px 0 0;padding:12px 14px;border-radius:10px;font-size:.95rem;display:none}
+.feedback.show{display:block}
+.feedback.good{background:var(--good-bg)}
+.feedback.bad{background:var(--bad-bg)}
+.feedback strong{display:block;margin-bottom:2px}
+.feedback .ans{font-weight:600}
+.override{margin-top:8px;background:transparent;border:0;padding:0;color:var(--accent);font:inherit;font-size:.9rem;text-decoration:underline;cursor:pointer}
+.btn.flag[aria-pressed="true"]{background:var(--blank);border-color:var(--blank-line);color:var(--ink)}
+.track button.flagged{box-shadow:inset 0 -5px 0 var(--blank-line)}
+.ghost[aria-pressed="true"]{background:var(--blank);border-color:var(--blank-line)}
+.empty{color:var(--muted)}
+.done{text-align:left}
+.done h2{font-family:Literata,Georgia,serif;font-weight:600;font-size:1.5rem;margin:0 0 6px}
+.done p{margin:0 0 16px;color:var(--muted)}
+.hint{font-size:.85rem;color:var(--muted);margin-top:14px}
+@media (max-width:520px){.prompt{font-size:1.08rem}.card{padding:18px 16px 16px}.score{margin-left:0;width:100%}}
+@media (prefers-reduced-motion:no-preference){.feedback.show{animation:in .18s ease-out}@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>MSK1: Skeletal System Basics</h1>
+    <p>Multiple choice mixed with fill-in-the-blank. Lecture-style questions covering every learning objective in depth. Use the topic menu to drill one lecture at a time.</p>
+  </header>
+
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Question type">
+      <button data-filter="all" aria-pressed="true">All</button>
+      <button data-filter="mc" aria-pressed="false">Multiple choice</button>
+      <button data-filter="fill" aria-pressed="false">Fill in the blank</button>
+    </div>
+    <select class="ghost" id="topic" aria-label="Topic"><option value="all">All topics</option></select>
+    <button class="ghost" id="onlyFlag" aria-pressed="false">&#9873; Flagged only (<span id="flagCount">0</span>)</button>
+    <button class="ghost" id="shuffle">Shuffle &amp; restart</button>
+    <div class="score" id="score"></div>
+  </div>
+
+  <div class="track" id="track" aria-label="Jump to question"></div>
+
+  <main id="main"></main>
+  <p class="hint">Enter checks your answer; press Enter again to go to the next question. Spelling is forgiving, and if your wording differs but you know you were right, choose "Count it as correct." Press F or use the flag button to mark a question or card to come back to. Your flags are saved in this browser.</p>
+</div>
+
+<script>
+const Q = [
+// ---------- Components of skeletal system ----------
+{s:"Components of skeletal system",t:"mc",p:"A biopsy of a 65-year-old's femoral shaft shows a medullary cavity filled mostly with adipocytes. What is this tissue primarily doing?",o:["Storing triglycerides","Producing formed elements of blood","Storing most of the body's calcium","Secreting collagen","Resorbing bone"],c:0,e:"Yellow bone marrow is mostly adipocytes and stores triglycerides. In adults, the medullary cavity holds yellow marrow, and hemopoiesis happens in red marrow."},
+{s:"Components of skeletal system",t:"mc",p:"A patient on chemotherapy develops low red and white blood cell counts. Which skeletal system component is most directly affected?",o:["Red bone marrow","Yellow bone marrow","Osseous tissue","Hyaline cartilage","Periosteum"],c:0,e:"Red bone marrow carries out hemopoiesis, the process by which the formed elements of blood develop."},
+{s:"Components of skeletal system",t:"mc",p:"Standing loads the tibia along its long axis, while the patellar tendon pulls on the tibial tuberosity. Which stresses are these, in order?",o:["Compressive; tensile","Tensile; compressive","Shear; tensile","Compressive; shear","Tensile; shear"],c:0,e:"Body weight pressing down along the axis is compression. A tendon pulling on bone is tension, and collagen resists it."},
+{s:"Components of skeletal system",t:"fill",p:"In a tackle, the tibia is pushed forward while the femur is held back. The knee's bones must resist ___ stress.",a:[["shear","shearing"]],e:"Shear stress: forces pushing in opposite directions."},
+{s:"Components of skeletal system",t:"mc",p:"Which of the following is NOT made primarily of dense connective tissue?",o:["Articular cartilage","Periosteum","Ligaments","Tendons","Fibrous outer layer of the periosteum"],c:0,e:"Articular cartilage is hyaline cartilage. The periosteum, ligaments, and tendons are dense CT."},
+{s:"Components of skeletal system",t:"mc",p:"Which pairing of skeletal component and role is INCORRECT?",o:["Nerves: carry blood away from the heart to bone","Red marrow: hemopoiesis","Cartilage: covers the ends of long bones","Yellow marrow: triglyceride storage","Periosteum: dense CT surrounding bone"],c:0,e:"Arteries carry blood away from the heart. Nerves are bundles of axons outside the CNS."},
+{s:"Components of skeletal system",t:"mc",p:"A metal plate is placed on the femur. Beneath it, the bone slowly remodels and changes its internal architecture. This best illustrates that bone:",o:["Is dynamic and adapts to stress","Is static once growth ends","Grows only at the epiphyseal plate","Cannot remodel in adults","Is purely mineral tissue"],c:0,e:"Bone is dynamic. It remodels and adapts to the stresses placed on it."},
+{s:"Components of skeletal system",t:"mc",p:"A collagen-poor bone is most vulnerable to which force?",o:["Tensile (stretching)","Compressive (crushing)","Neither, because collagen doesn't affect strength","Only shear","Only torsion"],c:0,e:"Collagen gives bone its tensile strength."},
+{s:"Components of skeletal system",t:"fill",p:"Vessel carrying blood from bone tissue back toward the heart: ___",a:[["vein","veins"]],e:"Arteries carry blood away from the heart to tissues. Veins return it. Nerves are bundles of axons outside the CNS."},
+{s:"Components of skeletal system",t:"mc",p:"Which role is NOT listed for cartilage in the skeletal system?",o:["Storing triglycerides","Serving as a model for bone ossification","Forming joints","Covering the ends of long bones","Being mostly hyaline cartilage"],c:0,e:"Triglyceride storage is the job of yellow marrow."},
+// ---------- Bone cells ----------
+{s:"Bone cells",t:"mc",p:"An experimental drug blocks the fusion of monocytes. Which process would be most directly reduced?",o:["Bone resorption","Collagen secretion","Initiation of calcification","Division of osteogenic cells","Nutrient exchange by osteocytes"],c:0,e:"Osteoclasts form from the fusion of up to 50 monocytes. Without fusion there are fewer osteoclasts, so less resorption."},
+{s:"Bone cells",t:"mc",p:"A mutation disrupts gap junctions in bone. Which cell's primary function is most directly impaired?",o:["Osteocyte","Osteoclast","Osteogenic cell","Osteoblast","Chondrocyte"],c:0,e:"Osteocytes maintain bone metabolism and exchange nutrients and waste with the blood through gap junctions."},
+{s:"Bone cells",t:"mc",p:"A proton pump inhibitor that acts at bone surfaces would most directly impair:",o:["Osteoclast breakdown of the matrix at the ruffled border","Osteoblast collagen production","Osteocyte communication","Mitosis of osteogenic cells","Mineral deposition in the collagen framework"],c:0,e:"The ruffled border releases protons (acid) and lysosomal enzymes to resorb bone."},
+{s:"Bone cells",t:"fill",p:"A mesenchyme-derived cell divides, then begins secreting collagen and initiating calcification. At this stage it is a(n) ___.",a:[["osteoblast"]],e:"Lineage: mesenchyme → osteogenic cell (divides) → osteoblast (builds) → osteocyte (trapped in matrix)."},
+{s:"Bone cells",t:"mc",p:"An osteoblast becomes surrounded by the matrix it secreted. What does it become, and which cell type can still divide?",o:["Osteocyte; osteogenic cell","Osteoclast; osteoblast","Osteocyte; osteocyte","Osteogenic cell; osteoclast","Osteoclast; osteogenic cell"],c:0,e:"Trapped osteoblasts become osteocytes. Only osteogenic (stem) cells are described as dividing."},
+{s:"Bone cells",t:"mc",p:"Which bone cell does NOT share a developmental lineage with the others?",o:["Osteoclast","Osteoblast","Osteocyte","Osteogenic cell"],c:0,e:"Osteoclasts come from fused monocytes. The other three come from mesenchyme."},
+{s:"Bone cells",t:"mc",p:"A drug blocks osteoblast signaling to osteoclasts. Which osteoblast function is being targeted?",o:["Its key role in hormonal regulation of bone resorption","Initiating calcification","Producing collagen","Becoming an osteocyte","Forming trabeculae"],c:0,e:"Osteoblasts play a key role in the hormonal regulation of bone resorption, and osteoclasts respond to their signals."},
+{s:"Bone cells",t:"mc",p:"You are looking for dividing stem cells of bone to culture. Which location would be LEAST useful?",o:["The center of an osteon's concentric lamellae, embedded in matrix","The deep side of the periosteum","The endosteum","Neurovascular canals","Endosteum lining spongy bone"],c:0,e:"Osteogenic cells live in the deep periosteum, the endosteum, and the neurovascular canals. Cells embedded in the matrix are osteocytes."},
+{s:"Bone cells",t:"mc",p:"Which pairing of cell and primary function is correct?",o:["Osteoblast: produces the organic matrix and initiates calcification","Osteocyte: resorbs matrix at a ruffled border","Osteoclast: exchanges nutrients through gap junctions","Osteogenic cell: secretes lysosomal enzymes","Osteoclast: becomes an osteocyte"],c:0,e:"Osteoblasts build bone, osteocytes maintain it, osteoclasts resorb it, and osteogenic cells are the stem cells."},
+{s:"Bone cells",t:"fill",p:"In osteoporosis, the ___ outpace the bone-building cells.",a:[["osteoclasts","osteoclast"]],e:"Resorption exceeds deposition."},
+// ---------- Extracellular matrix ----------
+{s:"Extracellular matrix",t:"mc",p:"A genetic disorder causes defective collagen synthesis. The patient's bones are most likely to be:",o:["Brittle and prone to fracture","Soft and easily bent","Denser than normal","Unusually flexible","Normal, since minerals give strength"],c:0,e:"Collagen provides tensile strength and flexibility, so losing it makes bone brittle. Losing minerals would make bone soft and bendable instead."},
+{s:"Extracellular matrix",t:"mc",p:"A child's bones are poorly mineralized but have normal collagen. Under body weight, the long bones would most likely:",o:["Bend and deform","Shatter into fragments","Become brittle","Grow faster in length","Be unaffected"],c:0,e:"The inorganic component gives hardness and rigidity. Without it, the flexible collagen framework bends."},
+{s:"Extracellular matrix",t:"fill",p:"Bone appears white on an X-ray mainly because of the crystallized mineral ___.",a:[["hydroxyapatite","calcium salts","calcium mineral salts","calcium"]],e:"Hydroxyapatite: calcium salts deposited in the collagen framework that crystallize and harden."},
+{s:"Extracellular matrix",t:"mc",p:"Which composition of the bony ECM is correct?",o:["30–40% organic, 45–55% inorganic, 15% water","45–55% organic, 30–40% inorganic, 15% water","15% organic, 70% inorganic, 15% water","50% organic, 50% inorganic, no water","60% organic, 25% inorganic, 15% water"],c:0,e:"The matrix is mostly inorganic, with about 15% water."},
+{s:"Extracellular matrix",t:"mc",p:"Bone is classified as a connective tissue mainly because it has:",o:["Abundant extracellular matrix with widely separated cells","Tightly packed cells with little matrix","Contractile proteins","A free apical surface","No blood supply"],c:0,e:"Bone is mineralized CT, one of the five major types of connective tissue."},
+{s:"Extracellular matrix",t:"mc",p:"Bone is called a composite because it:",o:["Combines organic and inorganic materials to get the best properties of each","Is made of several bone cell types","Contains both red and yellow marrow","Has both compact and spongy regions","Is covered by periosteum"],c:0,e:"Organic collagen provides flexibility and tensile strength. Inorganic mineral provides hardness."},
+{s:"Extracellular matrix",t:"mc",p:"Minerals harden bone through which sequence?",o:["Osteoblasts secrete collagen → mineral salts are deposited in the collagen framework → they crystallize and harden","Minerals crystallize first → osteoclasts add collagen","Osteocytes secrete hydroxyapatite directly","Collagen calcifies without minerals","Cartilage converts directly to mineral"],c:0,e:"This process is calcification."},
+{s:"Extracellular matrix",t:"mc",p:"Which is NOT a characteristic of osseous tissue?",o:["Tightly packed cells with little extracellular matrix","Mineralized connective tissue","Abundant extracellular matrix","Widely separated cells","One of the major types of connective tissue"],c:0,e:"Like all connective tissue, bone has abundant matrix and widely separated cells."},
+// ---------- Organization of bone ----------
+{s:"Organization of bone",t:"mc",p:"A histology slide shows concentric rings of matrix around central channels with no marrow spaces. Which site was most likely sampled?",o:["Diaphysis of a long bone","Interior of a vertebral body","Interior of the femoral head","Interior of a carpal bone","Interior of a flat skull bone"],c:0,e:"Osteons belong to compact bone, which forms the bulk of the diaphysis. The other sites are mostly spongy bone."},
+{s:"Organization of bone",t:"mc",p:"Which structure links the central canals with each other and with the periosteum's blood supply?",o:["Perforating canals","Concentric lamellae","Trabeculae","Medullary cavity","Inner circumferential lamellae"],c:0,e:"Perforating canals run transversely, carrying neurovasculature from the periosteum to the central canals and medullary cavity."},
+{s:"Organization of bone",t:"fill",p:"The bone type filling vertebral bodies, epiphyses, and flat bones. Give an alternate name, not \"spongy\": ___",a:[["trabecular","cancellous"]],e:"Spongy bone is also called trabecular or cancellous bone."},
+{s:"Organization of bone",t:"mc",p:"Which feature lets spongy bone resist load while keeping bones light?",o:["Trabeculae aligned along lines of stress, with marrow-filled spaces","Densely packed osteons","Thick circumferential lamellae","A cartilage core","Large central canals"],c:0,e:"Spongy bone has no osteons. Its trabeculae ('little beams') follow lines of stress, and the spaces between them reduce weight."},
+{s:"Organization of bone",t:"mc",p:"Damage to the outer circumferential lamellae and the overlying periosteum would most impair:",o:["Appositional growth","Interstitial growth","Hemopoiesis","Growth at the epiphyseal plate","Formation of trabeculae"],c:0,e:"Circumferential lamellae matter in appositional (width) growth. Interstitial growth happens within cartilage at the growth plate."},
+{s:"Organization of bone",t:"mc",p:"Which order runs correctly from deep to superficial in the wall of a diaphysis?",o:["Medullary cavity → inner circumferential lamellae → osteons → outer circumferential lamellae → periosteum","Periosteum → osteons → medullary cavity → endosteum","Medullary cavity → periosteum → osteons → outer lamellae","Osteons → medullary cavity → periosteum → inner lamellae","Endosteum → periosteum → osteons → medullary cavity"],c:0,e:"Inner lamellae line the medullary cavity. Outer lamellae lie directly deep to the periosteum."},
+{s:"Organization of bone",t:"fill",p:"A fracture tears the fibers anchoring the periosteum to the outer lamellae. These are called ___ fibers.",a:[["perforating","sharpey","sharpeys","sharpey's"]],e:"Perforating (Sharpey's) fibers."},
+{s:"Organization of bone",t:"mc",p:"A radiology report mentions \"cortical thinning.\" Which tissue is thinning?",o:["Compact bone","Spongy bone","Trabecular bone","Red marrow","Articular cartilage"],c:0,e:"Cortical and dense are other names for compact bone."},
+{s:"Organization of bone",t:"mc",p:"A surgeon harvests a \"cancellous graft\" from the iliac crest. What is being taken?",o:["Spongy bone","Compact bone","Periosteum","Hyaline cartilage","Cortical bone"],c:0,e:"Cancellous and trabecular are other names for spongy bone."},
+{s:"Organization of bone",t:"mc",p:"A cross-section of a flat skull bone would most likely show:",o:["Compact bone on the outer surfaces with spongy bone in between","Only compact bone with osteons","Only spongy bone","A large medullary cavity","An epiphyseal plate"],c:0,e:"Compact bone forms the external layer of all bones. Spongy bone forms most of the short, flat, and irregular bones and the epiphyses."},
+{s:"Organization of bone",t:"mc",p:"Which layer of an osteon lies closest to the central canal?",o:["The innermost concentric lamella","Outer circumferential lamellae","Inner circumferential lamellae","Periosteum","Perforating fibers"],c:0,e:"Concentric lamellae are circular plates of mineralized matrix that increase in diameter away from the central canal."},
+{s:"Organization of bone",t:"mc",p:"Osteons in the femoral diaphysis run mostly parallel to its long axis. Why?",o:["Osteons align along lines of stress","Osteons align with blood flow from the heart","The epiphyseal plate dictates their direction","They are randomly arranged","Muscles pull them into position"],c:0,e:"Osteons are aligned along lines of stress and are dynamic."},
+{s:"Organization of bone",t:"mc",p:"Which lamellae line the medullary cavity?",o:["Inner circumferential lamellae","Outer circumferential lamellae","Concentric lamellae","Interstitial trabeculae","Periosteal lamellae"],c:0,e:"Outer lamellae sit deep to the periosteum. Inner lamellae line the medullary cavity."},
+{s:"Organization of bone",t:"mc",p:"Compared with compact bone, spongy bone:",o:["Lacks osteons, and its spaces are filled with marrow and visible to the naked eye","Has more osteons","Has no alignment with stress","Is heavier","Lacks any mineralized matrix"],c:0,e:"Spongy bone is organized into trabeculae."},
+// ---------- Parts of a long bone ----------
+{s:"Parts of a long bone",t:"mc",p:"An X-ray of a 12-year-old's femur shows a dark line between the shaft and the expanded end. Where is it, and what joint type is it?",o:["Metaphysis; synchondrosis","Epiphysis; symphysis","Diaphysis; synostosis","Metaphysis; symphysis","Epiphysis; syndesmosis"],c:0,e:"The epiphyseal (growth) plate sits in the metaphysis. It is a synchondrosis of hyaline cartilage and drives growth in length."},
+{s:"Parts of a long bone",t:"mc",p:"A fracture through the growth plate of a 9-year-old's distal tibia is most concerning because it may:",o:["Impair lengthening of the tibia","Impair widening of the tibia","Destroy the tibia's red marrow","Prevent formation of the periosteum","Convert compact bone to spongy bone"],c:0,e:"The epiphyseal plate is where interstitial growth lengthens the bone."},
+{s:"Parts of a long bone",t:"mc",p:"A surgeon strips the periosteum from a section of diaphysis. Which consequence is most expected?",o:["Reduced blood supply and fewer osteogenic cells for repair and growth","Loss of articular cartilage","Increased hemopoiesis","Closure of the epiphyseal plate","Conversion of yellow to red marrow"],c:0,e:"Perforating canals bring neurovasculature from the periosteum, and its deep layer holds osteogenic cells."},
+{s:"Parts of a long bone",t:"mc",p:"Which statement about the medullary cavity of an adult is FALSE?",o:["It is lined by periosteum","It lies within the diaphysis","It contains yellow marrow and blood vessels","It reduces bone weight","It is lined by endosteum"],c:0,e:"The endosteum lines the medullary cavity. The periosteum covers the outer surface."},
+{s:"Parts of a long bone",t:"fill",p:"A single layer of cells with some CT lines the bony canals and the surfaces of spongy bone. It is the ___.",a:[["endosteum"]],e:"Endosteum."},
+{s:"Parts of a long bone",t:"mc",p:"Articular cartilage is damaged in a knee injury. Why is healing expected to be poor?",o:["It is avascular hyaline cartilage","It is fibrocartilage with little collagen","It lacks a periosteum only in children","It is replaced by bone in adults","It contains no cells"],c:0,e:"Articular cartilage lacks blood vessels, which limits repair."},
+{s:"Parts of a long bone",t:"mc",p:"Which pairing of long bone region and main tissue is correct?",o:["Diaphysis: mostly compact; epiphysis: mostly spongy with a compact covering","Diaphysis: mostly spongy; epiphysis: mostly compact","Both are entirely spongy","Metaphysis: mostly yellow marrow","Epiphysis: hyaline cartilage only"],c:0,e:"Diaphysis means 'growing between.' Epiphysis means 'growing upon,' and the epiphyses are enlarged to provide extra surface area."},
+{s:"Parts of a long bone",t:"mc",p:"An adult's X-ray shows a faint line where the growth plate used to be. What joint type is this now?",o:["Synostosis","Synchondrosis","Symphysis","Syndesmosis","Synovial"],c:0,e:"Once the plate closes, the epiphysis and diaphysis fuse."},
+{s:"Parts of a long bone",t:"mc",p:"Which describes the two layers of the periosteum?",o:["Outer dense irregular CT; inner cellular layer","Outer hyaline cartilage; inner endosteum","Outer cellular layer; inner fibrocartilage","A single layer of cells only","Outer compact bone; inner spongy bone"],c:0,e:"Perforating (Sharpey's) fibers attach the periosteum to the underlying bone."},
+{s:"Parts of a long bone",t:"fill",p:"Long bone region whose name means \"growing between\": ___",a:[["diaphysis"]],e:"Diaphysis, also called the shaft or body."},
+// ---------- Formation & growth ----------
+{s:"Formation & growth",t:"mc",p:"Which bone forms without a cartilage model?",o:["Parietal bone","Femur","Humerus","Rib","Tibia"],c:0,e:"Flat bones of the skull form by intramembranous ossification. So do most facial bones, the mandible, and the medial clavicle."},
+{s:"Formation & growth",t:"mc",p:"A fetus cannot form hyaline cartilage models normally. Which bones would still develop most normally?",o:["Flat bones of the skull and the mandible","Long bones of the limbs","Vertebrae","Ribs","Bones of the pelvis"],c:0,e:"Endochondral ossification needs a hyaline cartilage model and forms most bones. Intramembranous bones do not."},
+{s:"Formation & growth",t:"fill",p:"An infant's fontanels are replaced by bone through ___ ossification.",a:[["intramembranous"]],e:"Fontanels are dense CT that is ossified directly."},
+{s:"Formation & growth",t:"mc",p:"A healing femoral fracture, a teen's growth spurt, and the daily replacement of microdamaged bone are ossification during, respectively:",o:["Fracture repair, growth, remodeling","Growth, remodeling, fracture repair","Initial formation, growth, remodeling","Remodeling, initial formation, growth","Fracture repair, initial formation, remodeling"],c:0,e:"The four situations are initial formation, growth, remodeling, and fracture repair."},
+{s:"Formation & growth",t:"mc",p:"During childhood the humerus gets both longer and thicker. Which match is correct?",o:["Length: interstitial at the epiphyseal plate; width: appositional at the surface","Length: appositional; width: interstitial","Both by interstitial growth","Both by appositional growth","Length: remodeling; width: interstitial"],c:0,e:"Interstitial growth is endogenous and lengthens bone. Appositional growth is exogenous and widens it."},
+{s:"Formation & growth",t:"mc",p:"Which type of growth can occur in both a cartilage model and in bone?",o:["Appositional","Interstitial","Intramembranous only","Neither","Endochondral only"],c:0,e:"Interstitial growth happens only in a cartilage model. Appositional growth happens in cartilage and bone."},
+{s:"Formation & growth",t:"fill",p:"Embryonic CT from which most mature CT, including the early skeleton, develops: ___",a:[["mesenchyme"]],e:"Both ossification methods replace pre-existing CT derived from mesenchyme."},
+{s:"Formation & growth",t:"fill",p:"Process by which bone forms: ___",a:[["ossification","osteogenesis"]],e:"Ossification occurs during initial formation, growth, remodeling, and fracture repair."},
+{s:"Formation & growth",t:"mc",p:"Which set of bones ALL form by intramembranous ossification?",o:["Flat skull bones, most facial bones, mandible, medial clavicle","Femur, tibia, humerus","Vertebrae and ribs","Carpals and tarsals","Hip bones and sacrum"],c:0,e:"Most other bones form by endochondral ossification."},
+{s:"Formation & growth",t:"mc",p:"The correct order of endochondral ossification is:",o:["Hyaline cartilage replaces mesenchyme → the cartilage model grows → bone replaces the cartilage","Bone forms directly in mesenchyme","Bone replaces mesenchyme → cartilage covers the bone","Fibrocartilage model → bone","Mesenchyme → dense CT → bone"],c:0,e:"Both methods replace pre-existing connective tissue."},
+{s:"Formation & growth",t:"fill",p:"A genetic defect limits cartilage cell proliferation at the growth plate, producing short limbs. The impaired growth type is ___.",a:[["interstitial"]],e:"Interstitial growth is endogenous growth within the cartilage and is what lengthens bone."},
+// ---------- Remodeling & factors ----------
+{s:"Remodeling & factors",t:"mc",p:"Astronauts on long missions lose bone mass. Which principle best explains this?",o:["Bone remodels according to mechanical stress; less loading means less bone","Microgravity blocks hemopoiesis","Collagen can't be made in space","Osteocytes die without gravity","The epiphyseal plates reopen"],c:0,e:"Bone is dynamic. Remodeling adapts to stress and redistributes tissue along lines of stress."},
+{s:"Remodeling & factors",t:"mc",p:"Which site would show the fastest bone turnover?",o:["Vertebral body","Mid-diaphysis of the femur","Outer circumferential lamellae","Cortex of the tibia","Shaft of the humerus"],c:0,e:"Spongy bone, like the inside of a vertebral body, renews faster than compact bone."},
+{s:"Remodeling & factors",t:"mc",p:"Blood calcium drops sharply. Which response is NOT expected?",o:["Increased calcitonin secretion","Increased PTH secretion","Increased osteoclast activity","Increased calcitriol synthesis by the kidneys","Increased calcium absorption from the gut"],c:0,e:"Calcitonin lowers blood calcium, so it would not rise. PTH raises osteoclast activity and calcitriol."},
+{s:"Remodeling & factors",t:"mc",p:"After a total thyroidectomy (without hormone replacement), which bone-related hormones are lost?",o:["Thyroid hormone and calcitonin","PTH and calcitriol","hGH and IGFs","Calcitonin and PTH","Estrogen and testosterone"],c:0,e:"The thyroid secretes thyroid hormone (stimulates osteoblasts) and calcitonin (inhibits osteoclasts). PTH comes from the parathyroid glands."},
+{s:"Remodeling & factors",t:"mc",p:"Vitamin C deficiency weakens bone mainly by:",o:["Impairing synthesis of bone proteins such as collagen","Blocking calcium absorption from the gut","Overstimulating osteoclasts","Closing the epiphyseal plates early","Preventing hemopoiesis"],c:0,e:"Vitamins C, K, and B12 are needed to synthesize the proteins of osseous tissue. Vitamin D handles calcium absorption."},
+{s:"Remodeling & factors",t:"fill",p:"A patient with chronic kidney disease has poor intestinal calcium absorption because the kidneys cannot make ___.",a:[["calcitriol"]],e:"PTH stimulates the kidneys to make calcitriol, the active form of vitamin D."},
+{s:"Remodeling & factors",t:"mc",p:"A 10-year-old with excess growth hormone would most likely show:",o:["Increased height from cell division at the epiphyseal plates","Increased osteoclast activity","Early closure of growth plates","Decreased IGF levels","Loss of bone density"],c:0,e:"hGH promotes IGFs, stimulates osteoblasts, and drives cell division at the epiphyseal plate and periosteum."},
+{s:"Remodeling & factors",t:"mc",p:"Which vitamin is described as directly stimulating osteoblasts?",o:["Vitamin A","Vitamin D","Vitamin K","Vitamin B12","Vitamin C"],c:0,e:"Vitamin A stimulates osteoblasts. Vitamin D increases GI calcium absorption. Vitamins C, K, and B12 support synthesis of bone proteins."},
+{s:"Remodeling & factors",t:"mc",p:"The dramatic growth spurt at puberty results mainly from sex hormones:",o:["Increasing osteoblast activity","Inhibiting osteoblasts","Stimulating monocyte fusion","Converting yellow to red marrow","Decreasing calcium absorption"],c:0,e:"Estrogens and testosterone increase osteoblast activity."},
+{s:"Remodeling & factors",t:"mc",p:"Which is an advantage of bone remodeling?",o:["New tissue is less brittle and stronger","It permanently stops bone turnover","It converts spongy bone to cartilage","It increases brittleness","It removes the periosteum"],c:0,e:"Remodeling also redistributes bone along lines of mechanical stress."},
+{s:"Remodeling & factors",t:"mc",p:"Which statement about minerals and bone is correct?",o:["The skeleton is the major calcium storage site, and calcium homeostasis influences growth and remodeling","Bone stores little calcium","Only calcium matters; phosphorus and magnesium play no role","Minerals are organic nutrients","Fluoride has no link to bone"],c:0,e:"Minerals are inorganic elements concentrated mostly in the skeleton. Calcium is the primary one, alongside phosphorus, magnesium, and fluoride."},
+{s:"Remodeling & factors",t:"mc",p:"A patient's thyroid hormone is very low. Which bone effect is expected?",o:["Less bone growth, since thyroid hormone stimulates osteoblasts","More osteoclast activity from calcitonin","Higher blood calcium","More calcitriol","Faster closure of growth plates"],c:0,e:"Thyroid hormone promotes bone growth by stimulating osteoblasts."},
+{s:"Remodeling & factors",t:"fill",p:"Hormone from the thyroid that inhibits osteoclasts: ___",a:[["calcitonin"]],e:"Calcitonin lowers blood calcium and promotes bone formation."},
+// ---------- Aging & osteoporosis ----------
+{s:"Aging & osteoporosis",t:"mc",p:"An 80-year-old's bones fracture with minor falls. Which pair of age-related changes best explains this?",o:["Demineralization and slowed collagen production","More collagen and more minerals","Faster remodeling and thicker cortices","Reopened growth plates and marrow loss","More osteoblasts and fewer osteoclasts"],c:0,e:"Aging causes loss of bone mass (demineralization) and brittleness from reduced collagen."},
+{s:"Aging & osteoporosis",t:"mc",p:"Why are vertebral fractures the most common presentation of osteoporosis?",o:["Vertebral bodies are mostly spongy bone, which osteoporosis affects most","Vertebrae are mostly compact bone","Vertebrae have no periosteum","Vertebrae don't remodel","Vertebrae have no marrow"],c:0,e:"Osteoporosis affects spongy bone more, and vertebral bodies are primarily spongy."},
+{s:"Aging & osteoporosis",t:"mc",p:"Which patient has the highest risk of osteoporosis?",o:["A small-framed, postmenopausal 68-year-old who smokes","A large-framed 30-year-old man who lifts weights","A 16-year-old athlete","A 40-year-old premenopausal runner with a good diet","A large-framed 50-year-old man who doesn't smoke"],c:0,e:"The main risk factor is a small body build. Advanced age, postmenopause (low estrogen), and smoking add to it."},
+{s:"Aging & osteoporosis",t:"fill",p:"A bisphosphonate treats osteoporosis by reducing the activity of ___.",a:[["osteoclasts","osteoclast"]],e:"Bisphosphonates are antiresorptive."},
+{s:"Aging & osteoporosis",t:"mc",p:"A woman's vertebral fracture raises suspicion of osteoporosis. Which test confirms low bone density?",o:["DEXA (DXA) scan","MRI","Blood calcium level","Standard radiograph only","Bone marrow biopsy"],c:0,e:"Dual-energy X-ray absorptiometry measures bone density."},
+{s:"Aging & osteoporosis",t:"mc",p:"Which is a prevention strategy rather than a pharmacologic treatment?",o:["Weight-bearing exercise","Bisphosphonates","Selective estrogen receptor modulators","Hormone replacement therapy","Antiresorptive therapy"],c:0,e:"Prevention means weight-bearing exercise and diet."},
+{s:"Aging & osteoporosis",t:"mc",p:"Why are postmenopausal individuals at greater risk of osteoporosis?",o:["Lower estrogen reduces osteoblast activity, so resorption outpaces deposition","Higher estrogen activates osteoclasts","Growth plates reopen","Calcitonin rises","Collagen production increases"],c:0,e:"Estrogen supports osteoblast activity. With less of it, osteoclast activity outpaces osteoblast activity."},
+{s:"Aging & osteoporosis",t:"mc",p:"A graph shows bone mass rising through young adulthood and then falling steadily. The decline mainly reflects:",o:["Demineralization (loss of bone mass)","Increased collagen production","Increased osteoblast activity","New growth plates forming","Increased hemopoiesis"],c:0,e:"Loss of bone mass is one of the two main effects of aging. The other is brittleness from slowed collagen production."},
+{s:"Aging & osteoporosis",t:"fill",p:"With age, slowed ___ production makes bones brittle.",a:[["collagen"]],e:"Less collagen means less flexibility and tensile strength."},
+{s:"Aging & osteoporosis",t:"mc",p:"Which statement defines osteoporosis correctly?",o:["Severe loss of bone density ('porous bone') in which osteoclast activity outpaces osteoblast activity","A crystal arthritis of joints","An infection of the marrow","Excess mineral deposition","Failure of the growth plates to close"],c:0,e:"Osteoporosis is the most common bone disease, and it affects spongy bone more."},
+{s:"Aging & osteoporosis",t:"mc",p:"Which set lists the common osteoporotic fracture sites, most common first?",o:["Vertebrae, then hip and wrist","Skull, then ribs","Femoral shaft, then tibia","Wrist, then vertebrae, then skull","Clavicle, then scapula"],c:0,e:"Osteoporosis is most commonly diagnosed from fractures, with the vertebrae as the most common site."},
+{s:"Aging & osteoporosis",t:"mc",p:"Why is a relatively small body build the main risk factor for osteoporosis?",o:["The bones are less dense to begin with","Small people have more osteoclasts","Small bones can't remodel","Small people don't absorb calcium","It raises estrogen levels"],c:0,e:"Other risk factors are age, postmenopause, smoking, diabetes, poor diet, and lack of weight-bearing exercise."},
+{s:"Aging & osteoporosis",t:"mc",p:"Which pharmacologic option works by replacing a hormone whose loss after menopause increases risk?",o:["Hormone (estrogen) replacement therapy","Bisphosphonates","Weight-bearing exercise","Calcium-rich diet","Open reduction"],c:0,e:"Selective estrogen receptor modulators are another option. Bisphosphonates are antiresorptive."},
+// ---------- Fractures ----------
+{s:"Fractures",t:"mc",p:"A motorcyclist's tibia is broken into four pieces, and one fragment protrudes through the skin. Classify it.",o:["Open, comminuted","Closed, comminuted","Open, greenstick","Closed, impacted","Open, stress"],c:0,e:"Through the skin makes it open (compound). Three or more fragments makes it comminuted."},
+{s:"Fractures",t:"mc",p:"After a fall from height onto the feet, one fragment of the femoral neck is jammed forcefully into the other. This is a(n):",o:["Impacted fracture","Comminuted fracture","Greenstick fracture","Stress fracture","Open fracture"],c:0,e:"Impacted: one fragment is driven into another."},
+{s:"Fractures",t:"fill",p:"An 8-year-old's radius cracks on one side and bends on the other. Fracture type: ___",a:[["greenstick"]],e:"Greenstick fractures are partial and specific to juveniles, whose bone isn't fully calcified."},
+{s:"Fractures",t:"mc",p:"Two weeks after a fracture, collagen and cartilage bridge the broken ends. Which step is this, and what comes next?",o:["Fibrocartilaginous callus; bony callus","Fracture hematoma; fibrocartilaginous callus","Bony callus; remodeling","Remodeling; bony callus","Fibrocartilaginous callus; fracture hematoma"],c:0,e:"Hematoma → fibrocartilaginous callus → bony callus → remodeling."},
+{s:"Fractures",t:"mc",p:"A military recruit has gradually worsening shin pain after weeks of marching; the first X-ray is normal. Most likely diagnosis?",o:["Stress fracture of the tibia","Greenstick fracture","Comminuted fracture","Impacted fracture","Open fracture"],c:0,e:"Stress fractures come from repetitive stress, may not show on early radiographs, and often involve the tibia."},
+{s:"Fractures",t:"mc",p:"A comminuted fracture is treated with plates and screws. How does this differ from a closed reduction?",o:["Open reduction uses surgery; closed reduction is manual manipulation with the skin intact","Open reduction uses no hardware","Closed reduction requires an incision","Only closed reduction realigns fragments","They are the same procedure"],c:0,e:"Both are reduction, meaning realignment ('setting' the fracture)."},
+{s:"Fractures",t:"fill",p:"A cast placed after a fracture is set serves the treatment goal of ___.",a:[["immobilization","immobilisation"]],e:"The goals are realignment, immobilization to maintain alignment, and restoration of function."},
+{s:"Fractures",t:"mc",p:"In fracture repair, the final step that restores the bone's original shape and strength is:",o:["Remodeling","Bony callus formation","Fracture hematoma","Fibrocartilaginous callus","Reduction"],c:0,e:"Remodeling is the fourth step of repair."},
+{s:"Fractures",t:"mc",p:"A wrist fracture leaves the skin intact. It is classified as:",o:["Closed (simple)","Open (compound)","Comminuted","Greenstick","Stress"],c:0,e:"An open (compound) fracture breaks through the skin."},
+{s:"Fractures",t:"mc",p:"Why might a stress fracture be missed on an initial radiograph?",o:["It is often a microscopic fissure","It only affects cartilage","It always involves the skull","It only occurs in children","It heals within hours"],c:0,e:"Stress fractures come from repetitive stress or disease processes, and many involve the tibia."},
+{s:"Fractures",t:"fill",p:"First step of fracture repair: formation of a fracture ___.",a:[["hematoma"]],e:"Hematoma → fibrocartilaginous callus → bony callus → remodeling."},
+{s:"Fractures",t:"mc",p:"A displaced fracture is pulled back into alignment by hand in the ER, without an incision. This is:",o:["Closed reduction","Open reduction","Immobilization only","Remodeling","Internal fixation"],c:0,e:"Closed reduction aligns the fractured ends by manual manipulation with the skin intact."},
+{s:"Fractures",t:"mc",p:"Physical therapy after a cast is removed mainly addresses which treatment goal?",o:["Restoration of function","Realignment","Immobilization","Hematoma formation","Reduction"],c:0,e:"The three goals are realignment, immobilization, and restoration of function."},
+// ---------- Divisions & features ----------
+{s:"Divisions & features",t:"mc",p:"Which list contains ONLY appendicular bones?",o:["Scapula, hip bone, femur, phalanges","Sternum, clavicle, humerus, radius","Rib, scapula, femur, tibia","Sacrum, hip bone, femur, patella","Hyoid, clavicle, ulna, carpals"],c:0,e:"Axial (80): skull, vertebral column (including the sacrum), thoracic cage, hyoid. Appendicular (126): limbs and girdles."},
+{s:"Divisions & features",t:"mc",p:"A nerve leaves the skull through a hole in a bone. Which feature term fits?",o:["Foramen","Condyle","Tuberosity","Crest","Trochanter"],c:0,e:"Depressions and openings let soft tissue pass through or form joints. Processes form joints or attachment points."},
+{s:"Divisions & features",t:"mc",p:"A large, roughened projection on the radius anchors a tendon. It is best called a:",o:["Tuberosity","Trochanter","Condyle","Facet","Fossa"],c:0,e:"Trochanters occur only on the femur. A tubercle is small; a tuberosity is large and roughened."},
+{s:"Divisions & features",t:"mc",p:"Which pair of features BOTH typically form joints?",o:["Condyle and facet","Crest and line","Tubercle and tuberosity","Spinous process and epicondyle","Trochanter and crest"],c:0,e:"Joint-forming features: condyle, facet, head."},
+{s:"Divisions & features",t:"fill",p:"A rounded articular projection supported on a constricted neck: ___",a:[["head"]],e:"Head, as in the head of the femur."},
+{s:"Divisions & features",t:"mc",p:"The external acoustic meatus is named for being a:",o:["Tubelike opening","Narrow slit","Shallow depression","Furrow","Sharp projection"],c:0,e:"Meatus = tubelike opening. Fissure = slit. Fossa = shallow depression. Sulcus = furrow."},
+{s:"Divisions & features",t:"mc",p:"The ribs, hyoid, and sacrum belong to which division?",o:["Axial","Appendicular","Ribs axial; sacrum appendicular","Hyoid appendicular","None of them"],c:0,e:"Axial (80 bones) lies around the body's longitudinal axis: skull, vertebral column, and thoracic cage."},
+{s:"Divisions & features",t:"mc",p:"Which pair correctly contrasts two attachment features?",o:["Crest: prominent elongated ridge; line: long, narrow, less prominent ridge","Crest: shallow depression; line: hole","Crest: joint surface; line: rounded head","Both are openings for nerves","Line: very large projection only on the femur"],c:0,e:"Attachment processes: crest, epicondyle, line, spinous process, trochanter, tubercle, tuberosity."},
+{s:"Divisions & features",t:"fill",p:"Furrow in a bone: ___",a:[["sulcus"]],e:"Sulcus. A fissure is a narrow slit between neighboring bones."},
+{s:"Divisions & features",t:"mc",p:"Bone features serve three broad functions. Which list is correct?",o:["Passage of neurovasculature, joint formation, connective tissue attachment","Hemopoiesis, calcium storage, fat storage","Growth, remodeling, repair","Protection, movement, heat production","Filtering blood, storing glycogen, making hormones"],c:0,e:"Depressions and openings let soft tissue pass or form joints. Processes form joints or attachment points."}
+];
+
+// ---------- helpers ----------
+const norm = s => s.toLowerCase().replace(/\(.*?\)/g,' ').replace(/[^a-z0-9 ]/g,' ').replace(/\b(the|a|an|m|mm|n|nn|nerve|bone|bones|muscle|muscles)\b/g,' ').replace(/\s+/g,' ').trim();
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=[...Array(n+1).keys()];for(let i=1;i<=m;i++){let c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function matches(input, accepted){
+  const g = norm(input); if(!g) return false;
+  return accepted.some(ans=>{const t=norm(ans); if(g===t) return true; if(/^\d+$/.test(t)) return false; const tol = t.length>=8?2:t.length>=5?1:0; return lev(g,t)<=tol;});
+}
+const shuffle = arr => {const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let filter="all", topic="all", deck=[], idx=0;
+const topicSel=document.getElementById("topic");
+[...new Set(Q.map(q=>q.s))].forEach(t=>{const o=document.createElement("option");o.value=t;o.textContent=`${t} (${Q.filter(q=>q.s===t).length})`;topicSel.appendChild(o)});
+topicSel.onchange=()=>{topic=topicSel.value;build()};
+const FLAG_KEY="flags:"+document.title;
+const keyOf=q=>{const t=(q.t||"")+"|"+(q.p||q.n||"");let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return (h>>>0).toString(36)};
+let flags=new Set(), onlyFlagged=false;
+try{flags=new Set(JSON.parse(localStorage.getItem(FLAG_KEY)||"[]"))}catch(e){flags=new Set()}
+const isF=q=>flags.has(keyOf(q));
+function saveFlags(){try{localStorage.setItem(FLAG_KEY,JSON.stringify([...flags]))}catch(e){} updateFlagCount();}
+function updateFlagCount(){const c=Q.filter(isF).length;const el=document.getElementById("flagCount");if(el)el.textContent=c;}
+function toggleFlag(q){const k=keyOf(q);flags.has(k)?flags.delete(k):flags.add(k);saveFlags();const b=document.getElementById("flag");if(b){b.setAttribute("aria-pressed",isF(q));b.innerHTML=isF(q)?"&#9873; Flagged":"&#9873; Flag";}renderTrack();}
+const flagBtn=q=>`<button class="btn flag" id="flag" aria-pressed="${isF(q)}">${isF(q)?"&#9873; Flagged":"&#9873; Flag"}</button>`;
+
+function build(){
+  const pool = onlyFlagged ? Q.filter(q=>isF(q)&&(topic==="all"||q.s===topic)&&(q.t==="card"||filter==="all"||q.t===filter)) : Q.filter(q=>(filter==="all"||q.t===filter)&&(topic==="all"||q.s===topic));
+  deck = shuffle(pool).map(q=>{
+    const item = {q, status:null, picked:null, typed:[]};
+    if(q.t==="mc"){ const order = shuffle(q.o.map((_,i)=>i)); item.order=order; }
+    return item;
+  });
+  idx=0; render();
+}
+
+const main=document.getElementById('main'), track=document.getElementById('track'), score=document.getElementById('score');
+
+function renderTrack(){
+  track.innerHTML="";
+  deck.forEach((it,i)=>{const b=document.createElement('button');b.setAttribute('aria-label',`Question ${i+1}${it.status?(it.status==="good"?", correct":", incorrect"):""}`);if(it.status)b.className=it.status;if(isF(it.q))b.classList.add("flagged");if(i===idx)b.classList.add('cur');b.onclick=()=>{idx=i;render()};track.appendChild(b)});
+  const done=deck.filter(d=>d.status).length, right=deck.filter(d=>d.status==="good").length;
+  score.innerHTML=`<b>${right}</b> correct of ${done} answered &nbsp;/&nbsp; ${deck.length} total`;
+}
+
+function render(){
+  renderTrack();
+  if(deck.length===0){main.innerHTML=`<section class="card"><p class="empty">${onlyFlagged?"Nothing flagged here yet. Flag questions or cards with the &#9873; button (or press F), then come back.":"No questions match these filters."}</p></section>`;return;}
+  if(idx>=deck.length){return renderDone()}
+  const it=deck[idx], q=it.q;
+  let html=`<section class="card" aria-live="polite"><p class="kind">Question ${idx+1} of ${deck.length}, <span>${q.t==="mc"?"multiple choice":"fill in the blank"}</span></p>`;
+  if(q.t==="fill"){
+    let n=0;
+    const parts=esc(q.p).split("___");
+    html+=`<p class="prompt">`+parts.map((p,i)=>i<parts.length-1?p+`<input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-b="${n++}" aria-label="Blank ${n}" value="${esc(it.typed[n-1]||"")}">`:p).join("")+`</p>`;
+  } else {
+    html+=`<p class="prompt">${esc(q.p)}</p><ul class="opts">`+it.order.map(oi=>`<li><button data-o="${oi}">${esc(q.o[oi])}</button></li>`).join("")+`</ul>`;
+  }
+  html+=`<div class="actions"><button class="btn" id="prev" ${idx===0?"disabled":""}>Previous</button>${flagBtn(q)}<span class="spacer"></span>`+
+        (q.t==="fill"?`<button class="btn" id="reveal">Show answer</button>`:"")+
+        `<button class="btn primary" id="go">${it.status?"Next":"Check"}</button></div><div class="feedback" id="fb"></div></section>`;
+  main.innerHTML=html;
+
+  if(q.t==="mc"){
+    main.querySelectorAll('.opts button').forEach(b=>{
+      b.onclick=()=>{ if(it.status) return; it.picked=+b.dataset.o; main.querySelectorAll('.opts button').forEach(x=>x.classList.toggle('pick',x===b)); };
+    });
+    if(it.picked!==null) main.querySelector(`.opts button[data-o="${it.picked}"]`).classList.add('pick');
+  } else {
+    const ins=main.querySelectorAll('.prompt input');
+    ins.forEach(inp=>{ const size=()=>inp.style.width=Math.max(7,Math.min(24,inp.value.length+3))+"ch"; size(); inp.addEventListener('input',()=>{it.typed[+inp.dataset.b]=inp.value;size()}); });
+    if(!it.status && ins[0]) ins[0].focus({preventScroll:true});
+    document.getElementById('reveal').onclick=()=>{ if(!it.status){ collectTyped(it); grade(it,true); } };
+  }
+  document.getElementById('prev').onclick=()=>{idx--;render()};
+  document.getElementById('go').onclick=()=>{ if(it.status){idx++;render()} else check(it) };
+  if(it.status) showFeedback(it);
+}
+
+function collectTyped(it){ main.querySelectorAll('.prompt input').forEach(inp=>it.typed[+inp.dataset.b]=inp.value); }
+
+function check(it){
+  const q=it.q;
+  if(q.t==="mc"){ if(it.picked===null) return flash("Choose an answer first."); it.status = it.picked===q.c?"good":"bad"; }
+  else { collectTyped(it); if(it.typed.filter(Boolean).length===0) return flash("Type an answer in the blank, or choose Show answer."); grade(it,false); return; }
+  render();
+}
+function grade(it,revealed){
+  const q=it.q;
+  it.results=q.a.map((acc,i)=>matches(it.typed[i]||"",acc));
+  it.status = !revealed && it.results.every(Boolean) ? "good" : "bad";
+  render();
+}
+function flash(msg){const fb=document.getElementById('fb');fb.className="feedback show bad";fb.innerHTML=esc(msg);}
+
+function showFeedback(it){
+  const q=it.q, fb=document.getElementById('fb');
+  document.getElementById('go').textContent = idx===deck.length-1?"See results":"Next";
+  if(q.t==="mc"){
+    main.querySelectorAll('.opts button').forEach(b=>{const o=+b.dataset.o;b.disabled=true;if(o===q.c)b.classList.add('good');else if(o===it.picked)b.classList.add('bad')});
+    fb.className=`feedback show ${it.status}`;
+    fb.innerHTML=`<strong>${it.status==="good"?"Correct.":"Not quite."}</strong>${esc(q.e)}`;
+  } else {
+    const ins=main.querySelectorAll('.prompt input');
+    ins.forEach((inp,i)=>{inp.readOnly=true;inp.classList.add(it.results&&it.results[i]&&it.status!=="bad"?"good":(it.results&&it.results[i]?"good":"bad"))});
+    const key=q.a.map(a=>a[0]).join("; ");
+    fb.className=`feedback show ${it.status}`;
+    fb.innerHTML=`<strong>${it.status==="good"?"Correct.":"Answer: <span class=\"ans\">"+esc(key)+"</span>"}</strong>${esc(q.e)}`+
+      (it.status==="bad"&&it.typed.some(Boolean)?`<br><button class="override" id="ov">Count it as correct</button>`:"");
+    const ov=document.getElementById('ov'); if(ov) ov.onclick=()=>{it.status="good";it.results=q.a.map(()=>true);render()};
+    const rv=document.getElementById('reveal'); if(rv) rv.disabled=true;
+  }
+  document.getElementById('go').focus({preventScroll:true});
+}
+
+function renderDone(){
+  const right=deck.filter(d=>d.status==="good").length, answered=deck.filter(d=>d.status).length, missed=deck.filter(d=>d.status==="bad");
+  const pct = answered?Math.round(right/answered*100):0;
+  main.innerHTML=`<section class="card done"><h2>${right} of ${deck.length} correct</h2><p>${answered<deck.length?`${deck.length-answered} left unanswered. `:""}${answered?pct+"% of answered questions.":""}</p><div class="actions">`+
+    (missed.length?`<button class="btn primary" id="retry">Retry the ${missed.length} I missed</button>`:"")+
+    ``+(Q.some(isF)&&!onlyFlagged?`<button class="btn" id="revFlag">Review flagged (${Q.filter(isF).length})</button>`:"")+`<button class="btn" id="again">Start over, shuffled</button><button class="btn" id="back">Review questions</button></div></section>`;
+  const r=document.getElementById('retry'); if(r) r.onclick=()=>{deck=shuffle(missed).map(m=>({q:m.q,status:null,picked:null,typed:[],order:m.q.t==="mc"?shuffle(m.q.o.map((_,i)=>i)):undefined}));idx=0;render()};
+  document.getElementById('again').onclick=build;
+  const rf=document.getElementById('revFlag'); if(rf) rf.onclick=()=>{onlyFlagged=true;document.getElementById('onlyFlag').setAttribute('aria-pressed','true');build()};
+  document.getElementById('back').onclick=()=>{idx=0;render()};
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=="Enter"||idx>=deck.length) return;
+  if(e.target.tagName==="BUTTON" && e.target.id!=="go" && !e.target.closest('.opts')) return;
+  if(e.target.closest && e.target.closest('.opts')) return;
+  e.preventDefault(); document.getElementById('go')?.click();
+});
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));build()});
+document.getElementById('shuffle').onclick=build;
+main.addEventListener('click',e=>{const b=e.target.closest('#flag');if(b&&deck[idx]){e.preventDefault();toggleFlag(deck[idx].q);const g=document.getElementById('go');if(g)g.focus({preventScroll:true});}});
+document.addEventListener('keydown',e=>{if((e.key==="f"||e.key==="F")&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&e.target.tagName!=="INPUT"&&e.target.tagName!=="SELECT"&&deck[idx]&&idx<deck.length){e.preventDefault();toggleFlag(deck[idx].q);}});
+document.getElementById('onlyFlag').onclick=function(){onlyFlagged=!onlyFlagged;this.setAttribute('aria-pressed',onlyFlagged);build()};
+updateFlagCount();
+build();
+</script>
+</body>
+</html>
