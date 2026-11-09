@@ -22,4 +22,6 @@ node src/build.mjs
 
 and commit the rebuilt `exam-3/cardio.html`. The other pages share `assets/theme.css`, with `assets/msk.css` and `assets/neuro.css` adapting the older quiz pages to it. Vercel redeploys on every push to `main`.
 
+Edits made through Claude Code on this machine are committed and pushed automatically at the end of each Claude turn (a Stop hook in `~/.claude/settings.json` runs `~/.claude/hooks/anatomy-autopush.sh`, which also rebuilds the generated pages when `src/` changes).
+
 Questions are practice only and may contain mistakes.
