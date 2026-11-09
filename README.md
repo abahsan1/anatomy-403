@@ -1,6 +1,6 @@
 # Anatomy 403 Practice
 
-Practice questions, fill-in-the-blank sentences and flashcards for Anatomy 403, one set per exam. Every page is a single static HTML file; flags and progress are saved in the browser.
+Practice questions, fill-in-the-blank sentences and flashcards for Anatomy 403, one set per exam. Live at https://anatomy-403.vercel.app. Every page is a single static HTML file; flags and progress are saved in the browser.
 
 | Exam | Pages |
 | --- | --- |
