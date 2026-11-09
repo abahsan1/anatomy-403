@@ -6,7 +6,7 @@ import { neon } from "@neondatabase/serverless";
 
 const sql = neon(process.env.DATABASE_URL);
 const CODE = /^[A-Z2-9]{5}(-[A-Z2-9]{5}){3}$/;
-const KEY = /^(flags:|neuro2-|cardio-)[\w :&.,'-]{1,80}$/;
+const KEY = /^(flags:|neuro2-|cardio-|msk-)[\w :&.,'-]{1,80}$/;
 const MAX_BYTES = 2_000_000;
 
 let ready;

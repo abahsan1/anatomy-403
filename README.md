@@ -5,7 +5,7 @@ Practice questions, fill-in-the-blank sentences and flashcards for Anatomy 403, 
 | Exam | Pages |
 | --- | --- |
 | Exam 1, musculoskeletal | `exam-1/msk.html` (lectures 1 to 5 as tabs) |
-| Exam 2, neuroanatomy | `exam-2/neuro.html` |
+| Exam 2, neuroanatomy | `exam-2/neuro.html` (lectures 1 to 6) |
 | Exam 3, cardiovascular and respiratory | `exam-3/cardio.html` |
 
 ## Sync across devices
@@ -14,17 +14,22 @@ Progress (flags, misses, positions) is saved to a Neon Postgres database through
 
 ## Building
 
-Exam 1 is built from the five lecture quizzes in `src/exam-1-msk/` with `node src/build-msk.mjs`.
+All three exams use the Exam 2 page's design and quiz engine. `exam-2/neuro.html` is edited directly; Exams 1 and 3 are generated from it by `src/build-exams.mjs`, which swaps in their own questions:
 
-## Adding Cardio lectures
+- Exam 1 from the five lecture quizzes in `src/exam-1-msk/` (multiple choice, fill in the blank, muscle flashcards)
+- Exam 3 from `src/exam-3-cardio/cardio-data.js`
 
-The Cardio page is built from `src/exam-3-cardio/` (`cardio-app.html`, `cardio-style.css`, `cardio-data.js`). Add questions to `cardio-data.js` (set the lecture's `ready: true` and add its topics), then run:
+Rebuild after changing any of those, or after changing the Exam 2 page:
 
 ```bash
 node src/build.mjs
 ```
 
-and commit the rebuilt `exam-3/cardio.html`. The other pages share `assets/theme.css`, with `assets/msk.css` and `assets/neuro.css` adapting the older quiz pages to it. Vercel redeploys on every push to `main`.
+This also rebuilds `src/exam-3-cardio/artifact.html`, the separate claude.ai Cardio artifact. The pages share `assets/theme.css` and `assets/neuro.css`. Vercel redeploys on every push to `main`.
+
+## Adding Cardio lectures
+
+Add questions to `cardio-data.js` (set the lecture's `ready: true` and add its topics), then run `node src/build.mjs`.
 
 Edits made through Claude Code on this machine are committed and pushed automatically at the end of each Claude turn (a Stop hook in `~/.claude/settings.json` runs `~/.claude/hooks/anatomy-autopush.sh`, which also rebuilds the generated pages when `src/` changes).
 

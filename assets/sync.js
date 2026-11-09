@@ -1,10 +1,10 @@
 // Syncs study progress across devices through /api/progress.
 // Each browser gets a private sync code; entering the same code on another device links them.
 // The pages keep saving to browser storage as before. This script watches the keys they save
-// (flags:*, neuro2-*, cardio-*), sends changes to the server, and on load pulls anything newer.
+// (flags:*, neuro2-*, cardio-*, msk-*), sends changes to the server, and on load pulls anything newer.
 // Load it before the page's own scripts so a pull can land before they read storage.
 (function () {
-  const TRACKED = ["flags:", "neuro2-", "cardio-"];
+  const TRACKED = ["flags:", "neuro2-", "cardio-", "msk-"];
   const CODE_KEY = "a403-sync-code", AT_KEY = "a403-sync-at", RELOAD_KEY = "a403-sync-reloaded";
   const CODE_RE = /^[A-Z2-9]{5}(-[A-Z2-9]{5}){3}$/;
   const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
