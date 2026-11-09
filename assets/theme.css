@@ -1,0 +1,43 @@
+/* Anatomy 403 shared theme.
+ * Cool-grey menus with white rounded cards, a deep navy "stage" for questions,
+ * saturated accents per exam, a pink-to-violet progress bar and pill buttons. */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+:root{
+  color-scheme:light;
+  --x-bg:#EEF1F8; --x-surface:#FFFFFF; --x-surface-2:#F4F6FC; --x-ink:#1A1D3B; --x-muted:#5F668C; --x-line:#E0E4F0;
+  --x-stage:#1E2350; --x-stage-2:#2A3068; --x-stage-3:#363E80; --x-stage-ink:#F4F5FF; --x-stage-muted:#B0B5DC; --x-stage-line:#3B4388;
+  --x-violet:#7C5CFF; --x-pink:#FF5FA2; --x-blue:#3E6BFF; --x-teal:#17BFAE; --x-coral:#FF7A45; --x-green:#1FBF88; --x-red:#FF4D6A; --x-yellow:#FFC23D;
+  --x-good-wash:rgba(31,191,136,.18); --x-bad-wash:rgba(255,77,106,.18); --x-flag-wash:rgba(255,194,61,.18);
+  --x-grad-progress:linear-gradient(90deg,#FF5FA2,#8B5CFF);
+  --x-grad-primary:linear-gradient(135deg,#5C8BFF,#3E5BFF);
+  --x-grad-good:linear-gradient(135deg,#2BD49A,#14A87A);
+  --x-r-sm:12px; --x-r-md:16px; --x-r-lg:24px; --x-r-xl:30px; --x-r-pill:999px;
+  --x-shadow:0 12px 32px rgba(32,38,90,.10); --x-shadow-sm:0 4px 14px rgba(32,38,90,.08);
+  --x-shadow-btn:0 10px 22px rgba(62,91,255,.32); --x-shadow-stage:0 24px 48px rgba(24,28,72,.28);
+  --x-font:"Plus Jakarta Sans", ui-rounded, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --x-ease:cubic-bezier(0.16,1,0.3,1);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark;
+  --x-bg:#0B0F2B; --x-surface:#161B42; --x-surface-2:#1E2452; --x-ink:#EEF0FF; --x-muted:#A3A8D6; --x-line:#2A3068;
+  --x-stage:#1B2052; --x-stage-2:#262D68; --x-stage-3:#323A80; --x-stage-ink:#F4F5FF; --x-stage-muted:#AEB3DE; --x-stage-line:#3A4290;
+  --x-shadow:0 12px 32px rgba(0,0,0,.35); --x-shadow-sm:0 4px 14px rgba(0,0,0,.3); --x-shadow-stage:0 24px 48px rgba(0,0,0,.45);
+} }
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --x-bg:#0B0F2B; --x-surface:#161B42; --x-surface-2:#1E2452; --x-ink:#EEF0FF; --x-muted:#A3A8D6; --x-line:#2A3068;
+  --x-stage:#1B2052; --x-stage-2:#262D68; --x-stage-3:#323A80; --x-stage-ink:#F4F5FF; --x-stage-muted:#AEB3DE; --x-stage-line:#3A4290;
+  --x-shadow:0 12px 32px rgba(0,0,0,.35); --x-shadow-sm:0 4px 14px rgba(0,0,0,.3); --x-shadow-stage:0 24px 48px rgba(0,0,0,.45);
+}
+
+/* the back link and the progress bar the quiz pages share */
+.xback{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px 0 10px;margin-bottom:14px;border-radius:var(--x-r-pill);background:var(--x-surface);color:var(--x-ink);font:600 .9rem/1 var(--x-font);text-decoration:none;box-shadow:var(--x-shadow-sm);transition:transform .15s var(--x-ease)}
+.xback svg{width:16px;height:16px}
+.xback:hover{transform:translateX(-2px)}
+.xback:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
+.xbar{display:flex;align-items:center;gap:12px;margin:6px 0 16px}
+.xbar .track-bg{flex:1;height:12px;border-radius:var(--x-r-pill);background:var(--x-line);overflow:hidden}
+.xbar .track-bg i{display:block;height:100%;border-radius:inherit;background:var(--x-grad-progress);transform-origin:left;transform:scaleX(var(--p,0));transition:transform .35s var(--x-ease)}
+.xbar span{font:700 .85rem/1 var(--x-font);color:var(--x-muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (prefers-reduced-motion: reduce){.xbar .track-bg i,.xback{transition:none}}

@@ -1,0 +1,97 @@
+/* Neuro page on the shared theme. Loaded after the page's own <style>, so these rules win.
+ * The page's own tokens are pointed at the theme's, in every theme state the page defines. */
+:root, :root:not([data-theme="light"]), :root[data-theme="dark"]{
+  --bg:var(--x-bg); --surface:var(--x-surface); --fg:var(--x-ink); --muted:var(--x-muted); --line:var(--x-line);
+  --accent:var(--x-violet); --accent-soft:rgba(124,92,255,.14); --good:var(--x-green); --good-soft:var(--x-good-wash);
+  --bad:var(--x-red); --bad-soft:var(--x-bad-wash); --warn:#C98A00; --plate:#FFFFFF;
+  --f-display:var(--x-font); --f-body:var(--x-font); --f-mono:var(--x-font);
+}
+body{font-family:var(--x-font);-webkit-font-smoothing:antialiased}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header h1{font-weight:800;letter-spacing:-0.02em}
+header p{font-size:.85rem}
+
+/* sidebar: pill switch and chips on white cards */
+.bar{border-bottom:0;background:var(--x-bg)}
+.seg{border:0;background:var(--x-surface);box-shadow:var(--x-shadow-sm);border-radius:var(--x-r-md);padding:4px;gap:4px}
+.seg button{border-radius:var(--x-r-sm);font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--x-grad-primary);color:#fff;box-shadow:var(--x-shadow-btn)}
+.chip{border:0;background:var(--x-surface);box-shadow:var(--x-shadow-sm);border-radius:var(--x-r-pill);font-weight:700;padding:8px 14px}
+.chip[aria-pressed="true"]{background:var(--x-violet);color:#fff}
+.fchip[aria-pressed="true"]{background:var(--x-yellow);color:#2A2100}
+.meta{font-family:var(--x-font);font-weight:600;letter-spacing:0;font-size:.82rem}
+.meta .score b{font-weight:800}
+.progress{height:12px;border-radius:var(--x-r-pill);background:var(--x-line)}
+.progress i{border-radius:inherit;background:var(--x-grad-progress)}
+.linkbtn{color:var(--x-pink);font-weight:700}
+
+/* the question card is the navy stage */
+.card{background:var(--x-stage);color:var(--x-stage-ink);border:0;border-radius:var(--x-r-xl);padding:24px;box-shadow:var(--x-shadow-stage)}
+.tag{font-family:var(--x-font);text-transform:none;letter-spacing:0;font-weight:700;font-size:.82rem;color:var(--x-pink)}
+.said-badge{color:#2A2100;background:var(--x-yellow);border:0;border-radius:var(--x-r-pill);padding:2px 9px;font-family:var(--x-font);text-transform:none;letter-spacing:0}
+.q{font-weight:800;letter-spacing:-0.01em}
+.multi-note{color:#2A2100;background:var(--x-yellow);border-radius:var(--x-r-pill);padding:4px 12px;text-transform:none;letter-spacing:0;font-family:var(--x-font);font-weight:800}
+.card .opts{gap:10px}
+.card .optrow{gap:8px}
+.card .opt{background:var(--x-stage-2);color:var(--x-stage-ink);border:2px solid transparent;border-radius:var(--x-r-md);padding:14px 16px;font-weight:600;align-items:center}
+.card .opt .k{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--x-stage-line);color:var(--x-stage-muted);font-family:var(--x-font);font-weight:800;padding:0}
+.card .opt:hover:not(:disabled){border-color:transparent;background:var(--x-stage-3)}
+.card .opt.sel{border-color:var(--x-violet);background:var(--x-stage-3)}
+.card .opt.sel .k{background:var(--x-violet);border-color:var(--x-violet);color:#fff}
+.card .opt.right{background:var(--x-good-wash);border-color:var(--x-green)}
+.card .opt.right .k{background:var(--x-green);border-color:var(--x-green);color:#fff}
+.card .opt.wrong{background:var(--x-bad-wash);border-color:var(--x-red)}
+.card .opt.wrong .k{background:var(--x-red);border-color:var(--x-red);color:#fff}
+.card .opt.missedopt{border-color:var(--x-green);border-style:dashed}
+.card .opt .lab{font-family:var(--x-font);text-transform:none;letter-spacing:0;font-weight:800}
+.card .opt.right .lab,.card .opt.missedopt .lab{color:#7EF0C4}
+.card .opt.wrong .lab{color:#FFA3B3}
+.card .xbtn{border:0;border-radius:var(--x-r-md);background:var(--x-stage-2);color:var(--x-stage-muted);width:46px}
+.card .optrow.crossed .xbtn{background:var(--x-red);color:#fff}
+.card .explain{background:var(--x-stage-2);border-radius:var(--x-r-md);padding:14px 16px}
+.card .explain.ok{box-shadow:inset 4px 0 0 var(--x-green)} .card .explain.ok b{color:#7EF0C4}
+.card .explain.no{box-shadow:inset 4px 0 0 var(--x-red)} .card .explain.no b{color:#FFA3B3}
+.card .said{border-left:0;border-radius:var(--x-r-sm);background:var(--x-flag-wash);padding:8px 12px;color:var(--x-stage-ink)}
+.card .said b{color:var(--x-yellow)}
+.card .lo{color:var(--x-stage-muted)} .card .lo b{color:var(--x-stage-ink)}
+.flag{border:0;border-radius:var(--x-r-pill);background:var(--x-stage-2);color:var(--x-stage-muted);font-weight:700;padding:7px 14px}
+.flag[aria-pressed="true"]{background:var(--x-yellow);color:#2A2100}
+
+/* buttons: light pills on the page, navy pills on the stage */
+.btn{border:0;border-radius:var(--x-r-pill);background:var(--x-surface);color:var(--x-ink);box-shadow:var(--x-shadow-sm);padding:12px 22px;font-weight:800}
+.btn.primary{background:var(--x-grad-primary);color:#fff;box-shadow:var(--x-shadow-btn)}
+.card .btn:not(.primary){background:var(--x-stage-2);color:var(--x-stage-ink);box-shadow:none}
+.btn:active:not(:disabled){transform:scale(.97)}
+.nav .again{background:var(--x-red);color:#fff;border:0}
+.nav .got{background:var(--x-green);color:#fff;border:0}
+
+/* fill in the blank and identification inputs on the stage */
+.card .fb-s input,.card .blank input{background:var(--x-stage-2);color:var(--x-stage-ink);border:2px solid var(--x-stage-line);border-radius:var(--x-r-sm);font-family:var(--x-font);font-weight:700}
+.card .fb-s input:focus,.card .blank input:focus{outline:none;border-color:var(--x-violet);box-shadow:0 0 0 3px rgba(124,92,255,.35)}
+.card .fb-s input.ok,.card .blank input.ok{background:var(--x-good-wash);border-color:var(--x-green)}
+.card .fb-s input.no,.card .blank input.no{background:var(--x-bad-wash);border-color:var(--x-red)}
+.card .fb.ok{color:#7EF0C4} .card .fb.no{color:#FFA3B3} .card .fb.near{color:var(--x-yellow)}
+.card .markok{color:var(--x-pink)}
+.card .fig-title{font-weight:800}
+.card .hint{color:var(--x-stage-muted)}
+.card .plate{border:0;border-radius:var(--x-r-md)}
+.card .num{background:var(--x-violet)}
+
+/* flashcards: a white card on the page */
+.card.flash{background:var(--x-surface);color:var(--x-ink);box-shadow:var(--x-shadow)}
+.card.flash .tag{color:#E0367F}
+.card.flash .front{font-weight:800;letter-spacing:-0.01em}
+.card.flash .fmt{border:0;background:rgba(124,92,255,.10);border-radius:var(--x-r-md)}
+.card.flash .fmt .fl{font-family:var(--x-font);text-transform:none;letter-spacing:0;color:var(--x-violet);font-weight:800}
+.card.flash .back{border-top:2px dashed var(--x-line)}
+.card.flash .ans,.card.flash .ans-list{color:var(--x-violet);font-weight:800}
+.card.flash .lo,.card.flash .tapnote{color:var(--x-muted)}
+.card.flash .said{background:#FFF6DC;color:#1A1D3B}
+
+/* results */
+.card.done{background:var(--x-grad-good);color:#fff}
+.card.done h2{font-weight:800}
+.card.done p{color:rgba(255,255,255,.9)}
+.card.done .btn{background:rgba(255,255,255,.2);color:#fff;box-shadow:none}
+.card.done .btn.primary{background:#fff;color:#11815C}
+@media (max-width:520px){.card{padding:18px 16px;border-radius:var(--x-r-lg)}}

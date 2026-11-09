@@ -10,12 +10,12 @@ Practice questions, fill-in-the-blank sentences and flashcards for Anatomy 403, 
 
 ## Adding Cardio lectures
 
-The Cardio page is built from `src/exam-3-cardio/`. Add questions to `cardio-data.js` (set the lecture's `ready: true` and add its topics), then run:
+The Cardio page is built from `src/exam-3-cardio/` (`cardio-app.html`, `cardio-style.css`, `cardio-data.js`). Add questions to `cardio-data.js` (set the lecture's `ready: true` and add its topics), then run:
 
 ```bash
 node src/build.mjs
 ```
 
-and commit the rebuilt `exam-3/cardio.html`. Vercel redeploys on every push to `main`.
+and commit the rebuilt `exam-3/cardio.html`. The other pages share `assets/theme.css`, with `assets/msk.css` and `assets/neuro.css` adapting the older quiz pages to it. Vercel redeploys on every push to `main`.
 
 Questions are practice only and may contain mistakes.
