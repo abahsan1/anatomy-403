@@ -122,6 +122,14 @@ h1{margin:20px 0 6px;font-size:1.75rem;font-weight:800;letter-spacing:-0.025em;l
   show(S.user());
   addEventListener("a403-auth",e=>show(e.detail));
 
+  // show only the sign-in buttons that are turned on in Supabase
+  fetch("https://ksfbvtkbcnqiqvsazesd.supabase.co/auth/v1/settings",{headers:{apikey:"sb_publishable_bWHSSPtt2UrFc4g5YQDwlA_CQF9Qw-d"}})
+    .then(r=>r.ok?r.json():Promise.reject()).then(cfg=>{
+      const on=cfg.external||{};let any=false;
+      document.querySelectorAll("[data-provider]").forEach(b=>{const ok=!!on[b.dataset.provider];b.hidden=!ok;any=any||ok});
+      document.querySelector(".providers").hidden=!any;document.querySelector(".or").hidden=!any;
+    }).catch(()=>{});
+
   document.querySelectorAll("[data-provider]").forEach(b=>b.onclick=async()=>{
     const all=document.querySelectorAll(".prov");all.forEach(x=>x.disabled=true);say("Opening "+b.textContent.trim().replace("Continue with ","")+"…");
     try{const sb=await S.client();const {error}=await sb.auth.signInWithOAuth({provider:b.dataset.provider,options:{redirectTo:back}});if(error)throw error}
