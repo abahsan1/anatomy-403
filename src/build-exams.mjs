@@ -169,7 +169,7 @@ const manifest = [
     lectures: MSK_LECS.map((name, i) => ({n: i + 1, name, ready: true, q: count(msk.questions, i + 1), b: count(msk.blanks, i + 1), m: count(msk.muscles, i + 1)}))},
   {n: 2, path: "/exam-2/neuro", prefix: "neuro2-", name: "Neuroanatomy", short: "Neuro", status: "past", date: null,
     lectures: NEURO_LECS.map((name, i) => ({n: i + 1, name, ready: true, q: count(neuroData.QUESTIONS, i + 1), b: count(neuroData.BLANKS, i + 1), f: count(neuroData.FIGS, i + 1, "lec")}))},
-  {n: 3, path: "/exam-3/cardio", prefix: "cardio-v2-", name: "Cardiovascular and respiratory", short: "Cardio", status: "current", date: null,
+  {n: 3, path: "/exam-3/cardio", prefix: "cardio-v2-", name: "Cardiovascular and respiratory", short: "Cardio", status: "current", date: "2026-11-16",
     lectures: C.LECTURES.map(L => ({n: L.n, name: L.ready ? L.name : "", ready: L.ready, q: count(cq, L.n), b: count(cb, L.n)}))},
 ];
 writeFileSync(new URL("assets/exams.js", root),
