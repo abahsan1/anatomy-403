@@ -1,11 +1,13 @@
-// Saves and loads one person's study progress, keyed by their private sync code.
-// GET  /api/progress?code=XXXXX-XXXXX-XXXXX-XXXXX  -> { data: { storageKey: value }, at }
-// PUT  /api/progress?code=...  body { data: { storageKey: value }, at }  merges the keys in.
-// The values are the pages' own browser-storage entries (flags, missed items, positions).
+// Saves and loads the signed-in person's study progress.
+// The browser sends its Supabase sign-in token; this checks it with Supabase Auth and keys the
+// progress by the account's id, so nobody can read or write someone else's progress.
+// GET  /api/progress  -> { data: { storageKey: value }, at }
+// PUT  /api/progress  body { data: { storageKey: value }, at }  merges the keys in.
 import { neon } from "@neondatabase/serverless";
 
 const sql = neon(process.env.DATABASE_URL);
-const CODE = /^[A-Z2-9]{5}(-[A-Z2-9]{5}){3}$/;
+const SUPABASE_URL = "https://ksfbvtkbcnqiqvsazesd.supabase.co";
+const SUPABASE_KEY = "sb_publishable_bWHSSPtt2UrFc4g5YQDwlA_CQF9Qw-d"; // publishable key, not a secret
 const KEY = /^(flags:|neuro2-|cardio-|msk-)[\w :&.,'-]{1,80}$/;
 const MAX_BYTES = 2_000_000;
 
@@ -18,12 +20,22 @@ const init = () => (ready ??= sql`
     updated_at timestamptz NOT NULL DEFAULT now()
   )`);
 
+// who is asking: the account id from a valid Supabase token, or null
+async function account(req) {
+  const m = /^Bearer\s+(\S+)$/.exec(req.headers.authorization || "");
+  if (!m) return null;
+  const r = await fetch(SUPABASE_URL + "/auth/v1/user", { headers: { authorization: "Bearer " + m[1], apikey: SUPABASE_KEY } });
+  if (!r.ok) return null;
+  const u = await r.json();
+  return u && typeof u.id === "string" ? u.id : null;
+}
+
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
-  const code = String(req.query.code || "").toUpperCase();
-  if (!CODE.test(code)) return res.status(400).json({ error: "That isn't a valid sync code." });
-
   try {
+    const id = await account(req);
+    if (!id) return res.status(401).json({ error: "Sign in to save progress." });
+    const code = "user:" + id;
     await init();
     if (req.method === "GET") {
       const rows = await sql`SELECT data, at FROM progress WHERE code = ${code}`;

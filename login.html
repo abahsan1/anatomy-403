@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" data-no-reload>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sign in · Anatomy 403</title>
+<meta name="description" content="Sign in to save your Anatomy 403 progress across devices.">
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/sync.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html,body{overflow-x:clip}
+body{margin:0;min-height:100vh;background:var(--x-bg);color:var(--x-ink);font-family:var(--x-font);-webkit-font-smoothing:antialiased}
+.shell{max-width:440px;margin:0 auto;padding:calc(32px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) 56px max(20px,env(safe-area-inset-left,0px))}
+.back{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px 0 10px;border-radius:var(--x-r-pill);background:var(--x-surface);box-shadow:var(--x-shadow-sm);color:var(--x-ink);font-weight:700;font-size:.9rem;text-decoration:none}
+.back svg{width:18px;height:18px}
+.back:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
+.card{margin-top:28px;background:var(--x-surface);border-radius:var(--x-r-xl);box-shadow:var(--x-shadow);padding:32px 24px 26px}
+.mark{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:var(--x-grad-primary);color:#fff;box-shadow:var(--x-shadow-btn)}
+.mark svg{width:28px;height:28px}
+h1{margin:20px 0 6px;font-size:1.75rem;font-weight:800;letter-spacing:-0.025em;line-height:1.15}
+.lede{margin:0;color:var(--x-muted);font-size:.95rem;line-height:1.5}
+.providers{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+.prov{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:52px;padding:0 18px;border:2px solid var(--x-line);border-radius:var(--x-r-md);background:var(--x-surface);color:var(--x-ink);font:700 1rem var(--x-font);cursor:pointer;transition:border-color .15s var(--x-ease),background-color .15s var(--x-ease),transform .1s var(--x-ease)}
+.prov svg{width:22px;height:22px;flex:none}
+.prov:hover{border-color:var(--x-violet);background:var(--x-surface-2)}
+.prov:active{transform:scale(.99)}
+.prov:focus-visible,.go:focus-visible,.field input:focus-visible,.ghost:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
+.prov[disabled],.go[disabled]{opacity:.6;cursor:default}
+.or{display:flex;align-items:center;gap:12px;margin:22px 0 18px;color:var(--x-muted);font-size:.85rem;font-weight:600}
+.or::before,.or::after{content:"";flex:1;height:2px;border-radius:2px;background:var(--x-line)}
+.field label{display:block;font-weight:700;font-size:.9rem;margin-bottom:8px}
+.field input{width:100%;min-height:52px;padding:0 16px;border:2px solid var(--x-line);border-radius:var(--x-r-md);background:var(--x-surface-2);color:var(--x-ink);font:600 1rem var(--x-font)}
+.field input::placeholder{color:var(--x-muted);font-weight:500}
+.go{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;margin-top:12px;border:0;border-radius:var(--x-r-pill);background:var(--x-grad-primary);color:#fff;box-shadow:var(--x-shadow-btn);font:800 1rem var(--x-font);cursor:pointer;text-decoration:none;transition:transform .1s var(--x-ease)}
+.go:active{transform:scale(.98)}
+.ghost{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;margin-top:10px;border:0;border-radius:var(--x-r-pill);background:var(--x-surface-2);color:var(--x-ink);font:800 .95rem var(--x-font);cursor:pointer}
+.msg{min-height:1.4em;margin:14px 0 0;font-size:.9rem;font-weight:600;line-height:1.45;color:var(--x-muted)}
+.msg.ok{color:#11815C} .msg.bad{color:#C8203F}
+.fine{margin:20px 0 0;font-size:.82rem;color:var(--x-muted);line-height:1.5}
+.who{display:flex;align-items:center;gap:14px;margin-top:22px;padding:14px;border-radius:var(--x-r-md);background:var(--x-surface-2)}
+.avatar{flex:none;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--x-violet);color:#fff;font-weight:800;font-size:1.2rem;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.who b{display:block;font-weight:800;overflow-wrap:anywhere}
+.who span{display:block;font-size:.88rem;color:var(--x-muted);overflow-wrap:anywhere}
+.who > div{min-width:0}
+[hidden]{display:none!important}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .msg.ok{color:#7EF0C4} :root:not([data-theme="light"]) .msg.bad{color:#FFA3B3}}
+:root[data-theme="dark"] .msg.ok{color:#7EF0C4} :root[data-theme="dark"] .msg.bad{color:#FFA3B3}
+@media (max-width:380px){.card{padding:26px 18px 22px}h1{font-size:1.5rem}}
+@media (prefers-reduced-motion: reduce){.prov,.go{transition:none}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <a class="back" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>All exams</a>
+
+  <section class="card" aria-labelledby="h">
+    <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-9.2-9.4C1.6 7.1 3.9 4 7.2 4c2 0 3.6 1.2 4.8 2.9C13.2 5.2 14.8 4 16.8 4c3.3 0 5.6 3.1 4.4 6.6C19.5 15.4 12 20 12 20z"/></svg></span>
+
+    <div id="out">
+      <h1 id="h">Sign in to Anatomy 403</h1>
+      <p class="lede">Your flags, missed questions and flashcards follow you to your phone, laptop or any computer.</p>
+
+      <div class="providers">
+        <button class="prov" type="button" data-provider="google">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.4h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.7z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6h-4a12 12 0 0 0 0 10.8l4-3.1z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/></svg>
+          Continue with Google
+        </button>
+        <button class="prov" type="button" data-provider="github">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5z"/></svg>
+          Continue with GitHub
+        </button>
+      </div>
+
+      <p class="or">or use your email</p>
+
+      <form id="email-form" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
+        </div>
+        <button class="go" id="send" type="submit">Email me a sign-in link</button>
+      </form>
+      <p class="fine">No password needed: we email you a link that signs you in. Without an account, progress still saves in this browser.</p>
+    </div>
+
+    <div id="in" hidden>
+      <h1>You're signed in</h1>
+      <p class="lede">Progress from every exam now saves to your account and syncs to any device where you sign in.</p>
+      <div class="who"><span class="avatar" id="avatar"></span><div><b id="who-name"></b><span id="who-email"></span></div></div>
+      <a class="go" id="continue" href="/">Go to your exams</a>
+      <button class="ghost" id="signout" type="button">Sign out</button>
+    </div>
+
+    <p class="msg" id="msg" role="status" aria-live="polite"></p>
+  </section>
+</main>
+<script>
+(function(){
+  const $=id=>document.getElementById(id), S=window.a403Sync;
+  const say=(t,kind)=>{$("msg").textContent=t||"";$("msg").className="msg"+(kind?" "+kind:"")};
+  // where to go after signing in: a path on this site only
+  const params=new URLSearchParams(location.search), hash=new URLSearchParams(location.hash.slice(1));
+  const raw=params.get("next")||"/", next=/^\/(?!\/)/.test(raw)?raw:"/";
+  $("continue").href=next;
+  const back=location.origin+"/login"+(next!=="/"?"?next="+encodeURIComponent(next):"");
+  const err=params.get("error_description")||hash.get("error_description");
+  if(err)say(err.replace(/\+/g," ")+". Try again, or use another way to sign in.","bad");
+  if(!S){say("Signing in needs browser storage, which is turned off here.","bad");return}
+
+  const show=p=>{
+    $("out").hidden=!!p; $("in").hidden=!p;
+    if(!p)return;
+    $("who-name").textContent=p.name||p.email.split("@")[0]||"Signed in";
+    $("who-email").textContent=p.email+" · via "+({google:"Google",github:"GitHub",email:"email link"}[p.provider]||p.provider);
+    const av=$("avatar");av.textContent="";
+    if(p.avatar){const im=new Image();im.alt="";im.referrerPolicy="no-referrer";im.src=p.avatar;im.onerror=()=>{av.textContent=(p.name||p.email||"?")[0].toUpperCase()};av.appendChild(im)}
+    else av.textContent=(p.name||p.email||"?")[0].toUpperCase();
+    if(params.get("next")&&!err){say("Taking you back…");setTimeout(()=>location.replace(next),900)}
+  };
+  show(S.user());
+  addEventListener("a403-auth",e=>show(e.detail));
+
+  document.querySelectorAll("[data-provider]").forEach(b=>b.onclick=async()=>{
+    const all=document.querySelectorAll(".prov");all.forEach(x=>x.disabled=true);say("Opening "+b.textContent.trim().replace("Continue with ","")+"…");
+    try{const sb=await S.client();const {error}=await sb.auth.signInWithOAuth({provider:b.dataset.provider,options:{redirectTo:back}});if(error)throw error}
+    catch(e){all.forEach(x=>x.disabled=false);say((e&&e.message)||"That didn't work. Try again.","bad")}
+  });
+
+  $("email-form").onsubmit=async e=>{
+    e.preventDefault();
+    const email=$("email").value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){say("Enter your email address, like you@example.com.","bad");$("email").focus();return}
+    $("send").disabled=true;say("Sending…");
+    try{const sb=await S.client();const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:back}});if(error)throw error;
+      say("Check "+email+" for a sign-in link. Open it on this device to finish signing in.","ok")}
+    catch(e2){say((e2&&e2.message)||"We couldn't send the email. Try again in a minute.","bad")}
+    finally{$("send").disabled=false}
+  };
+
+  $("signout").onclick=async()=>{$("signout").disabled=true;await S.signOut();$("signout").disabled=false;say("Signed out. Progress on this browser was cleared; it's safe in your account.","ok")};
+})();
+</script>
+</body>
+</html>

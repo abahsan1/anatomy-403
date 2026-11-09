@@ -50,19 +50,20 @@ body{margin:0;min-height:100vh;background:var(--x-bg);color:var(--x-ink);font-fa
 .sync-card h2 .st.ok{background:rgba(31,191,136,.16);color:#11815C}
 .sync-card h2 .st.off{background:rgba(255,77,106,.14);color:#C8203F}
 .sync-card p{margin:6px 0 0;font-size:.88rem;color:var(--x-muted);line-height:1.5}
-.code-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
-.code{flex:1;min-width:0;padding:12px 14px;border-radius:var(--x-r-md);background:var(--x-surface-2);font:700 1rem/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.04em;overflow-wrap:anywhere;user-select:all}
-.pill{min-height:44px;padding:0 18px;border:0;border-radius:var(--x-r-pill);font:800 .88rem/1 var(--x-font);cursor:pointer;background:var(--x-surface-2);color:var(--x-ink);transition:transform .1s var(--x-ease)}
+.acct-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:14px}
+.acct-who{flex:1;min-width:0;display:flex;align-items:center;gap:12px}
+.avatar{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--x-violet);color:#fff;font-weight:800;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.acct-who b{display:block;font-weight:800;overflow-wrap:anywhere}
+.acct-who span{display:block;font-size:.85rem;color:var(--x-muted);overflow-wrap:anywhere}
+.acct-who > div{min-width:0}
+.pill{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border:0;border-radius:var(--x-r-pill);font:800 .88rem/1 var(--x-font);cursor:pointer;background:var(--x-surface-2);color:var(--x-ink);text-decoration:none;transition:transform .1s var(--x-ease)}
 .pill.primary{background:var(--x-grad-primary);color:#fff;box-shadow:var(--x-shadow-btn)}
 .pill:active{transform:scale(.97)}
-.pill:focus-visible,.link-form input:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
-.link-form{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.link-form input{flex:1;min-width:0;min-height:44px;padding:0 14px;border:2px solid var(--x-line);border-radius:var(--x-r-md);background:var(--x-surface);color:var(--x-ink);font:600 .95rem var(--x-font);text-transform:uppercase}
-.link-form input::placeholder{text-transform:none;color:var(--x-muted)}
-.sync-msg{min-height:1.2em;margin-top:8px;font-size:.82rem;font-weight:600;color:var(--x-muted)}
-.sync-msg.bad{color:#C8203F}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sync-card h2 .st.ok{color:#7EF0C4}:root:not([data-theme="light"]) .sync-card h2 .st.off,:root:not([data-theme="light"]) .sync-msg.bad{color:#FFA3B3}}
-:root[data-theme="dark"] .sync-card h2 .st.ok{color:#7EF0C4} :root[data-theme="dark"] .sync-card h2 .st.off,:root[data-theme="dark"] .sync-msg.bad{color:#FFA3B3}
+.pill:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
+.hello{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.top-acct{flex:none;min-height:40px;padding:0 16px;font-size:.85rem;background:var(--x-surface);box-shadow:var(--x-shadow-sm)}
+.top-acct .avatar{width:28px;height:28px;font-size:.8rem;margin:0 8px 0 -8px}
 .name b{overflow-wrap:anywhere}
 @media (max-width:380px){.exam summary{gap:12px;padding:14px}.tile{width:44px;height:44px;border-radius:14px}.tile svg{width:22px;height:22px}.name b{font-size:1.05rem}.list{padding:0 10px 12px}}
 @media (prefers-reduced-motion: reduce){.chev,.list a{transition:none}}
@@ -71,8 +72,9 @@ body{margin:0;min-height:100vh;background:var(--x-bg);color:var(--x-ink);font-fa
 <body>
 <main class="shell">
   <header class="hello">
-    <p>Welcome back</p>
-    <h1>Anatomy 403</h1>
+    <div><p id="hi">Welcome back</p>
+    <h1>Anatomy 403</h1></div>
+    <a class="pill top-acct" id="top-acct" href="/login">Sign in</a>
   </header>
 
   <div class="exams">
@@ -123,27 +125,36 @@ body{margin:0;min-height:100vh;background:var(--x-bg);color:var(--x-ink);font-fa
   </div>
 
   <section class="sync-card" aria-labelledby="sync-h">
-    <h2 id="sync-h">Sync across devices <span class="st" id="sync-st">Connecting</span></h2>
-    <p>Your flags, misses and progress save to this code. Enter it on your phone or another computer to pick up where you left off. Keep it private: anyone with the code sees your progress.</p>
-    <div class="code-row"><span class="code" id="sync-code">Loading</span><button class="pill" id="sync-copy" type="button">Copy</button></div>
-    <form class="link-form" id="sync-form" autocomplete="off">
-      <label class="vh" for="sync-in">Code from another device</label>
-      <input id="sync-in" placeholder="Enter a code from another device" spellcheck="false" autocapitalize="characters">
-      <button class="pill primary" type="submit">Use this code</button>
-    </form>
+    <h2 id="sync-h">Your progress <span class="st" id="sync-st">Checking</span></h2>
+    <div id="acct-out" hidden>
+      <p>Progress is saving in this browser only. Sign in with Google, GitHub or your email to keep it safe and pick up on any device.</p>
+      <div class="acct-row"><a class="pill primary" href="/login">Sign in to sync</a></div>
+    </div>
+    <div id="acct-in" hidden>
+      <p>Flags, missed questions and flashcards save to your account and sync wherever you sign in.</p>
+      <div class="acct-row"><div class="acct-who"><span class="avatar" id="avatar"></span><div><b id="who-name"></b><span id="who-email"></span></div></div><button class="pill" id="signout" type="button">Sign out</button></div>
+    </div>
     <p class="sync-msg" id="sync-msg" role="status"></p>
   </section>
 </main>
 <script>
 (function(){
   const $=id=>document.getElementById(id), S=window.a403Sync;
-  if(!S){$("sync-st").textContent="Unavailable";$("sync-st").className="st off";$("sync-code").textContent="Sync needs browser storage, which is turned off here.";return}
-  $("sync-code").textContent=S.code();
-  const show=st=>{const el=$("sync-st");el.textContent=st==="saved"?"Synced":st==="offline"?"Offline, saving here":"Connecting";el.className="st"+(st==="saved"?" ok":st==="offline"?" off":"")};
+  if(!S){$("sync-st").textContent="Unavailable";$("sync-st").className="st off";$("acct-out").hidden=false;return}
+  const show=st=>{const el=$("sync-st");el.textContent=st==="saved"?"Synced":st==="offline"?"Offline, saving here":st==="signed-out"?"This browser only":"Checking";el.className="st"+(st==="saved"?" ok":st==="offline"?" off":"")};
+  const face=(el,p)=>{el.textContent="";const t=(p.name||p.email||"?")[0].toUpperCase();
+    if(p.avatar){const im=new Image();im.alt="";im.referrerPolicy="no-referrer";im.src=p.avatar;im.onerror=()=>{el.textContent=t};el.appendChild(im)}else el.textContent=t};
+  const who=p=>{
+    $("acct-in").hidden=!p;$("acct-out").hidden=!!p;
+    const top=$("top-acct");top.textContent="";
+    if(p){const first=(p.name||"").split(" ")[0];$("hi").textContent=first?"Welcome back, "+first:"Welcome back";
+      $("who-name").textContent=p.name||p.email.split("@")[0];$("who-email").textContent=p.email;face($("avatar"),p);
+      const av=document.createElement("span");av.className="avatar";face(av,p);top.append(av,"Account");top.href="/login"}
+    else{$("hi").textContent="Welcome back";top.textContent="Sign in";top.href="/login"}
+  };
   show(S.status()); addEventListener("a403-sync",e=>show(e.detail));
-  $("sync-copy").onclick=()=>{const done=()=>{$("sync-msg").className="sync-msg";$("sync-msg").textContent="Code copied."};
-    if(navigator.clipboard)navigator.clipboard.writeText(S.code()).then(done,()=>{getSelection().selectAllChildren($("sync-code"));$("sync-msg").textContent="Selected. Copy it with your keyboard."});else getSelection().selectAllChildren($("sync-code"))};
-  $("sync-form").onsubmit=e=>{e.preventDefault();if(!S.use($("sync-in").value)){$("sync-msg").className="sync-msg bad";$("sync-msg").textContent="That code isn't valid. It's 20 letters and numbers, like ABCDE-FGHJK-LMNPQ-RSTUV."}};
+  if(S.status()!=="connecting")who(S.user()); addEventListener("a403-auth",e=>who(e.detail));
+  $("signout").onclick=async()=>{$("signout").disabled=true;await S.signOut();$("signout").disabled=false;$("sync-msg").className="sync-msg";$("sync-msg").textContent="Signed out. This browser's copy was cleared; your progress is safe in your account."};
 })();
 </script>
 </body>
