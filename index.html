@@ -6,8 +6,10 @@
 <title>Anatomy 403 Practice</title>
 <meta name="description" content="Practice quizzes and flashcards for Anatomy 403, one set per exam.">
 <link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/sync.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 html,body{overflow-x:clip}
 body{margin:0;min-height:100vh;background:var(--x-bg);color:var(--x-ink);font-family:var(--x-font);-webkit-font-smoothing:antialiased}
 .shell{max-width:640px;margin:0 auto;padding:calc(48px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) 64px max(20px,env(safe-area-inset-left,0px))}
@@ -42,6 +44,25 @@ body{margin:0;min-height:100vh;background:var(--x-bg);color:var(--x-ink);font-fa
 .cardio{--c:var(--x-pink);--c-ink:#E0367F}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .msk{--c-ink:#FF9A6C} :root:not([data-theme="light"]) .neuro{--c-ink:#A893FF} :root:not([data-theme="light"]) .cardio{--c-ink:#FF8DBE}}
 :root[data-theme="dark"] .msk{--c-ink:#FF9A6C} :root[data-theme="dark"] .neuro{--c-ink:#A893FF} :root[data-theme="dark"] .cardio{--c-ink:#FF8DBE}
+.sync-card{margin-top:28px;background:var(--x-surface);border-radius:var(--x-r-lg);box-shadow:var(--x-shadow);padding:20px}
+.sync-card h2{margin:0;font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:10px}
+.sync-card h2 .st{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:var(--x-r-pill);background:var(--x-surface-2);color:var(--x-muted)}
+.sync-card h2 .st.ok{background:rgba(31,191,136,.16);color:#11815C}
+.sync-card h2 .st.off{background:rgba(255,77,106,.14);color:#C8203F}
+.sync-card p{margin:6px 0 0;font-size:.88rem;color:var(--x-muted);line-height:1.5}
+.code-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+.code{flex:1;min-width:0;padding:12px 14px;border-radius:var(--x-r-md);background:var(--x-surface-2);font:700 1rem/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.04em;overflow-wrap:anywhere;user-select:all}
+.pill{min-height:44px;padding:0 18px;border:0;border-radius:var(--x-r-pill);font:800 .88rem/1 var(--x-font);cursor:pointer;background:var(--x-surface-2);color:var(--x-ink);transition:transform .1s var(--x-ease)}
+.pill.primary{background:var(--x-grad-primary);color:#fff;box-shadow:var(--x-shadow-btn)}
+.pill:active{transform:scale(.97)}
+.pill:focus-visible,.link-form input:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
+.link-form{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.link-form input{flex:1;min-width:0;min-height:44px;padding:0 14px;border:2px solid var(--x-line);border-radius:var(--x-r-md);background:var(--x-surface);color:var(--x-ink);font:600 .95rem var(--x-font);text-transform:uppercase}
+.link-form input::placeholder{text-transform:none;color:var(--x-muted)}
+.sync-msg{min-height:1.2em;margin-top:8px;font-size:.82rem;font-weight:600;color:var(--x-muted)}
+.sync-msg.bad{color:#C8203F}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sync-card h2 .st.ok{color:#7EF0C4}:root:not([data-theme="light"]) .sync-card h2 .st.off,:root:not([data-theme="light"]) .sync-msg.bad{color:#FFA3B3}}
+:root[data-theme="dark"] .sync-card h2 .st.ok{color:#7EF0C4} :root[data-theme="dark"] .sync-card h2 .st.off,:root[data-theme="dark"] .sync-msg.bad{color:#FFA3B3}
 .name b{overflow-wrap:anywhere}
 @media (max-width:380px){.exam summary{gap:12px;padding:14px}.tile{width:44px;height:44px;border-radius:14px}.tile svg{width:22px;height:22px}.name b{font-size:1.05rem}.list{padding:0 10px 12px}}
 @media (prefers-reduced-motion: reduce){.chev,.list a{transition:none}}
@@ -100,6 +121,30 @@ body{margin:0;min-height:100vh;background:var(--x-bg);color:var(--x-ink);font-fa
       </ul>
     </details>
   </div>
+
+  <section class="sync-card" aria-labelledby="sync-h">
+    <h2 id="sync-h">Sync across devices <span class="st" id="sync-st">Connecting</span></h2>
+    <p>Your flags, misses and progress save to this code. Enter it on your phone or another computer to pick up where you left off. Keep it private: anyone with the code sees your progress.</p>
+    <div class="code-row"><span class="code" id="sync-code">Loading</span><button class="pill" id="sync-copy" type="button">Copy</button></div>
+    <form class="link-form" id="sync-form" autocomplete="off">
+      <label class="vh" for="sync-in">Code from another device</label>
+      <input id="sync-in" placeholder="Enter a code from another device" spellcheck="false" autocapitalize="characters">
+      <button class="pill primary" type="submit">Use this code</button>
+    </form>
+    <p class="sync-msg" id="sync-msg" role="status"></p>
+  </section>
 </main>
+<script>
+(function(){
+  const $=id=>document.getElementById(id), S=window.a403Sync;
+  if(!S){$("sync-st").textContent="Unavailable";$("sync-st").className="st off";$("sync-code").textContent="Sync needs browser storage, which is turned off here.";return}
+  $("sync-code").textContent=S.code();
+  const show=st=>{const el=$("sync-st");el.textContent=st==="saved"?"Synced":st==="offline"?"Offline, saving here":"Connecting";el.className="st"+(st==="saved"?" ok":st==="offline"?" off":"")};
+  show(S.status()); addEventListener("a403-sync",e=>show(e.detail));
+  $("sync-copy").onclick=()=>{const done=()=>{$("sync-msg").className="sync-msg";$("sync-msg").textContent="Code copied."};
+    if(navigator.clipboard)navigator.clipboard.writeText(S.code()).then(done,()=>{getSelection().selectAllChildren($("sync-code"));$("sync-msg").textContent="Selected. Copy it with your keyboard."});else getSelection().selectAllChildren($("sync-code"))};
+  $("sync-form").onsubmit=e=>{e.preventDefault();if(!S.use($("sync-in").value)){$("sync-msg").className="sync-msg bad";$("sync-msg").textContent="That code isn't valid. It's 20 letters and numbers, like ABCDE-FGHJK-LMNPQ-RSTUV."}};
+})();
+</script>
 </body>
 </html>

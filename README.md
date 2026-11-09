@@ -8,6 +8,10 @@ Practice questions, fill-in-the-blank sentences and flashcards for Anatomy 403, 
 | Exam 2, neuroanatomy | `exam-2/neuro.html` |
 | Exam 3, cardiovascular and respiratory | `exam-3/cardio.html` |
 
+## Sync across devices
+
+Progress (flags, misses, positions) is saved to a Neon Postgres database through `api/progress.js`. Each browser gets a private sync code (shown on the home page); entering it on another device links them. `assets/sync.js` watches the pages' browser-storage keys and syncs them. The database connection comes from the `DATABASE_URL` environment variable that the Vercel Neon integration set.
+
 ## Building
 
 Exam 1 is built from the five lecture quizzes in `src/exam-1-msk/` with `node src/build-msk.mjs`.

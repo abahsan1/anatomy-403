@@ -19,6 +19,7 @@ const swap = (s, from, to) => {
 };
 
 let page = src(3).replace(Q_RE, () => "const Q = " + JSON.stringify(all) + ";");
+page = swap(page, '<link rel="stylesheet" href="/assets/msk.css">', '<link rel="stylesheet" href="/assets/msk.css">\n<script src="/assets/sync.js"></script>');
 page = swap(page, "<title>MSK3 Quiz: Head, Neck & Back</title>", "<title>MSK Exam 1 Practice</title>");
 page = swap(page, "<h1>MSK3: Head, Neck &amp; Back</h1>", "<h1>Exam 1. Musculoskeletal</h1>");
 page = page.replace(/<p>Multiple choice mixed with fill-in-the-blank\.[^<]*<\/p>/,

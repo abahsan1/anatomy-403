@@ -12,6 +12,6 @@ const page = read("cardio-app.html")
 const back = '<a class="xback" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>All exams</a>';
 const head = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body>';
 
-writeFileSync(new URL("../exam-3/cardio.html", import.meta.url), head + page.replace("<!--BACK-->", () => back) + "</body></html>");
+writeFileSync(new URL("../exam-3/cardio.html", import.meta.url), head + page.replace("<!--BACK-->", () => back + '\n<script src="/assets/sync.js"></script>') + "</body></html>");
 writeFileSync(new URL("artifact.html", dir), page.replace("<!--BACK-->\n", ""));
 console.log("wrote exam-3/cardio.html and src/exam-3-cardio/artifact.html");
