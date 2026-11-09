@@ -7,154 +7,278 @@
 <meta name="description" content="Practice quizzes and flashcards for Anatomy 403, one set per exam.">
 <link rel="stylesheet" href="/assets/theme.css">
 <script src="/assets/sync.js"></script>
+<script src="/assets/exams.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box}
-.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 html,body{overflow-x:clip}
 body{margin:0;min-height:100vh;background:var(--x-bg);color:var(--x-ink);font-family:var(--x-font);-webkit-font-smoothing:antialiased}
-.shell{max-width:640px;margin:0 auto;padding:calc(48px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) 64px max(20px,env(safe-area-inset-left,0px))}
-.hello{margin-bottom:28px}
-.hello p{margin:0 0 6px;font-weight:600;color:var(--x-muted)}
-.hello h1{margin:0;font-size:clamp(2rem,7vw,2.6rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1}
-.exams{display:flex;flex-direction:column;gap:16px}
-.exam{background:var(--x-surface);border-radius:var(--x-r-lg);box-shadow:var(--x-shadow);overflow:hidden}
-.exam summary{list-style:none;display:flex;align-items:center;gap:16px;padding:18px 20px;cursor:pointer;min-height:88px}
-.exam summary::-webkit-details-marker{display:none}
-.exam summary:focus-visible{outline:3px solid var(--x-violet);outline-offset:-3px;border-radius:var(--x-r-lg)}
-.tile{flex:none;width:56px;height:56px;border-radius:18px;display:grid;place-items:center;color:#fff;background:var(--c)}
-.tile svg{width:28px;height:28px}
-.name{flex:1;min-width:0}
-.name small{display:block;font-size:.8rem;font-weight:700;color:var(--c-ink,var(--c))}
-.name b{display:block;font-size:1.2rem;font-weight:800;letter-spacing:-0.01em;line-height:1.25}
-.chev{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--x-surface-2);color:var(--x-muted);transition:transform .25s var(--x-ease)}
-.chev svg{width:18px;height:18px}
-.exam[open] .chev{transform:rotate(180deg)}
-.list{list-style:none;margin:0;padding:0 14px 16px;display:flex;flex-direction:column;gap:8px}
-.list a{display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 14px;border-radius:var(--x-r-md);background:var(--x-surface-2);color:var(--x-ink);text-decoration:none;font-weight:600;transition:background-color .15s var(--x-ease),transform .15s var(--x-ease)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
+.shell{max-width:1120px;margin:0 auto;padding:calc(36px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) 64px max(20px,env(safe-area-inset-left,0px))}
+
+/* header */
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:24px}
+.top h1{margin:0;font-size:clamp(2rem,6vw,2.6rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1}
+.top p{margin:8px 0 0;font-size:1rem;font-weight:600;color:var(--x-muted)}
+.top p b{color:var(--x-ink);font-weight:800}
+.acct{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:var(--x-r-pill);background:var(--x-surface);box-shadow:var(--x-shadow-sm);color:var(--x-ink);font-weight:800;font-size:.88rem;text-decoration:none}
+.acct .avatar{width:30px;height:30px;font-size:.8rem;margin-left:-8px}
+.avatar{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--x-violet);color:#fff;font-weight:800;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+
+/* layout */
+.grid{display:grid;gap:20px}
+.col{display:flex;flex-direction:column;gap:20px;min-width:0}
+@media (min-width:960px){.grid{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);align-items:start}}
+
+.card{background:var(--x-surface);border-radius:var(--x-r-lg);box-shadow:var(--x-shadow);padding:22px}
+.card h2{margin:0;font-size:1.1rem;font-weight:800;letter-spacing:-0.01em}
+.sub{margin:4px 0 0;font-size:.9rem;color:var(--x-muted);line-height:1.5}
+
+/* continue: the navy stage */
+.stage{background:var(--x-stage);color:var(--x-stage-ink);border-radius:var(--x-r-xl);box-shadow:var(--x-shadow-stage);padding:26px}
+.stage .kicker{margin:0;font-size:.9rem;font-weight:700;color:var(--x-stage-muted)}
+.stage h2{margin:6px 0 0;font-size:clamp(1.5rem,4.2vw,2rem);font-weight:800;letter-spacing:-0.025em;line-height:1.15}
+.stage .where{margin:8px 0 0;font-size:1rem;font-weight:600;color:var(--x-stage-muted)}
+.stage .where b{color:var(--x-stage-ink)}
+.bar{display:flex;align-items:center;gap:12px;margin:20px 0 0}
+.bar .track{flex:1;height:14px;border-radius:var(--x-r-pill);background:var(--x-stage-2);overflow:hidden}
+.bar .track i{display:block;height:100%;border-radius:inherit;background:var(--x-grad-progress);transform-origin:left;transform:scaleX(var(--p,0));transition:transform .5s var(--x-ease)}
+.bar span{font-weight:800;font-size:.95rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stage-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-top:22px}
+.score{font-size:.95rem;font-weight:600;color:var(--x-stage-muted)}
+.score b{color:var(--x-stage-ink);font-size:1.15rem;font-weight:800;font-variant-numeric:tabular-nums}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 26px;border:0;border-radius:var(--x-r-pill);background:var(--x-grad-primary);color:#fff;font:800 1rem var(--x-font);text-decoration:none;cursor:pointer;box-shadow:0 6px 14px rgba(62,91,255,.28);transition:transform .1s var(--x-ease)}
+.btn svg{width:18px;height:18px}
+.btn:active{transform:scale(.97)}
+.btn.soft{background:var(--x-surface-2);color:var(--x-ink);box-shadow:none;min-height:42px;padding:0 18px;font-size:.9rem}
+
+/* exam header */
+.exam-head{display:flex;align-items:center;gap:14px}
+.tile{flex:none;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:#fff;background:var(--c)}
+.tile svg{width:26px;height:26px}
+.exam-head .nm{flex:1;min-width:0}
+.exam-head small{display:block;font-size:.82rem;font-weight:700;color:var(--c-ink,var(--c))}
+.exam-head b{display:block;font-size:1.2rem;font-weight:800;letter-spacing:-0.01em;line-height:1.25;overflow-wrap:anywhere}
+.when{flex:none;padding:6px 12px;border-radius:var(--x-r-pill);background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c-ink,var(--c));font-weight:800;font-size:.85rem;white-space:nowrap}
+.stats{display:flex;flex-wrap:wrap;gap:10px 28px;margin:18px 0 4px}
+.stat b{display:block;font-size:1.6rem;font-weight:800;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:.85rem;font-weight:600;color:var(--x-muted)}
+.stat.missed b{color:var(--x-red)} .stat.flagged b{color:#C98A00}
+
+/* lecture lists */
+.list{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.list a{display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 14px;border-radius:var(--x-r-md);background:var(--x-surface-2);text-decoration:none;font-weight:700;transition:background-color .15s var(--x-ease)}
 .list a:hover{background:color-mix(in srgb,var(--c) 14%,var(--x-surface-2))}
-.list a:active{transform:scale(.99)}
-.list a:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
 .list .dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--c)}
 .list .t{flex:1;min-width:0}
 .list .t span{display:block;font-size:.8rem;font-weight:500;color:var(--x-muted);margin-top:2px}
 .list .go{flex:none;width:18px;height:18px;color:var(--x-muted)}
-.list .soon{padding:6px 14px 2px;font-size:.85rem;color:var(--x-muted)}
+.list .soon{padding:4px 14px 0;font-size:.88rem;color:var(--x-muted)}
+
+/* review */
+.rev-total{display:flex;align-items:baseline;gap:10px;margin-top:10px}
+.rev-total b{font-size:2.4rem;font-weight:800;letter-spacing:-0.03em;line-height:1;font-variant-numeric:tabular-nums}
+.rev-total span{font-weight:600;color:var(--x-muted)}
+.rev{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rev li{display:flex;align-items:center;gap:12px;padding:10px 10px 10px 14px;border-radius:var(--x-r-md);background:var(--x-surface-2)}
+.rev .dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--c)}
+.rev .t{flex:1;min-width:0;font-weight:700}
+.rev .t span{display:block;font-size:.8rem;font-weight:500;color:var(--x-muted)}
+
+/* past exams */
+.past{background:var(--x-surface);border-radius:var(--x-r-lg);box-shadow:var(--x-shadow);overflow:hidden}
+.past + .past{margin-top:0}
+.past summary{list-style:none;display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer}
+.past summary::-webkit-details-marker{display:none}
+.past summary:focus-visible{outline-offset:-3px;border-radius:var(--x-r-lg)}
+.past .tile{width:44px;height:44px;border-radius:14px}
+.past .tile svg{width:22px;height:22px}
+.past .nm{flex:1;min-width:0}
+.past .nm small{display:block;font-size:.8rem;font-weight:700;color:var(--c-ink,var(--c))}
+.past .nm b{display:block;font-weight:800;font-size:1.02rem;overflow-wrap:anywhere}
+.past .nm span{display:block;font-size:.8rem;color:var(--x-muted);margin-top:1px}
+.chev{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--x-surface-2);color:var(--x-muted);transition:transform .25s var(--x-ease)}
+.chev svg{width:16px;height:16px}
+.past[open] .chev{transform:rotate(180deg)}
+.past .list{margin:0;padding:0 12px 14px}
+.section-label{margin:4px 2px -8px;font-size:.95rem;font-weight:800;color:var(--x-muted)}
+
+/* account */
+.acct-card .st{display:inline-block;margin-left:8px;padding:3px 10px;border-radius:var(--x-r-pill);font-size:.72rem;font-weight:700;background:var(--x-surface-2);color:var(--x-muted);vertical-align:2px}
+.acct-card .st.ok{background:rgba(31,191,136,.16);color:#11815C}
+.acct-card .st.off{background:rgba(255,77,106,.14);color:#C8203F}
+.who{display:flex;align-items:center;gap:12px;margin-top:14px}
+.who > div{flex:1;min-width:0}
+.who b{display:block;font-weight:800;overflow-wrap:anywhere}
+.who span{display:block;font-size:.85rem;color:var(--x-muted);overflow-wrap:anywhere}
+.msg{min-height:0;margin:10px 0 0;font-size:.85rem;font-weight:600;color:var(--x-muted)}
+.msg:empty{display:none}
+.foot{margin:28px 2px 0;font-size:.82rem;color:var(--x-muted)}
+.foot a{font-weight:700;color:var(--x-muted)}
+
 .msk{--c:var(--x-coral);--c-ink:#D9541E}
 .neuro{--c:var(--x-violet);--c-ink:#6A47F0}
 .cardio{--c:var(--x-pink);--c-ink:#E0367F}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .msk{--c-ink:#FF9A6C} :root:not([data-theme="light"]) .neuro{--c-ink:#A893FF} :root:not([data-theme="light"]) .cardio{--c-ink:#FF8DBE}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--good-ink:#7EF0C4}
+ :root:not([data-theme="light"]) .msk{--c-ink:#FF9A6C} :root:not([data-theme="light"]) .neuro{--c-ink:#A893FF} :root:not([data-theme="light"]) .cardio{--c-ink:#FF8DBE}
+ :root:not([data-theme="light"]) .acct-card .st.ok{color:#7EF0C4} :root:not([data-theme="light"]) .acct-card .st.off{color:#FFA3B3} :root:not([data-theme="light"]) .stat.flagged b{color:var(--x-yellow)}}
 :root[data-theme="dark"] .msk{--c-ink:#FF9A6C} :root[data-theme="dark"] .neuro{--c-ink:#A893FF} :root[data-theme="dark"] .cardio{--c-ink:#FF8DBE}
-.sync-card{margin-top:28px;background:var(--x-surface);border-radius:var(--x-r-lg);box-shadow:var(--x-shadow);padding:20px}
-.sync-card h2{margin:0;font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:10px}
-.sync-card h2 .st{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:var(--x-r-pill);background:var(--x-surface-2);color:var(--x-muted)}
-.sync-card h2 .st.ok{background:rgba(31,191,136,.16);color:#11815C}
-.sync-card h2 .st.off{background:rgba(255,77,106,.14);color:#C8203F}
-.sync-card p{margin:6px 0 0;font-size:.88rem;color:var(--x-muted);line-height:1.5}
-.acct-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:14px}
-.acct-who{flex:1;min-width:0;display:flex;align-items:center;gap:12px}
-.avatar{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--x-violet);color:#fff;font-weight:800;overflow:hidden}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.acct-who b{display:block;font-weight:800;overflow-wrap:anywhere}
-.acct-who span{display:block;font-size:.85rem;color:var(--x-muted);overflow-wrap:anywhere}
-.acct-who > div{min-width:0}
-.pill{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border:0;border-radius:var(--x-r-pill);font:800 .88rem/1 var(--x-font);cursor:pointer;background:var(--x-surface-2);color:var(--x-ink);text-decoration:none;transition:transform .1s var(--x-ease)}
-.pill.primary{background:var(--x-grad-primary);color:#fff;box-shadow:var(--x-shadow-btn)}
-.pill:active{transform:scale(.97)}
-.pill:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
-.hello{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
-.top-acct{flex:none;min-height:40px;padding:0 16px;font-size:.85rem;background:var(--x-surface);box-shadow:var(--x-shadow-sm)}
-.top-acct .avatar{width:28px;height:28px;font-size:.8rem;margin:0 8px 0 -8px}
-.name b{overflow-wrap:anywhere}
-@media (max-width:380px){.exam summary{gap:12px;padding:14px}.tile{width:44px;height:44px;border-radius:14px}.tile svg{width:22px;height:22px}.name b{font-size:1.05rem}.list{padding:0 10px 12px}}
-@media (prefers-reduced-motion: reduce){.chev,.list a{transition:none}}
+:root[data-theme="dark"] .acct-card .st.ok{color:#7EF0C4} :root[data-theme="dark"] .acct-card .st.off{color:#FFA3B3} :root[data-theme="dark"] .stat.flagged b{color:var(--x-yellow)}
+[hidden]{display:none!important}
+@media (max-width:420px){.shell{padding-top:calc(24px + env(safe-area-inset-top,0px))}.card,.stage{padding:20px}.stage-foot .btn{width:100%}.top p{font-size:.92rem}}
+@media (prefers-reduced-motion: reduce){.bar .track i,.chev,.list a,.btn{transition:none}}
 </style>
 </head>
 <body>
 <main class="shell">
-  <header class="hello">
-    <div><p id="hi">Welcome back</p>
-    <h1>Anatomy 403</h1></div>
-    <a class="pill top-acct" id="top-acct" href="/login">Sign in</a>
+  <header class="top">
+    <div>
+      <h1>Anatomy 403</h1>
+      <p id="nextline">Practice questions, fill in the blank and flashcards for every exam.</p>
+    </div>
+    <a class="acct" id="acct" href="/login">Sign in</a>
   </header>
 
-  <div class="exams">
-    <details class="exam msk">
-      <summary>
-        <span class="tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.5 2.5 0 0 1 2.4 3.2A2.5 2.5 0 1 1 16 9.6L9.6 16a2.5 2.5 0 1 1-3.4 3.4A2.5 2.5 0 1 1 3.2 14a2.5 2.5 0 0 1 4.4-2.4L14 5.2A2.5 2.5 0 0 1 17 3z"/></svg></span>
-        <span class="name"><small>Exam 1</small><b>Musculoskeletal</b></span>
-        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
-      </summary>
-      <ul class="list">
-        <li><a href="/exam-1/msk"><i class="dot"></i><span class="t">All lectures<span>555 questions and flashcards, mixed</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/exam-1/msk#lecture-1"><i class="dot"></i><span class="t">Lecture 1. Skeletal system basics<span>112 questions</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/exam-1/msk#lecture-2"><i class="dot"></i><span class="t">Lecture 2. Joints and skeletal muscle<span>105 questions</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/exam-1/msk#lecture-3"><i class="dot"></i><span class="t">Lecture 3. Head, neck and back<span>92 questions, 19 flashcards</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/exam-1/msk#lecture-4"><i class="dot"></i><span class="t">Lecture 4. Thorax, abdomen and upper limb<span>85 questions, 33 flashcards</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/exam-1/msk#lecture-5"><i class="dot"></i><span class="t">Lecture 5. Pelvis and lower limb<span>90 questions, 19 flashcards</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-      </ul>
-    </details>
-
-    <details class="exam neuro">
-      <summary>
-        <span class="tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3A3 3 0 0 0 6.6 5.3 3 3 0 0 0 4.5 10a3.5 3.5 0 0 0 1.2 5.6A3 3 0 0 0 9.5 21 2.5 2.5 0 0 0 12 18.5v-13A2.5 2.5 0 0 0 9.5 3z"/><path d="M14.5 3a3 3 0 0 1 2.9 2.3 3 3 0 0 1 2.1 4.7 3.5 3.5 0 0 1-1.2 5.6 3 3 0 0 1-3.8 5.4 2.5 2.5 0 0 1-2.5-2.5v-13A2.5 2.5 0 0 1 14.5 3z"/></svg></span>
-        <span class="name"><small>Exam 2</small><b>Neuroanatomy</b></span>
-        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
-      </summary>
-      <ul class="list">
-        <li><a href="/exam-2/neuro"><i class="dot"></i><span class="t">All lectures<span>Questions, fill in the blank, lab images and flashcards</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/exam-2/neuro#lecture-1"><i class="dot"></i><span class="t">Lecture 1. Brain<span>Neuro 1</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/exam-2/neuro#lecture-2"><i class="dot"></i><span class="t">Lecture 2. Spinal cord and nerves<span>Neuro 2</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/exam-2/neuro#lecture-3"><i class="dot"></i><span class="t">Lecture 3. Brain stem and cranial nerves<span>Neuro 3</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/exam-2/neuro#lecture-4"><i class="dot"></i><span class="t">Lecture 4. Motor systems and autonomics<span>Neuro 4</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/exam-2/neuro#lecture-5"><i class="dot"></i><span class="t">Lecture 5. Special senses<span>Neuro 5</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li><a href="/exam-2/neuro#lecture-6"><i class="dot"></i><span class="t">Lecture 6. Diencephalon, cortex and limbic system<span>Neuro 6</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-      </ul>
-    </details>
-
-    <details class="exam cardio">
-      <summary>
-        <span class="tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-9.2-9.4C1.6 7.1 3.9 4 7.2 4c2 0 3.6 1.2 4.8 2.9C13.2 5.2 14.8 4 16.8 4c3.3 0 5.6 3.1 4.4 6.6C19.5 15.4 12 20 12 20z"/><path d="M3.5 12h4l1.5-3 2.5 6 1.5-3h7.5"/></svg></span>
-        <span class="name"><small>Exam 3</small><b>Cardiovascular and respiratory</b></span>
-        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
-      </summary>
-      <ul class="list">
-        <li><a href="/exam-3/cardio#lecture-1"><i class="dot"></i><span class="t">Lecture 1. The heart<span>137 questions and blanks, plus flashcards</span></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
-        <li class="soon">Lectures 2 to 6 are added as they're covered.</li>
-      </ul>
-    </details>
+  <div class="grid">
+    <div class="col">
+      <section class="stage" id="cont" aria-labelledby="cont-h"></section>
+      <section class="card" id="current" aria-label="Current exam"></section>
+    </div>
+    <div class="col">
+      <section class="card" id="review" aria-labelledby="rev-h"></section>
+      <p class="section-label" id="past-label">Past exams</p>
+      <div class="col" id="past" style="gap:12px"></div>
+      <section class="card acct-card" aria-labelledby="sync-h">
+        <h2 id="sync-h">Your progress<span class="st" id="sync-st">Checking</span></h2>
+        <div id="acct-out" hidden>
+          <p class="sub">Saving in this browser only. Sign in with Google, GitHub or your email to keep it safe on every device.</p>
+          <div class="who"><a class="btn soft" href="/login">Sign in to sync</a></div>
+        </div>
+        <div id="acct-in" hidden>
+          <div class="who"><span class="avatar" id="avatar"></span><div><b id="who-name"></b><span id="who-email"></span></div><button class="btn soft" id="signout" type="button">Sign out</button></div>
+        </div>
+        <p class="msg" id="msg" role="status"></p>
+      </section>
+    </div>
   </div>
-
-  <section class="sync-card" aria-labelledby="sync-h">
-    <h2 id="sync-h">Your progress <span class="st" id="sync-st">Checking</span></h2>
-    <div id="acct-out" hidden>
-      <p>Progress is saving in this browser only. Sign in with Google, GitHub or your email to keep it safe and pick up on any device.</p>
-      <div class="acct-row"><a class="pill primary" href="/login">Sign in to sync</a></div>
-    </div>
-    <div id="acct-in" hidden>
-      <p>Flags, missed questions and flashcards save to your account and sync wherever you sign in.</p>
-      <div class="acct-row"><div class="acct-who"><span class="avatar" id="avatar"></span><div><b id="who-name"></b><span id="who-email"></span></div></div><button class="pill" id="signout" type="button">Sign out</button></div>
-    </div>
-    <p class="sync-msg" id="sync-msg" role="status"></p>
-  </section>
+  <p class="foot">Practice questions only; they may contain mistakes. <a href="/privacy">Privacy</a></p>
 </main>
+<noscript><p style="text-align:center">Turn on JavaScript to see your exams: <a href="/exam-1/msk">Exam 1</a>, <a href="/exam-2/neuro">Exam 2</a>, <a href="/exam-3/cardio">Exam 3</a>.</p></noscript>
 <script>
 (function(){
-  const $=id=>document.getElementById(id), S=window.a403Sync;
-  if(!S){$("sync-st").textContent="Unavailable";$("sync-st").className="st off";$("acct-out").hidden=false;return}
-  const show=st=>{const el=$("sync-st");el.textContent=st==="saved"?"Synced":st==="offline"?"Offline, saving here":st==="signed-out"?"This browser only":"Checking";el.className="st"+(st==="saved"?" ok":st==="offline"?" off":"")};
+  const $=id=>document.getElementById(id), E=window.A403_EXAMS||[];
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const read=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
+  const raw=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+  const CLS={1:"msk",2:"neuro",3:"cardio"};
+  const ICON={
+    1:'<path d="M17 3a2.5 2.5 0 0 1 2.4 3.2A2.5 2.5 0 1 1 16 9.6L9.6 16a2.5 2.5 0 1 1-3.4 3.4A2.5 2.5 0 1 1 3.2 14a2.5 2.5 0 0 1 4.4-2.4L14 5.2A2.5 2.5 0 0 1 17 3z"/>',
+    2:'<path d="M9.5 3A3 3 0 0 0 6.6 5.3 3 3 0 0 0 4.5 10a3.5 3.5 0 0 0 1.2 5.6A3 3 0 0 0 9.5 21 2.5 2.5 0 0 0 12 18.5v-13A2.5 2.5 0 0 0 9.5 3z"/><path d="M14.5 3a3 3 0 0 1 2.9 2.3 3 3 0 0 1 2.1 4.7 3.5 3.5 0 0 1-1.2 5.6 3 3 0 0 1-3.8 5.4 2.5 2.5 0 0 1-2.5-2.5v-13A2.5 2.5 0 0 1 14.5 3z"/>',
+    3:'<path d="M12 20s-7.5-4.6-9.2-9.4C1.6 7.1 3.9 4 7.2 4c2 0 3.6 1.2 4.8 2.9C13.2 5.2 14.8 4 16.8 4c3.3 0 5.6 3.1 4.4 6.6C19.5 15.4 12 20 12 20z"/><path d="M3.5 12h4l1.5-3 2.5 6 1.5-3h7.5"/>'};
+  const tile=e=>`<span class="tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[e.n]}</svg></span>`;
+  const GO='<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+  const MODE={mcq:"Multiple choice",fb:"Fill in the blank",id:"Identification",fc:"Flashcards"};
+  const plural=(n,w)=>n+" "+w+(n===1?"":"s");
+  const lecName=(e,l)=>{const L=e.lectures.find(x=>x.n===l);return L?e.short+" "+l+" · "+L.name:"All lectures"};
+  const items=L=>{const p=[];const qb=L.q+L.b;if(qb)p.push(plural(qb,"question")+(L.b?" and fill-ins":""));if(L.f)p.push(plural(L.f,"lab image"));if(L.m)p.push(plural(L.m,"muscle card"));return p.join(", ")};
+
+  // what this browser knows about each exam
+  function state(e){
+    const P=e.prefix, prefs=read(P+"prefs")||{}, sess=read(P+"sessions")||{};
+    const mode=prefs.mode||"mcq", lec=prefs.lec||0, style=prefs.style||"all", src=raw(P+"fcsrc")||"missed";
+    const s=sess[[mode,lec,0,mode==="mcq"?style:"",mode==="fc"?src:""].join("|")];
+    let pos=null;
+    if(s){
+      if(mode==="mcq"&&s.list&&s.list.length)pos={n:s.list.length,i:Math.min(s.i,s.list.length),right:s.right,answered:s.answered,unit:"question"};
+      else if((mode==="fb"||mode==="id")&&s.list&&s.list.length){let r=0,t=0;Object.values(s.stats||{}).forEach(x=>{r+=x.r;t+=x.t});pos={n:s.list.length,i:Math.min(s.i,s.list.length),right:r,answered:t,unit:mode==="fb"?"sentence":"figure",blanks:true}}
+      else if(mode==="fc"&&s.deck&&s.deck.length)pos={n:s.deck.length,i:Math.min(s.i,s.deck.length),got:s.got,unit:"card"};
+    }
+    return {mode,lec,pos,last:Number(raw(P+"last")||0),missed:(read(P+"missed")||[]).length,flagged:(read(P+"flags")||[]).length,prefs};
+  }
+  const href=(e,lec)=>e.path+(lec?"#lecture-"+lec:"");
+  const ready=e=>e.lectures.filter(l=>l.ready);
+  const daysTo=d=>{if(!d)return null;const t=new Date(d+"T12:00:00"),n=new Date();n.setHours(12,0,0,0);return Math.round((t-n)/864e5)};
+  const whenText=n=>n==null?"":n<0?"":n===0?"Today":n===1?"Tomorrow":"In "+n+" days";
+
+  // open an exam on its missed-and-flagged flashcards
+  function studyMissed(e){
+    const P=e.prefix,p=read(P+"prefs")||{};
+    try{localStorage.setItem(P+"prefs",JSON.stringify({...p,mode:"fc",lec:0}));localStorage.setItem(P+"fcsrc","missed")}catch(x){}
+    location.href=e.path;
+  }
+
+  function render(){
+    const S=E.map(e=>({e,s:state(e)}));
+    const cur=S.find(x=>x.e.status==="current")||S[S.length-1];
+    const days=daysTo(cur.e.date);
+
+    $("nextline").innerHTML=`Next up: <b>Exam ${cur.e.n}, ${esc(cur.e.name)}</b>${days!=null&&days>=0?" · "+whenText(days).toLowerCase():""}`;
+
+    // continue: the most recently studied exam with a session in progress, else the current exam
+    const recent=S.filter(x=>x.s.pos).sort((a,b)=>b.s.last-a.s.last)[0];
+    const c=$("cont");
+    if(recent){
+      const {e,s}=recent,p=s.pos,done=p.i>=p.n;
+      const pct=p.n?Math.round(p.i/p.n*100):0;
+      const sc=p.unit==="card"?`<b>${p.got||0}</b> marked "got it"`:p.answered?`<b>${p.right}</b> of ${p.answered} ${p.blanks?"blanks ":""}correct`:"Not answered yet";
+      c.className="stage "+CLS[e.n];
+      c.innerHTML=`<p class="kicker">${done?"Set finished":"Pick up where you left off"}</p>
+        <h2 id="cont-h">Exam ${e.n} · ${esc(lecName(e,s.lec))}</h2>
+        <p class="where">${MODE[s.mode]} · <b>${done?"all "+p.n+" "+p.unit+"s done":p.unit+" "+(p.i+1)+" of "+p.n}</b></p>
+        <div class="bar"><div class="track" role="progressbar" aria-label="Progress through this set" aria-valuemin="0" aria-valuemax="${p.n}" aria-valuenow="${p.i}"><i style="--p:${p.n?p.i/p.n:0}"></i></div><span>${pct}%</span></div>
+        <div class="stage-foot"><span class="score">${sc}</span><a class="btn" href="${href(e,s.lec)}">${done?"See results":"Continue"}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>`;
+    }else{
+      const e=cur.e,L=ready(e)[0];
+      c.className="stage "+CLS[e.n];
+      c.innerHTML=`<p class="kicker">Start here</p>
+        <h2 id="cont-h">Exam ${e.n} · ${esc(e.short)} ${L.n} · ${esc(L.name)}</h2>
+        <p class="where">${esc(items(L))}. Answers you miss turn into flashcards.</p>
+        <div class="stage-foot"><span class="score"></span><a class="btn" href="${href(e,L.n)}">Start practicing<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>`;
+    }
+
+    // the current exam, open
+    {const {e,s}=cur,total=ready(e).reduce((a,l)=>a+l.q+l.b,0),pend=e.lectures.filter(l=>!l.ready).length;
+     const el=$("current");el.className="card "+CLS[e.n];
+     el.innerHTML=`<div class="exam-head">${tile(e)}<span class="nm"><small>Exam ${e.n} · studying now</small><b>${esc(e.name)}</b></span>${days!=null&&days>=0?`<span class="when">${whenText(days)}</span>`:""}</div>
+       <div class="stats"><div class="stat"><b>${total}</b><span>questions and fill-ins</span></div><div class="stat missed"><b>${s.missed}</b><span>missed</span></div><div class="stat flagged"><b>${s.flagged}</b><span>flagged</span></div></div>
+       <ul class="list">${ready(e).length>1?`<li><a href="${e.path}"><i class="dot"></i><span class="t">All lectures<span>Everything ready so far, mixed</span></span>${GO}</a></li>`:""}
+       ${ready(e).map(L=>`<li><a href="${href(e,L.n)}"><i class="dot"></i><span class="t">Lecture ${L.n}. ${esc(L.name)}<span>${esc(items(L))}</span></span>${GO}</a></li>`).join("")}
+       ${pend?`<li class="soon">${pend===1?"One more lecture is":pend+" more lectures are"} added as they're covered.</li>`:""}</ul>`;}
+
+    // review: misses and flags across every exam
+    {const rows=S.filter(x=>x.s.missed||x.s.flagged),tot=S.reduce((a,x)=>a+x.s.missed,0),fl=S.reduce((a,x)=>a+x.s.flagged,0);
+     $("review").innerHTML=`<h2 id="rev-h">Review</h2>`+(rows.length
+       ?`<div class="rev-total"><b>${tot}</b><span>missed${fl?", "+fl+" flagged":""}</span></div>
+         <ul class="rev">${rows.map(({e,s})=>`<li class="${CLS[e.n]}"><i class="dot"></i><span class="t">Exam ${e.n} · ${esc(e.short)}<span>${[s.missed?s.missed+" missed":"",s.flagged?s.flagged+" flagged":""].filter(Boolean).join(", ")}</span></span><button class="btn soft" type="button" data-study="${e.n}">${s.missed?"Study":"Open"}</button></li>`).join("")}</ul>`
+       :`<p class="sub">Questions you miss or flag land here as flashcards, ready to review before the exam.</p>`);
+     $("review").querySelectorAll("[data-study]").forEach(b=>b.onclick=()=>{const x=S.find(y=>y.e.n===+b.dataset.study);x.s.missed?studyMissed(x.e):location.href=x.e.path});}
+
+    // past exams, folded
+    {const past=S.filter(x=>x!==cur);$("past-label").hidden=!past.length;
+     $("past").innerHTML=past.map(({e,s})=>{const t=e.lectures.reduce((a,l)=>a+l.q+l.b,0);
+       return `<details class="past ${CLS[e.n]}"><summary>${tile(e)}<span class="nm"><small>Exam ${e.n}</small><b>${esc(e.name)}</b><span>${t} questions and fill-ins${s.missed?" · "+s.missed+" missed":""}</span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+       <ul class="list"><li><a href="${e.path}"><i class="dot"></i><span class="t">All lectures<span>Mixed from every lecture</span></span>${GO}</a></li>
+       ${e.lectures.map(L=>`<li><a href="${href(e,L.n)}"><i class="dot"></i><span class="t">Lecture ${L.n}. ${esc(L.name)}<span>${esc(items(L))}</span></span>${GO}</a></li>`).join("")}</ul></details>`}).join("");}
+  }
+  render();
+
+  // account
+  const A=window.a403Sync;
   const face=(el,p)=>{el.textContent="";const t=(p.name||p.email||"?")[0].toUpperCase();
     if(p.avatar){const im=new Image();im.alt="";im.referrerPolicy="no-referrer";im.src=p.avatar;im.onerror=()=>{el.textContent=t};el.appendChild(im)}else el.textContent=t};
+  const show=st=>{const el=$("sync-st");el.textContent=st==="saved"?"Synced":st==="offline"?"Offline, saving here":st==="signed-out"?"This browser only":"Checking";el.className="st"+(st==="saved"?" ok":st==="offline"?" off":"")};
   const who=p=>{
     $("acct-in").hidden=!p;$("acct-out").hidden=!!p;
-    const top=$("top-acct");top.textContent="";
-    if(p){const first=(p.name||"").split(" ")[0];$("hi").textContent=first?"Welcome back, "+first:"Welcome back";
-      $("who-name").textContent=p.name||p.email.split("@")[0];$("who-email").textContent=p.email;face($("avatar"),p);
-      const av=document.createElement("span");av.className="avatar";face(av,p);top.append(av,"Account");top.href="/login"}
-    else{$("hi").textContent="Welcome back";top.textContent="Sign in";top.href="/login"}
+    const top=$("acct");top.textContent="";top.href="/login";
+    if(p){$("who-name").textContent=p.name||p.email.split("@")[0];$("who-email").textContent=p.email;face($("avatar"),p);
+      const av=document.createElement("span");av.className="avatar";face(av,p);top.append(av,(p.name||"").split(" ")[0]||"Account")}
+    else top.textContent="Sign in";
   };
-  show(S.status()); addEventListener("a403-sync",e=>show(e.detail));
-  if(S.status()!=="connecting")who(S.user()); addEventListener("a403-auth",e=>who(e.detail));
-  $("signout").onclick=async()=>{$("signout").disabled=true;await S.signOut();$("signout").disabled=false;$("sync-msg").className="sync-msg";$("sync-msg").textContent="Signed out. This browser's copy was cleared; your progress is safe in your account."};
+  if(!A){show("offline");$("acct-out").hidden=false;return}
+  show(A.status());addEventListener("a403-sync",e=>{show(e.detail);if(e.detail==="saved")render()});
+  if(A.status()!=="connecting")who(A.user());addEventListener("a403-auth",e=>who(e.detail));
+  $("signout").onclick=async()=>{$("signout").disabled=true;await A.signOut();$("signout").disabled=false;$("msg").textContent="Signed out. This browser's copy was cleared; your progress is safe in your account.";render()};
 })();
 </script>
 </body>

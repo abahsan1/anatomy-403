@@ -36,9 +36,15 @@
   // ---------- push changes, but only after the first pull ----------
   const pending = new Set();
   let pulled = false, timer = null;
+  // each exam page's own prefix; "<prefix>last" records when that exam was last studied (for the home page)
+  const EXAMS = ["msk-", "neuro2-", "cardio-v2-"];
   Storage.prototype.setItem = function (k, v) {
     set.call(this, k, v);
-    if (this === LS && tracked(k)) { pending.add(k); if (pulled && user) schedule(); }
+    if (this !== LS || !tracked(k)) return;
+    pending.add(k);
+    const ex = EXAMS.find(p => k.startsWith(p));
+    if (ex && k !== ex + "last" && k !== ex + "fcsrc") { set.call(LS, ex + "last", String(Date.now())); pending.add(ex + "last"); }
+    if (pulled && user) schedule();
   };
   const schedule = () => { clearTimeout(timer); timer = setTimeout(push, 1200); };
   function push(keepalive) {
