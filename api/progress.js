@@ -8,7 +8,7 @@ import { neon } from "@neondatabase/serverless";
 const sql = neon(process.env.DATABASE_URL);
 const SUPABASE_URL = "https://ksfbvtkbcnqiqvsazesd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_bWHSSPtt2UrFc4g5YQDwlA_CQF9Qw-d"; // publishable key, not a secret
-const KEY = /^(flags:|neuro2-|cardio-|msk-)[\w :&.,'-]{1,80}$/;
+const KEY = /^(flags:|neuro2-|cardio-|msk-|gi-)[\w :&.,'-]{1,80}$/;
 const MAX_BYTES = 2_000_000;
 
 let ready;

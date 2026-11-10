@@ -124,8 +124,9 @@ a{color:inherit}
 .msk{--c:var(--x-coral);--c-ink:#D9541E}
 .neuro{--c:var(--x-violet);--c-ink:#6A47F0}
 .cardio{--c:var(--x-pink);--c-ink:#E0367F}
+.gi{--c:var(--x-teal);--c-ink:#12A594}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--good-ink:#7EF0C4}
- :root:not([data-theme="light"]) .msk{--c-ink:#FF9A6C} :root:not([data-theme="light"]) .neuro{--c-ink:#A893FF} :root:not([data-theme="light"]) .cardio{--c-ink:#FF8DBE}
+ :root:not([data-theme="light"]) .msk{--c-ink:#FF9A6C} :root:not([data-theme="light"]) .neuro{--c-ink:#A893FF} :root:not([data-theme="light"]) .cardio{--c-ink:#FF8DBE} :root:not([data-theme="light"]) .gi{--c-ink:#5EEAD9}
  :root:not([data-theme="light"]) .acct-card .st.ok{color:#7EF0C4} :root:not([data-theme="light"]) .acct-card .st.off{color:#FFA3B3} :root:not([data-theme="light"]) .stat.flagged b{color:var(--x-yellow)}}
 :root[data-theme="dark"] .msk{--c-ink:#FF9A6C} :root[data-theme="dark"] .neuro{--c-ink:#A893FF} :root[data-theme="dark"] .cardio{--c-ink:#FF8DBE}
 :root[data-theme="dark"] .acct-card .st.ok{color:#7EF0C4} :root[data-theme="dark"] .acct-card .st.off{color:#FFA3B3} :root[data-theme="dark"] .stat.flagged b{color:var(--x-yellow)}
@@ -211,6 +212,7 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
     <li><a href="/exam-1/msk">Exam 1</a></li>
     <li><a href="/exam-2/neuro">Exam 2</a></li>
     <li><a href="/exam-3/cardio">Exam 3</a></li>
+    <li><a href="/exam-4/gi">Exam 4</a></li>
     <li><a href="/privacy">Privacy</a></li>
   </ul>
   <a class="acct" id="acct" href="/login">Sign in</a>
@@ -234,6 +236,8 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
     </div>
     <div class="col">
       <section class="card" id="review" aria-labelledby="rev-h"></section>
+      <p class="section-label" id="next-label">Coming up</p>
+      <div class="col" id="next" style="gap:12px"></div>
       <p class="section-label" id="past-label">Past exams</p>
       <div class="col" id="past" style="gap:12px"></div>
       <section class="card acct-card" aria-labelledby="sync-h">
@@ -252,17 +256,18 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
   <p class="foot">Practice questions only; they may contain mistakes. <a href="/privacy">Privacy</a></p>
 </main>
 </div>
-<noscript><p style="text-align:center">Turn on JavaScript to see your exams: <a href="/exam-1/msk">Exam 1</a>, <a href="/exam-2/neuro">Exam 2</a>, <a href="/exam-3/cardio">Exam 3</a>.</p></noscript>
+<noscript><p style="text-align:center">Turn on JavaScript to see your exams: <a href="/exam-1/msk">Exam 1</a>, <a href="/exam-2/neuro">Exam 2</a>, <a href="/exam-3/cardio">Exam 3</a>, <a href="/exam-4/gi">Exam 4</a>.</p></noscript>
 <script>
 (function(){
   const $=id=>document.getElementById(id), E=window.A403_EXAMS||[];
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const read=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
   const raw=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
-  const CLS={1:"msk",2:"neuro",3:"cardio"};
+  const CLS={1:"msk",2:"neuro",3:"cardio",4:"gi"};
   const ICON={
     1:'<path d="M17 3a2.5 2.5 0 0 1 2.4 3.2A2.5 2.5 0 1 1 16 9.6L9.6 16a2.5 2.5 0 1 1-3.4 3.4A2.5 2.5 0 1 1 3.2 14a2.5 2.5 0 0 1 4.4-2.4L14 5.2A2.5 2.5 0 0 1 17 3z"/>',
     2:'<path d="M9.5 3A3 3 0 0 0 6.6 5.3 3 3 0 0 0 4.5 10a3.5 3.5 0 0 0 1.2 5.6A3 3 0 0 0 9.5 21 2.5 2.5 0 0 0 12 18.5v-13A2.5 2.5 0 0 0 9.5 3z"/><path d="M14.5 3a3 3 0 0 1 2.9 2.3 3 3 0 0 1 2.1 4.7 3.5 3.5 0 0 1-1.2 5.6 3 3 0 0 1-3.8 5.4 2.5 2.5 0 0 1-2.5-2.5v-13A2.5 2.5 0 0 1 14.5 3z"/>',
+    4:'<path d="M9 3v3.5a3.5 3.5 0 0 0 3.5 3.5h.5a5.5 5.5 0 0 1 5.5 5.5A5.5 5.5 0 0 1 13 21H9.5A4.5 4.5 0 0 1 5 16.5V15"/><path d="M9 12.5c1.6 1.2 3.4 1.5 5 1"/>',
     3:'<path d="M12 20s-7.5-4.6-9.2-9.4C1.6 7.1 3.9 4 7.2 4c2 0 3.6 1.2 4.8 2.9C13.2 5.2 14.8 4 16.8 4c3.3 0 5.6 3.1 4.4 6.6C19.5 15.4 12 20 12 20z"/><path d="M3.5 12h4l1.5-3 2.5 6 1.5-3h7.5"/>'};
   const tile=e=>`<span class="tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[e.n]}</svg></span>`;
   const GO='<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
@@ -298,7 +303,7 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
 
   function render(){
     const S=E.map(e=>({e,s:state(e)}));
-    const cur=S.find(x=>x.e.status==="current")||S[S.length-1];
+    const cur=S.find(x=>x.e.status==="current")||[...S].reverse().find(x=>ready(x.e).length)||S[0];
     const days=daysTo(cur.e.date);
 
     // continue: the most recently studied set, named; else the first lecture of the current exam
@@ -331,8 +336,15 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
        :`<p class="sub">Questions you miss or flag land here as flashcards, ready to review before the exam.</p>`);
      $("review").querySelectorAll("[data-study]").forEach(b=>b.onclick=()=>{const x=S.find(y=>y.e.n===+b.dataset.study);x.s.missed?studyMissed(x.e):location.href=x.e.path});}
 
+    // upcoming exams: a page exists, lectures arrive as they're covered
+    {const next=S.filter(x=>x!==cur&&x.e.status==="upcoming");$("next-label").hidden=!next.length;
+     $("next").innerHTML=next.map(({e})=>{const t=e.lectures.reduce((a,l)=>a+l.q+l.b,0),r=ready(e);
+       return `<details class="past ${CLS[e.n]}"><summary>${tile(e)}<span class="nm"><small>Exam ${e.n}</small><b>${esc(e.name)}</b><span>${r.length?t+" questions and fill-ins so far":"Lectures are added as they're covered"}</span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+       <ul class="list"><li><a href="${e.path}"><i class="dot"></i><span class="t">Open the Exam ${e.n} page<span>${r.length?"Everything ready so far":"Nothing to practise yet"}</span></span>${GO}</a></li>
+       ${r.map(L=>`<li><a href="${href(e,L.n)}"><i class="dot"></i><span class="t">Lecture ${L.n}. ${esc(L.name)}<span>${esc(items(L))}</span></span>${GO}</a></li>`).join("")}</ul></details>`}).join("");}
+
     // past exams, folded
-    {const past=S.filter(x=>x!==cur);$("past-label").hidden=!past.length;
+    {const past=S.filter(x=>x!==cur&&x.e.status!=="upcoming");$("past-label").hidden=!past.length;
      $("past").innerHTML=past.map(({e,s})=>{const t=e.lectures.reduce((a,l)=>a+l.q+l.b,0);
        return `<details class="past ${CLS[e.n]}"><summary>${tile(e)}<span class="nm"><small>Exam ${e.n}</small><b>${esc(e.name)}</b><span>${t} questions and fill-ins${s.missed?" · "+s.missed+" missed":""}</span></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
        <ul class="list"><li><a href="${e.path}"><i class="dot"></i><span class="t">All lectures<span>Mixed from every lecture</span></span>${GO}</a></li>

@@ -7,6 +7,7 @@ Practice questions, fill-in-the-blank sentences and flashcards for Anatomy 403, 
 | Exam 1, musculoskeletal | `exam-1/msk.html` (lectures 1 to 5 as tabs) |
 | Exam 2, neuroanatomy | `exam-2/neuro.html` (lectures 1 to 6) |
 | Exam 3, cardiovascular and respiratory | `exam-3/cardio.html` |
+| Exam 4, GI, reproductive, endocrine and integumentary | `exam-4/gi.html` |
 
 ## Accounts and sync
 
@@ -14,10 +15,11 @@ Sign-in is Supabase Auth (project `anatomy-403`): Google, GitHub and email sign-
 
 ## Building
 
-All three exams use the Exam 2 page's design and quiz engine. `exam-2/neuro.html` is edited directly; Exams 1 and 3 are generated from it by `src/build-exams.mjs`, which swaps in their own questions:
+All four exams use the Exam 2 page's design and quiz engine. `exam-2/neuro.html` is edited directly; Exams 1, 3 and 4 are generated from it by `src/build-exams.mjs`, which swaps in their own questions:
 
 - Exam 1 from the five lecture quizzes in `src/exam-1-msk/` (multiple choice, fill in the blank, muscle flashcards)
 - Exam 3 from `src/exam-3-cardio/cardio-data.js`
+- Exam 4 from `src/exam-4-gi/exam4-data.js` (same format; empty until its lectures arrive)
 
 Rebuild after changing any of those, or after changing the Exam 2 page:
 

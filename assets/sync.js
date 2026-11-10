@@ -2,13 +2,13 @@
 // Sign-in is Supabase Auth (Google, GitHub, email link); progress is saved through /api/progress,
 // which checks the sign-in and stores it under the account. Signed out, progress stays in this browser.
 // The pages keep saving to browser storage as before. This script watches the keys they save
-// (flags:*, neuro2-*, cardio-*, msk-*), sends changes to the server, and on load pulls anything newer.
+// (flags:*, neuro2-*, cardio-*, msk-*, gi-*), sends changes to the server, and on load pulls anything newer.
 // Load it in <head>, before the pages' own scripts.
 (function () {
   const SUPABASE_URL = "https://ksfbvtkbcnqiqvsazesd.supabase.co";
   const SUPABASE_KEY = "sb_publishable_bWHSSPtt2UrFc4g5YQDwlA_CQF9Qw-d"; // publishable: safe in the browser
   const LIB = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js";
-  const TRACKED = ["flags:", "neuro2-", "cardio-", "msk-"];
+  const TRACKED = ["flags:", "neuro2-", "cardio-", "msk-", "gi-"];
   const AT_KEY = "a403-sync-at", USER_KEY = "a403-sync-user", RELOAD_KEY = "a403-sync-reloaded";
   const tracked = k => TRACKED.some(p => k.startsWith(p));
 
@@ -37,7 +37,7 @@
   const pending = new Set();
   let pulled = false, timer = null;
   // each exam page's own prefix; "<prefix>last" records when that exam was last studied (for the home page)
-  const EXAMS = ["msk-", "neuro2-", "cardio-v2-"];
+  const EXAMS = ["msk-", "neuro2-", "cardio-v2-", "gi-"];
   Storage.prototype.setItem = function (k, v) {
     set.call(this, k, v);
     if (this !== LS || !tracked(k)) return;
