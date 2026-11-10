@@ -155,24 +155,34 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
 .frame .acct{min-height:40px;padding:0 26px;background:var(--d-violet);color:#fff;box-shadow:0 8px 22px -6px rgba(91,75,255,.8);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
 .frame .acct .avatar{width:28px;height:28px;margin-left:-14px}
 
-/* hero */
-.hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;min-height:min(600px,78vh);padding:20px clamp(20px,4vw,48px) 70px}
-.hero-copy{position:relative;z-index:2}
-.hero h1{margin:0;font-size:clamp(3.6rem,10vw,8rem);font-weight:700;letter-spacing:-0.035em;line-height:.95;color:#fff;overflow-wrap:break-word}
-.nextpill{display:block;max-width:440px;margin:34px 0 0;padding:13px 26px;border:2px solid rgba(255,255,255,.85);border-radius:999px;font-size:1rem;font-weight:400;color:#fff;line-height:1.35}
-.nextpill b{font-weight:600}
-.hero-act{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:34px}
-.pill{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 24px;border-radius:999px;text-decoration:none;font-family:var(--d-font);transition:transform .15s var(--x-ease),background-color .15s var(--x-ease)}
-.pill.solid{background:var(--d-cyan);color:#fff;font-weight:700;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 10px 24px -8px rgba(22,166,242,.9)}
-.pill.ghost{border:1.5px solid rgba(255,255,255,.85);color:#fff;font-weight:400;font-size:.95rem;letter-spacing:.06em}
+/* hero: greeting and a named continue card on the left, the exam countdown inside the rings on the right */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center;min-height:min(620px,80vh);padding:24px clamp(20px,4vw,48px) 80px}
+.hero-copy{position:relative;z-index:2;min-width:0}
+.hello{margin:0 0 12px;font-size:1rem;color:var(--d-muted)}
+.hero h1{margin:0;font-size:clamp(3rem,7.4vw,6.4rem);font-weight:700;letter-spacing:-0.035em;line-height:.98;color:#fff;overflow-wrap:break-word;min-width:0}
+.resume{display:block;max-width:540px;margin-top:36px;padding:20px 22px;border-radius:22px;background:var(--x-grad-stage);border:1px solid #2E2A6A;color:#fff;text-decoration:none;transition:transform .2s var(--x-ease),border-color .2s var(--x-ease)}
+.resume:hover{transform:translateY(-2px);border-color:#4B42A8}
+.resume .k{display:block;font-size:.88rem;color:var(--d-muted)}
+.resume .t{display:block;margin-top:4px;font-size:clamp(1.2rem,2.2vw,1.45rem);font-weight:600;letter-spacing:-0.01em;line-height:1.25}
+.resume .m{display:block;margin-top:4px;font-size:.95rem;color:#D6D3EE}
+.resume .row{display:flex;align-items:center;gap:16px;margin-top:16px}
+.resume .tr{flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
+.resume .tr i{display:block;height:100%;border-radius:inherit;background:var(--x-grad-progress);transform-origin:left;transform:scaleX(var(--p,0))}
+.resume .note{flex:1;font-size:.88rem;color:var(--d-muted)}
+.resume .go{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:0 18px 0 22px;border-radius:99px;background:var(--d-cyan);font-weight:700;font-size:.82rem;letter-spacing:.07em;text-transform:uppercase;box-shadow:0 10px 24px -8px rgba(22,166,242,.9)}
+.resume .go svg{width:16px;height:16px}
+.hero-act{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.pill{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 22px;border-radius:999px;text-decoration:none;font:400 .95rem var(--d-font);cursor:pointer;transition:transform .15s var(--x-ease),background-color .15s var(--x-ease)}
+.pill.ghost{border:1.5px solid rgba(255,255,255,.75);background:transparent;color:#fff;letter-spacing:.02em}
 .pill:hover{transform:translateY(-1px)} .pill.ghost:hover{background:rgba(255,255,255,.08)}
-.hero-art{position:absolute;z-index:1;top:-30px;right:-40px;width:min(62%,700px);pointer-events:none}
-.hero-art img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 18px rgba(124,92,255,.35))}
-.hero-note{position:relative;z-index:2;justify-self:end;max-width:320px;margin-top:40px;padding:18px 22px;text-align:center;background:radial-gradient(closest-side,rgba(5,5,7,.92) 55%,rgba(5,5,7,.6) 80%,transparent);text-shadow:0 1px 10px #050507}
-.note-mark{display:inline-block;width:50px;height:50px;color:#9C8BFF}
-.note-mark svg{width:100%;height:100%}
-.note-h{margin:6px 0 0;font-size:clamp(1.8rem,3vw,2.4rem);font-weight:400;letter-spacing:-0.01em;color:#fff}
-.note-p{margin:10px 0 0;font-size:.9rem;line-height:1.55;color:#E5E3F5}
+.count{position:relative;justify-self:center;width:min(100%,540px);aspect-ratio:1;display:grid;place-items:center}
+.count-art{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 18px rgba(124,92,255,.35))}
+.count-in{position:relative;display:flex;flex-direction:column;align-items:center;margin:-6% 0 0 -6%;text-align:center}
+.count-n{font-size:clamp(4.6rem,11vw,8.2rem);font-weight:700;line-height:.82;letter-spacing:-0.05em;background:linear-gradient(160deg,#FFFFFF 35%,#C7B6FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.count-n.word{font-size:clamp(3rem,7vw,4.6rem);line-height:1}
+.count-u{margin-top:10px;font-size:1.2rem;font-weight:500;color:#fff}
+.count-u,.count-l{text-shadow:0 0 10px #050507,0 0 4px #050507,0 0 2px #050507}
+.count-l{margin-top:4px;max-width:15em;font-size:.88rem;line-height:1.4;color:var(--d-muted)}
 .scrollcue{position:absolute;left:50%;bottom:22px;z-index:2;width:18px;height:28px;margin-left:-9px;border:1.5px solid rgba(255,255,255,.7);border-radius:10px}
 .scrollcue span{position:absolute;left:50%;top:6px;width:2px;height:6px;margin-left:-1px;border-radius:2px;background:#fff;animation:cue 1.8s var(--x-ease) infinite}
 @keyframes cue{0%{transform:translateY(0);opacity:1}70%{transform:translateY(8px);opacity:0}100%{opacity:0}}
@@ -188,12 +198,11 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
 
 @media (max-width:900px){
   .links{display:none}.nav .acct{margin-left:auto}
-  .hero{grid-template-columns:minmax(0,1fr);min-height:0;padding-bottom:80px}
-  .hero-art{top:40px;right:-30%;width:110%;opacity:.55}
-  .hero-note{justify-self:start;text-align:left;margin-top:44px}
-  .note-mark{display:none}
+  .hero{grid-template-columns:minmax(0,1fr);gap:0;min-height:0;padding-bottom:76px}
+  .hero-copy{display:contents}
+  .hello{order:1}.hero h1{order:2}.count{order:3;width:min(100%,380px);margin:8px auto 0}.resume{order:4;margin-top:4px}.hero-act{order:5}
 }
-@media (max-width:420px){.nav{padding-top:20px}.brand span{display:none}.nextpill{font-size:.92rem}.hero-act{gap:12px}.hero-act .pill{flex:1 1 auto;padding:0 18px}.pill.solid{letter-spacing:.05em}}
+@media (max-width:420px){.nav{padding-top:20px}.brand span{display:none}.hero-act .pill{flex:1 1 auto;padding:0 16px}.resume{padding:18px}.resume .row{gap:12px}}
 @media (prefers-reduced-motion: reduce){.scrollcue span{animation:none}.pill{transition:none}}
 
 @media (max-width:420px){.shell{padding-top:calc(24px + env(safe-area-inset-top,0px))}.card,.stage{padding:20px}.stage-foot .btn{width:100%}.top p{font-size:.92rem}}
@@ -213,23 +222,21 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
   <a class="acct" id="acct" href="/login">Sign in</a>
 </nav>
 <header class="hero">
-  <div class="hero-art" aria-hidden="true"><img src="/assets/contours.svg" alt="" width="660" height="640"></div>
   <div class="hero-copy">
-    <h1>Welcome.</h1>
-    <p class="nextpill" id="nextline">Practice questions, fill in the blank and flashcards for every exam.</p>
-    <div class="hero-act"><a class="pill solid" id="hero-go" href="/exam-3/cardio">Start practicing</a><a class="pill ghost" href="#dash">see more</a></div>
+    <p class="hello">Anatomy 403 practice</p>
+    <h1 id="hero-h">Welcome.</h1>
+    <a class="resume" id="resume" href="/exam-3/cardio"><span class="k">Start here</span><span class="t">Exam 3</span></a>
+    <div class="hero-act" id="hero-act"><a class="pill ghost" href="#dash">All lectures</a></div>
   </div>
-  <div class="hero-note">
-    <span class="note-mark"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><circle cx="20" cy="20" r="15"/><path d="M5 21h8l3-7 5 14 4-9 2 2h8"/></svg></span>
-    <p class="note-h" id="hero-exam">Exam 3.</p>
-    <p class="note-p" id="hero-sub">Practice questions, fill-ins and flashcards built from the slides, learning objectives and lecture recordings.</p>
+  <div class="count" id="count">
+    <img class="count-art" src="/assets/countdown-rings.svg" alt="" aria-hidden="true" width="640" height="640">
+    <p class="count-in"><b class="count-n" id="count-n"></b><span class="count-u" id="count-u"></span><span class="count-l" id="count-l"></span></p>
   </div>
   <a class="scrollcue" href="#dash" aria-label="Scroll to your exams"><span></span></a>
 </header>
 <main class="shell" id="dash">
   <div class="grid">
     <div class="col">
-      <section class="stage" id="cont" aria-labelledby="cont-h"></section>
       <section class="card" id="current" aria-label="Current exam"></section>
     </div>
     <div class="col">
@@ -268,7 +275,7 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
   const GO='<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
   const MODE={mcq:"Multiple choice",fb:"Fill in the blank",id:"Identification",fc:"Flashcards"};
   const plural=(n,w)=>n+" "+w+(n===1?"":"s");
-  const lecName=(e,l)=>{const L=e.lectures.find(x=>x.n===l);return L?e.short+" "+l+" · "+L.name:"All lectures"};
+  const lecName=(e,l)=>{const L=e.lectures.find(x=>x.n===l);return L?e.short+" "+l+": "+L.name:"All lectures"};
   const items=L=>{const p=[];const qb=L.q+L.b;if(qb)p.push(plural(qb,"question")+(L.b?" and fill-ins":""));if(L.f)p.push(plural(L.f,"lab image"));if(L.m)p.push(plural(L.m,"muscle card"));return p.join(", ")};
 
   // what this browser knows about each exam
@@ -301,33 +308,26 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
     const cur=S.find(x=>x.e.status==="current")||S[S.length-1];
     const days=daysTo(cur.e.date);
 
-    {const t=ready(cur.e).reduce((a,l)=>a+l.q,0),b=ready(cur.e).reduce((a,l)=>a+l.b,0);
-     $("hero-exam").textContent="Exam "+cur.e.n+".";
-     $("hero-sub").textContent=cur.e.name+". "+t+" questions and "+b+" fill-ins across "+(n=>n.length>1?n.slice(0,-1).join(", ")+" and "+n[n.length-1]:n[0])(ready(cur.e).map(l=>l.name))+". Answers you miss turn into flashcards.";}
-    $("nextline").innerHTML=`Next up: <b>Exam ${cur.e.n}, ${esc(cur.e.name)}</b>${days!=null&&days>=0?" · "+whenText(days).toLowerCase():""}`;
+    // countdown inside the rings
+    {const n=days,rd=ready(cur.e).length,tot=cur.e.lectures.length,big=$("count-n");
+     const dt=cur.e.date?new Date(cur.e.date+"T12:00:00").toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"}):"";
+     const up=n!=null&&n>=0;big.classList.toggle("word",n===0);
+     big.textContent=up?(n===0?"Today":String(n)):String(rd);
+     $("count-u").textContent=up?(n===0?"Exam "+cur.e.n+" is today":(n===1?"day":"days")+" until Exam "+cur.e.n):(rd===1?"lecture":"lectures")+" ready";
+     $("count-l").textContent=up?dt:cur.e.name;}
 
-    // continue: the most recently studied exam with a session in progress, else the current exam
+    // continue: the most recently studied set, named; else the first lecture of the current exam
     const recent=S.filter(x=>x.s.pos).sort((a,b)=>b.s.last-a.s.last)[0];
-    const c=$("cont");
-    {const go=$("hero-go");if(recent){go.href=href(recent.e,recent.s.lec);go.textContent=recent.s.pos.i>=recent.s.pos.n?"See results":"Continue"}else{go.href=href(cur.e,ready(cur.e)[0].n);go.textContent="Start practicing"}}
-    if(recent){
-      const {e,s}=recent,p=s.pos,done=p.i>=p.n;
-      const pct=p.n?Math.round(p.i/p.n*100):0;
-      const sc=p.unit==="card"?`<b>${p.got||0}</b> marked "got it"`:p.answered?`<b>${p.right}</b> of ${p.answered} ${p.blanks?"blanks ":""}correct`:"Not answered yet";
-      c.className="stage "+CLS[e.n];
-      c.innerHTML=`<p class="kicker">${done?"Set finished":"Pick up where you left off"}</p>
-        <h2 id="cont-h">Exam ${e.n} · ${esc(lecName(e,s.lec))}</h2>
-        <p class="where">${MODE[s.mode]} · <b>${done?"all "+p.n+" "+p.unit+"s done":p.unit+" "+(p.i+1)+" of "+p.n}</b></p>
-        <div class="bar"><div class="track" role="progressbar" aria-label="Progress through this set" aria-valuemin="0" aria-valuemax="${p.n}" aria-valuenow="${p.i}"><i style="--p:${p.n?p.i/p.n:0}"></i></div><span>${pct}%</span></div>
-        <div class="stage-foot"><span class="score">${sc}</span><a class="btn" href="${href(e,s.lec)}">${done?"See results":"Continue"}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>`;
-    }else{
-      const e=cur.e,L=ready(e)[0];
-      c.className="stage "+CLS[e.n];
-      c.innerHTML=`<p class="kicker">Start here</p>
-        <h2 id="cont-h">Exam ${e.n} · ${esc(e.short)} ${L.n} · ${esc(L.name)}</h2>
-        <p class="where">${esc(items(L))}. Answers you miss turn into flashcards.</p>
-        <div class="stage-foot"><span class="score"></span><a class="btn" href="${href(e,L.n)}">Start practicing<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>`;
-    }
+    {const r=$("resume"),ARW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+     if(recent){const {e,s}=recent,p=s.pos,done=p.i>=p.n;
+       const sc=p.unit==="card"?(p.got?" · "+p.got+" got it":""):p.answered?" · "+p.right+" of "+p.answered+" right":"";
+       r.href=href(e,s.lec);
+       r.innerHTML=`<span class="k">${done?"You finished this set":"Continue where you left off"}</span><span class="t">Exam ${e.n} · ${esc(lecName(e,s.lec))}</span><span class="m">${MODE[s.mode]} · ${done?"all "+p.n+" "+p.unit+"s done":p.unit+" "+(p.i+1)+" of "+p.n}${sc}</span><span class="row"><span class="tr" role="progressbar" aria-label="Progress through this set" aria-valuemin="0" aria-valuemax="${p.n}" aria-valuenow="${p.i}"><i style="--p:${p.n?p.i/p.n:0}"></i></span><span class="go">${done?"Results":"Continue"}${ARW}</span></span>`;}
+     else{const e=cur.e,L=ready(e)[0];r.href=href(e,L.n);
+       r.innerHTML=`<span class="k">Start here</span><span class="t">Exam ${e.n} · ${esc(lecName(e,L.n))}</span><span class="m">${esc(items(L))}</span><span class="row"><span class="note">Answers you miss turn into flashcards.</span><span class="go">Start${ARW}</span></span>`;}}
+    {const a=$("hero-act"),m=cur.s.missed;
+     a.innerHTML=(m?`<button class="pill ghost" type="button" id="hero-miss">Review ${m} missed</button>`:"")+`<a class="pill ghost" href="#current">All Exam ${cur.e.n} lectures</a>`;
+     if(m)$("hero-miss").onclick=()=>studyMissed(cur.e);}
 
     // the current exam, open
     {const {e,s}=cur,total=ready(e).reduce((a,l)=>a+l.q+l.b,0),pend=e.lectures.filter(l=>!l.ready).length;
@@ -361,6 +361,7 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
     if(p.avatar){const im=new Image();im.alt="";im.referrerPolicy="no-referrer";im.src=p.avatar;im.onerror=()=>{el.textContent=t};el.appendChild(im)}else el.textContent=t};
   const show=st=>{const el=$("sync-st");el.textContent=st==="saved"?"Synced":st==="offline"?"Offline, saving here":st==="signed-out"?"This browser only":"Checking";el.className="st"+(st==="saved"?" ok":st==="offline"?" off":"")};
   const who=p=>{
+    {const f=p&&(p.name||"").trim().split(/\s+/)[0];$("hero-h").textContent=f?"Welcome back, "+f+".":"Welcome.";}
     $("acct-in").hidden=!p;$("acct-out").hidden=!!p;
     const top=$("acct");top.textContent="";top.href="/login";
     if(p){$("who-name").textContent=p.name||p.email.split("@")[0];$("who-email").textContent=p.email;face($("avatar"),p);
