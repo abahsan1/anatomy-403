@@ -10,15 +10,15 @@
 <style>
 *,*::before,*::after{box-sizing:border-box}
 html,body{overflow-x:clip}
-body{margin:0;min-height:100vh;background:var(--x-bg);color:var(--x-ink);font-family:var(--x-font);-webkit-font-smoothing:antialiased}
+body{margin:0;min-height:100vh;background:var(--x-page);background-attachment:fixed;color:var(--x-ink);font-family:var(--x-font);-webkit-font-smoothing:antialiased}
 .shell{max-width:440px;margin:0 auto;padding:calc(32px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) 56px max(20px,env(safe-area-inset-left,0px))}
 .back{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px 0 10px;border-radius:var(--x-r-pill);background:var(--x-surface);box-shadow:var(--x-shadow-sm);color:var(--x-ink);font-weight:700;font-size:.9rem;text-decoration:none}
 .back svg{width:18px;height:18px}
 .back:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
-.card{margin-top:28px;background:var(--x-surface);border-radius:var(--x-r-xl);box-shadow:var(--x-shadow);padding:32px 24px 26px}
+.card{margin-top:28px;background:var(--x-surface);border-radius:var(--x-r-xl);box-shadow:0 50px 90px -40px rgba(70,40,210,.7);padding:32px 24px 26px}
 .mark{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:var(--x-grad-primary);color:#fff;box-shadow:var(--x-shadow-btn)}
 .mark svg{width:28px;height:28px}
-h1{margin:20px 0 6px;font-size:1.75rem;font-weight:800;letter-spacing:-0.025em;line-height:1.15}
+h1{margin:20px 0 6px;font-size:1.9rem;font-weight:700;letter-spacing:-0.025em;line-height:1.15}
 .lede{margin:0;color:var(--x-muted);font-size:.95rem;line-height:1.5}
 .providers{display:flex;flex-direction:column;gap:10px;margin-top:24px}
 .prov{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:52px;padding:0 18px;border:2px solid var(--x-line);border-radius:var(--x-r-md);background:var(--x-surface);color:var(--x-ink);font:700 1rem var(--x-font);cursor:pointer;transition:border-color .15s var(--x-ease),background-color .15s var(--x-ease),transform .1s var(--x-ease)}
@@ -36,7 +36,7 @@ h1{margin:20px 0 6px;font-size:1.75rem;font-weight:800;letter-spacing:-0.025em;l
 .go:active{transform:scale(.98)}
 .ghost{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;margin-top:10px;border:0;border-radius:var(--x-r-pill);background:var(--x-surface-2);color:var(--x-ink);font:800 .95rem var(--x-font);cursor:pointer}
 .msg{min-height:1.4em;margin:14px 0 0;font-size:.9rem;font-weight:600;line-height:1.45;color:var(--x-muted)}
-.msg.ok{color:#11815C} .msg.bad{color:#C8203F}
+.msg.ok{color:var(--x-good-ink)} .msg.bad{color:var(--x-bad-ink)}
 .fine{margin:20px 0 0;font-size:.82rem;color:var(--x-muted);line-height:1.5}
 .fine a{color:var(--x-muted);font-weight:700}
 .who{display:flex;align-items:center;gap:14px;margin-top:22px;padding:14px;border-radius:var(--x-r-md);background:var(--x-surface-2)}
@@ -46,8 +46,6 @@ h1{margin:20px 0 6px;font-size:1.75rem;font-weight:800;letter-spacing:-0.025em;l
 .who span{display:block;font-size:.88rem;color:var(--x-muted);overflow-wrap:anywhere}
 .who > div{min-width:0}
 [hidden]{display:none!important}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .msg.ok{color:#7EF0C4} :root:not([data-theme="light"]) .msg.bad{color:#FFA3B3}}
-:root[data-theme="dark"] .msg.ok{color:#7EF0C4} :root[data-theme="dark"] .msg.bad{color:#FFA3B3}
 @media (max-width:380px){.card{padding:26px 18px 22px}h1{font-size:1.5rem}}
 @media (prefers-reduced-motion: reduce){.prov,.go{transition:none}}
 </style>
