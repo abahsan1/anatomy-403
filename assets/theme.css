@@ -1,28 +1,27 @@
-/* Anatomy 403 shared theme: the dark landing design.
- * Near-black pages and cards, a deep violet "stage" for questions, cyan primary pills,
- * a violet-to-purple progress bar taken from the home page's contour art, and Jost type.
+/* Anatomy 403 shared theme: the dark neon design.
+ * Near-black pages and cards with a purple tint, a deep purple-to-blue "stage" for questions,
+ * hot-pink-to-purple primary pills, a blue-purple-pink progress bar, and Jost type.
  * One dark palette for every color-scheme setting. */
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&display=swap");
 
 :root,:root[data-theme="light"],:root[data-theme="dark"]{
   color-scheme:dark;
-  --x-bg:#050507; --x-surface:#0F0F17; --x-surface-2:#181824; --x-ink:#FFFFFF; --x-muted:#A6A3C2; --x-line:#23233A;
-  --x-stage:#110E2C; --x-stage-2:#1E1A45; --x-stage-3:#2A2560; --x-stage-ink:#FFFFFF; --x-stage-muted:#B7B2E0; --x-stage-line:#3A3480;
-  --x-violet:#7C5CFF; --x-pink:#FF7EB6; --x-blue:#4F8CFF; --x-cyan:#16A6F2; --x-teal:#2CD4C2; --x-coral:#FF8A5C; --x-green:#2BD49A; --x-red:#FF5A75; --x-yellow:#FFC23D;
+  --x-bg:#06040D; --x-surface:#120C20; --x-surface-2:#1C1430; --x-ink:#FFFFFF; --x-muted:#B4A8D8; --x-line:#2B2147;
+  --x-stage:#170B33; --x-stage-2:#24124F; --x-stage-3:#33186E; --x-stage-ink:#FFFFFF; --x-stage-muted:#C7B6EC; --x-stage-line:#4A2A8F;
+  --x-violet:#A855FF; --x-pink:#FF3DB8; --x-blue:#3D7BFF; --x-cyan:#00D4FF; --x-teal:#2CD4C2; --x-coral:#FF8A5C; --x-green:#2BD49A; --x-red:#FF5A75; --x-yellow:#FFC23D;
   --x-good-wash:rgba(43,212,154,.16); --x-bad-wash:rgba(255,90,117,.16); --x-flag-wash:rgba(255,194,61,.14);
   --x-good-ink:#7EF0C4; --x-bad-ink:#FFA3B3;
-  --x-grad-progress:linear-gradient(90deg,#5B6CFF,#B46BFF);
-  --x-grad-primary:linear-gradient(135deg,#2BB8FF,#1194E0);
+  --x-grad-progress:linear-gradient(90deg,#3D7BFF,#A855FF 55%,#FF3DB8);
+  --x-grad-primary:linear-gradient(135deg,#FF3DB8,#A855FF);
   --x-grad-good:linear-gradient(135deg,#1FB585,#127A63);
-  --x-grad-stage:linear-gradient(135deg,#1C1450 0%,#0E1240 60%,#0B1A3F 100%);
-  --x-page:linear-gradient(135deg,#F3F0FF 0%,#D9D2FF 45%,#8C6BFF 100%);
+  --x-grad-stage:linear-gradient(135deg,#2A0C4A 0%,#160B3F 55%,#0A1A4A 100%);
+  --x-page:linear-gradient(135deg,#0D0626 0%,#2B0D55 50%,#6A1680 100%);
   --x-r-sm:12px; --x-r-md:16px; --x-r-lg:24px; --x-r-xl:30px; --x-r-pill:999px;
   --x-shadow:none; --x-shadow-sm:none;
-  --x-shadow-btn:0 10px 24px -8px rgba(22,166,242,.8); --x-shadow-stage:0 30px 60px -30px rgba(91,75,255,.55);
+  --x-shadow-btn:0 10px 26px -8px rgba(255,61,184,.7); --x-shadow-stage:0 30px 60px -30px rgba(168,85,255,.5);
   --x-font:"Jost", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --x-ease:cubic-bezier(0.16,1,0.3,1);
 }
-@media (prefers-color-scheme: dark){:root{--x-page:linear-gradient(135deg,#17123A 0%,#1E1550 50%,#3B23A8 100%)}}
 html{background:var(--x-bg)}
 
 /* the back link and the progress bar the quiz pages share */

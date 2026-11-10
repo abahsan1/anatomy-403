@@ -2,11 +2,11 @@
  * The page's own tokens are pointed at the theme's, in every theme state the page defines. */
 :root, :root:not([data-theme="light"]), :root[data-theme="dark"]{
   --bg:var(--x-bg); --surface:var(--x-surface); --fg:var(--x-ink); --muted:var(--x-muted); --line:var(--x-line);
-  --accent:var(--x-violet); --accent-soft:rgba(124,92,255,.14); --good:var(--x-green); --good-soft:var(--x-good-wash);
+  --accent:var(--x-violet); --accent-soft:rgba(168,85,255,.14); --good:var(--x-green); --good-soft:var(--x-good-wash);
   --bad:var(--x-red); --bad-soft:var(--x-bad-wash); --warn:var(--x-yellow); --plate:#FFFFFF; color-scheme:dark;
   --f-display:var(--x-font); --f-body:var(--x-font); --f-mono:var(--x-font);
 }
-body{font-family:var(--x-font);-webkit-font-smoothing:antialiased;background:radial-gradient(900px 520px at 100% -10%,rgba(124,92,255,.20),transparent 60%),radial-gradient(700px 420px at -10% 110%,rgba(79,140,255,.12),transparent 60%),var(--x-bg);background-attachment:fixed}
+body{font-family:var(--x-font);-webkit-font-smoothing:antialiased;background:radial-gradient(900px 520px at 100% -10%,rgba(168,85,255,.20),transparent 60%),radial-gradient(700px 420px at -10% 110%,rgba(79,140,255,.12),transparent 60%),var(--x-bg);background-attachment:fixed}
 .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header h1{font-weight:700;letter-spacing:-0.03em}
 header p{font-size:.85rem}
@@ -26,7 +26,7 @@ header p{font-size:.85rem}
 .linkbtn{color:var(--x-pink);font-weight:700}
 
 /* the question card is the deep violet stage */
-.card{background:var(--x-grad-stage);color:var(--x-stage-ink);border:1px solid #2E2A6A;border-radius:var(--x-r-xl);padding:24px;box-shadow:var(--x-shadow-stage)}
+.card{background:var(--x-grad-stage);color:var(--x-stage-ink);border:1px solid #3B1F6E;border-radius:var(--x-r-xl);padding:24px;box-shadow:var(--x-shadow-stage)}
 .tag{font-family:var(--x-font);text-transform:none;letter-spacing:0;font-weight:700;font-size:.82rem;color:var(--x-pink)}
 .said-badge{color:#2A2100;background:var(--x-yellow);border:0;border-radius:var(--x-r-pill);padding:2px 9px;font-family:var(--x-font);text-transform:none;letter-spacing:0}
 .q{font-weight:800;letter-spacing:-0.01em}
@@ -67,7 +67,7 @@ header p{font-size:.85rem}
 
 /* fill in the blank and identification inputs on the stage */
 .card .fb-s input,.card .blank input{background:var(--x-stage-2);color:var(--x-stage-ink);border:2px solid var(--x-stage-line);border-radius:var(--x-r-sm);font-family:var(--x-font);font-weight:700}
-.card .fb-s input:focus,.card .blank input:focus{outline:none;border-color:var(--x-violet);box-shadow:0 0 0 3px rgba(124,92,255,.35)}
+.card .fb-s input:focus,.card .blank input:focus{outline:none;border-color:var(--x-violet);box-shadow:0 0 0 3px rgba(168,85,255,.35)}
 .card .fb-s input.ok,.card .blank input.ok{background:var(--x-good-wash);border-color:var(--x-green)}
 .card .fb-s input.no,.card .blank input.no{background:var(--x-bad-wash);border-color:var(--x-red)}
 .card .fb.ok{color:var(--x-good-ink)} .card .fb.no{color:var(--x-bad-ink)} .card .fb.near{color:var(--x-yellow)}
@@ -81,10 +81,10 @@ header p{font-size:.85rem}
 .card.flash{background:var(--x-surface);color:var(--x-ink);border:1px solid var(--x-line);box-shadow:var(--x-shadow-stage)}
 .card.flash .tag{color:var(--x-pink)}
 .card.flash .front{font-weight:800;letter-spacing:-0.01em}
-.card.flash .fmt{border:0;background:rgba(124,92,255,.16);border-radius:var(--x-r-md)}
-.card.flash .fmt .fl{font-family:var(--x-font);text-transform:none;letter-spacing:0;color:#B3A3FF;font-weight:800}
+.card.flash .fmt{border:0;background:rgba(168,85,255,.16);border-radius:var(--x-r-md)}
+.card.flash .fmt .fl{font-family:var(--x-font);text-transform:none;letter-spacing:0;color:#E0A8FF;font-weight:800}
 .card.flash .back{border-top:2px dashed var(--x-line)}
-.card.flash .ans,.card.flash .ans-list{color:#B3A3FF;font-weight:800}
+.card.flash .ans,.card.flash .ans-list{color:#E0A8FF;font-weight:800}
 .card.flash .lo,.card.flash .tapnote{color:var(--x-muted)}
 .card.flash .said{background:var(--x-flag-wash);color:var(--x-ink)}
 
