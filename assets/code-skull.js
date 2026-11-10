@@ -1,121 +1,96 @@
-/* Home page hero art: a front-facing skull drawn in code characters that
-   dissolves to the left. Draws into every <canvas data-code-skull>.
-   Static under prefers-reduced-motion; animation pauses off screen. */
+/* Home page hero art: a skull drawn in thousands of code characters that
+   dissolves to the left. Shading comes from the brightness map in
+   /assets/skull-map.js (window.A403_SKULL). Draws into every
+   <canvas data-code-skull>. Static under prefers-reduced-motion; the
+   animation pauses while the canvas is off screen. */
 (() => {
-  const CODE = "function(){var lec=$(document).querySelector('#lecture');setTimeout(next,400);for(let i=0;i<deck.length;i++){if(card.missed)queue.push(card)}return score/total}const heart={atria:2,ventricles:2};aorta.branch('carotid');blood.type='O+';printText(index,chunk);display:block;contentArray.map(";
-  const RAMP = ".:;-=+*$%#&8B@";
-  const COLORS = ["#FFFFFF","#B3A3FF","#7C5CFF","#4F8CFF","#16A6F2","#2CD4C2","#FFC23D","#FF8A5C","#FF7EB6"];
+  const CODE = "function(){var lec=$(document).querySelector('#lecture');setTimeout(next,400);for(let i=0;i<deck.length;i++){if(card.missed)queue.push(card)}return score/total}const heart={atria:2,ventricles:2};aorta.branch('carotid');blood.type='O+';printText(index,chunk);display:block;contentArray.map(scrollTop);$(window).on('load',init);";
+  // light to dark: highlights warm, mid-tones mixed, shadows cool
+  const HI = ["#FFFFFF", "#FFF4D6", "#FFC23D", "#FFD98A"];
+  const MID = ["#FF8A5C", "#FF7EB6", "#2CD4C2", "#16A6F2", "#FFC23D", "#B3A3FF"];
+  const LO = ["#4F8CFF", "#7C5CFF", "#16A6F2", "#B3A3FF"];
+  const SIZES = 7;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  const rnd = (a) => a[(Math.random() * a.length) | 0];
 
-  // Skull silhouette in a unit box; cx shifted right to leave room for the dissolve.
-  function mask(ctx, S) {
-    const cx = 0.6, P = (x, y) => [x * S, y * S];
-    ctx.fillStyle = "#fff";
-    ctx.beginPath(); ctx.ellipse(...P(cx, 0.37), 0.27 * S, 0.29 * S, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(...P(cx - 0.265, 0.42));
-    ctx.bezierCurveTo(...P(cx - 0.27, 0.55), ...P(cx - 0.25, 0.6), ...P(cx - 0.2, 0.66));
-    ctx.lineTo(...P(cx - 0.14, 0.7));
-    ctx.lineTo(...P(cx + 0.14, 0.7));
-    ctx.lineTo(...P(cx + 0.2, 0.66));
-    ctx.bezierCurveTo(...P(cx + 0.25, 0.6), ...P(cx + 0.27, 0.55), ...P(cx + 0.265, 0.42));
-    ctx.closePath(); ctx.fill();
-    // mandible
-    ctx.beginPath();
-    ctx.moveTo(...P(cx - 0.19, 0.69));
-    ctx.bezierCurveTo(...P(cx - 0.2, 0.83), ...P(cx - 0.1, 0.9), ...P(cx, 0.9));
-    ctx.bezierCurveTo(...P(cx + 0.1, 0.9), ...P(cx + 0.2, 0.83), ...P(cx + 0.19, 0.69));
-    ctx.closePath(); ctx.fill();
-    // holes
-    ctx.globalCompositeOperation = "destination-out";
-    for (const s of [-1, 1]) {
-      ctx.beginPath(); ctx.ellipse(...P(cx + s * 0.112, 0.485), 0.088 * S, 0.078 * S, s * -0.18, 0, Math.PI * 2); ctx.fill();
-      ctx.beginPath(); ctx.ellipse(...P(cx + s * 0.205, 0.735), 0.03 * S, 0.05 * S, 0, 0, Math.PI * 2); ctx.fill();
-    }
-    ctx.beginPath();
-    ctx.moveTo(...P(cx, 0.55));
-    ctx.bezierCurveTo(...P(cx - 0.02, 0.58), ...P(cx - 0.05, 0.63), ...P(cx - 0.03, 0.645));
-    ctx.lineTo(...P(cx + 0.03, 0.645));
-    ctx.bezierCurveTo(...P(cx + 0.05, 0.63), ...P(cx + 0.02, 0.58), ...P(cx, 0.55));
-    ctx.fill();
-    ctx.lineWidth = 0.009 * S; ctx.strokeStyle = "#000";
-    ctx.beginPath(); ctx.moveTo(...P(cx - 0.15, 0.745)); ctx.lineTo(...P(cx + 0.15, 0.745)); ctx.stroke();
-    for (let i = -4; i <= 4; i++) {
-      const x = cx + i * 0.032;
-      ctx.beginPath(); ctx.moveTo(...P(x, 0.68)); ctx.lineTo(...P(x, 0.8)); ctx.stroke();
-    }
-    ctx.globalCompositeOperation = "source-over";
-  }
-
-  function build(S) {
-    const m = document.createElement("canvas"); m.width = m.height = S;
-    const mc = m.getContext("2d"); mask(mc, S);
-    const b = document.createElement("canvas"); b.width = b.height = S;
-    const bc = b.getContext("2d"); bc.filter = "blur(" + Math.round(S * 0.018) + "px)"; bc.drawImage(m, 0, 0);
-    const md = mc.getImageData(0, 0, S, S).data, bd = bc.getImageData(0, 0, S, S).data;
-    const step = 0.0125, out = []; let k = 0;
-    for (let y = 0.05; y < 0.95; y += step * 1.25) {
-      for (let x = 0.25; x < 0.92; x += step) {
-        const px = Math.floor(x * S), py = Math.floor(y * S), i = (py * S + px) * 4;
-        if (md[i + 3] < 128) continue;
-        // shade: depth from the blurred mask, lit from the upper right
-        const depth = bd[i + 3] / 255;
-        const light = 0.55 + 0.6 * (x - 0.33) - 0.25 * (y - 0.5);
-        let v = Math.max(0.05, Math.min(1, depth * light + (Math.random() - 0.5) * 0.18));
-        const g = { x, y, v, ch: CODE[k++ % CODE.length], col: pick(v), a: 0.35 + 0.65 * v, sz: 0.85 + 0.5 * v, dx: 0, vx: 0 };
-        // the left side dissolves: more cells drift off the further left they sit
-        const pull = Math.max(0, (0.52 - x) / 0.27);
-        if (Math.random() < pull * 0.55) { g.dx = -Math.pow(Math.random(), 1.6) * 0.3; g.vx = -(0.0004 + Math.random() * 0.0012); g.a *= 0.75; g.sz *= 0.8; }
+  function build() {
+    const M = window.A403_SKULL; if (!M) return [];
+    const bin = atob(M.d), map = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) map[i] = bin.charCodeAt(i);
+    const sh = 0.86, sw = sh * M.w / M.h, left = 0.6 - sw / 2, top = 0.06;
+    const at = (u, v) => map[Math.min(M.h - 1, (v * M.h) | 0) * M.w + Math.min(M.w - 1, (u * M.w) | 0)] / 255;
+    const step = 0.0068, out = []; let k = 0;
+    for (let y = top; y < top + sh; y += step * 1.18) {
+      for (let x = left; x < left + sw; x += step) {
+        const v0 = at((x - left) / sw, (y - top) / sh);
+        if (v0 < 0.1 || Math.random() > 0.35 + v0) continue;
+        const v = Math.min(1, v0 * (0.92 + Math.random() * 0.16));
+        const g = {
+          x: x + (Math.random() - 0.5) * step * 0.6, y, v,
+          ch: CODE[k++ % CODE.length],
+          col: v > 0.72 ? rnd(HI) : v > 0.38 ? rnd(MID) : rnd(LO),
+          a: 0.25 + 0.75 * Math.pow(v, 0.8),
+          s: Math.min(SIZES - 1, (v * SIZES + Math.random() * 1.6) | 0),
+          dx: 0, vx: 0,
+        };
+        // the left of the skull dissolves: more cells drift off the further left they sit
+        const pull = Math.max(0, (left + sw * 0.42 - x) / (sw * 0.42));
+        if (Math.random() < pull * pull * 0.7) {
+          g.dx = -Math.pow(Math.random(), 1.4) * 0.32;
+          g.vx = -(0.0003 + Math.random() * 0.001);
+          g.s = Math.max(0, g.s - 1);
+        }
         out.push(g);
       }
     }
-    // stray particles to the left
-    for (let n = 0; n < 260; n++) {
-      const y = 0.18 + Math.random() * 0.7, x = 0.02 + Math.pow(Math.random(), 0.7) * 0.45;
-      out.push({ x, y, v: 0.2, ch: CODE[k++ % CODE.length], col: COLORS[1 + (n % 8)], a: 0.15 + Math.random() * 0.45 * (x / 0.47), sz: 0.55 + Math.random() * 0.4, dx: 0, vx: -(0.0003 + Math.random() * 0.0008), stray: 1 });
+    // stray characters already adrift on the left
+    for (let n = 0; n < 420; n++) {
+      const x = 0.01 + Math.pow(Math.random(), 0.75) * (left + 0.04);
+      out.push({ x, y: top + 0.08 + Math.random() * sh * 0.82, v: 0.3, ch: CODE[k++ % CODE.length], col: rnd(MID.concat(LO)),
+        a: 0.1 + Math.random() * 0.5 * (x / left), s: (Math.random() * 3) | 0, dx: 0, vx: -(0.0002 + Math.random() * 0.0007), stray: 1 });
     }
+    // group by size then colour so the canvas changes font and fill as rarely as possible
+    out.sort((p, q) => p.s - q.s || (p.col < q.col ? -1 : p.col > q.col ? 1 : 0));
     return out;
-  }
-  function pick(v) {
-    if (v > 0.8) return Math.random() < 0.5 ? "#FFFFFF" : COLORS[6 + ((Math.random() * 3) | 0)];
-    return COLORS[1 + ((Math.random() * 8) | 0)];
   }
 
   function mount(cv) {
-    const ctx = cv.getContext("2d"); let glyphs = [], W = 0, live = false, last = 0;
+    const ctx = cv.getContext("2d"); let glyphs = null, W = 0, H = 0, live = false, last = 0, fonts = [];
     function size() {
       const r = cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1);
-      W = r.width; if (!W) return;
-      cv.width = Math.round(W * d); cv.height = Math.round(r.height * d);
+      W = r.width; H = r.height; if (!W) return;
+      cv.width = Math.round(W * d); cv.height = Math.round(H * d);
       ctx.setTransform(d, 0, 0, d, 0, 0);
-      if (!glyphs.length) glyphs = build(600);
+      const base = W * 0.0105;
+      fonts = Array.from({ length: SIZES }, (_, i) => (i > 3 ? "700 " : "500 ") + (base * (0.62 + i * 0.16)).toFixed(1) + "px ui-monospace,'SF Mono',Menlo,Consolas,monospace");
+      if (!glyphs) glyphs = build();
       draw();
     }
     function draw() {
-      const H = cv.height / (cv.width / W); ctx.clearRect(0, 0, W, H);
-      const base = W * 0.0165; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.clearRect(0, 0, W, H); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      let f = -1, c = "";
       for (const g of glyphs) {
-        const x = (g.x + g.dx) * W; if (x < -10) continue;
-        ctx.globalAlpha = g.a * (g.dx < 0 && !g.stray ? Math.max(0, 1 + g.dx * 2.2) : 1);
-        ctx.fillStyle = g.col;
-        ctx.font = "600 " + (base * g.sz).toFixed(1) + "px ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-        ctx.fillText(g.v > 0.88 && !g.stray ? RAMP[RAMP.length - 1 - ((Math.random() * 3) | 0)] : g.ch, x, g.y * H);
+        const x = (g.x + g.dx) * W; if (x < -8) continue;
+        if (g.s !== f) { f = g.s; ctx.font = fonts[f]; }
+        if (g.col !== c) { c = g.col; ctx.fillStyle = c; }
+        ctx.globalAlpha = g.stray ? g.a : g.a * Math.max(0, 1 + g.dx * 2.6);
+        ctx.fillText(g.ch, x, g.y * H);
       }
       ctx.globalAlpha = 1;
     }
     function tick(t) {
       if (!live) return;
       requestAnimationFrame(tick);
-      if (t - last < 80) return; last = t;
+      if (t - last < 70) return; last = t;
       for (const g of glyphs) {
-        if (g.vx) { g.dx += g.vx; if (g.x + g.dx < 0) g.dx = g.stray ? 0.45 - g.x + Math.random() * 0.05 : 0; }
-        if (Math.random() < 0.02) g.ch = CODE[(Math.random() * CODE.length) | 0];
+        if (g.vx) { g.dx += g.vx; if (g.x + g.dx < 0) g.dx = g.stray ? Math.random() * 0.04 + 0.28 - g.x : 0; }
+        if (Math.random() < 0.015) g.ch = CODE[(Math.random() * CODE.length) | 0];
       }
       draw();
     }
     new ResizeObserver(size).observe(cv);
     new IntersectionObserver(([e]) => {
-      const go = e.isIntersecting && !reduce.matches && !document.hidden;
+      const go = e.isIntersecting && !reduce.matches;
       if (go && !live) { live = true; requestAnimationFrame(tick); } else if (!go) live = false;
     }).observe(cv);
   }
