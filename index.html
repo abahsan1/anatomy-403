@@ -148,7 +148,7 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
 /* nav */
 .nav{display:flex;align-items:center;gap:24px;padding:28px clamp(20px,4vw,48px) 0}
 .brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:.92rem;line-height:1;letter-spacing:.06em;text-transform:uppercase}
-.brand svg{width:34px;height:34px}
+.brand .skull{margin:0;font:700 6.2px/1.02 ui-monospace,"SF Mono",Menlo,Consolas,monospace;letter-spacing:0;text-transform:none;color:#fff;white-space:pre}
 .links{display:flex;gap:clamp(18px,3vw,40px);margin:0 0 0 auto;padding:0;list-style:none}
 .links a{color:#fff;text-decoration:none;font-weight:600;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;opacity:.9}
 .links a:hover{opacity:1;text-decoration:underline;text-underline-offset:6px}
@@ -212,7 +212,12 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
 <body>
 <div class="frame">
 <nav class="nav" aria-label="Main">
-  <a class="brand" href="/"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><circle cx="20" cy="20" r="15"/><path d="M5 21h8l3-7 5 14 4-9 2 2h8"/></svg><span>Anatomy<br>403</span></a>
+  <a class="brand" href="/"><pre class="skull" aria-hidden="true">  .-"""-.
+ /       \
+| (o) (o) |
+ \   ^   /
+  |'|'|'|
+  '-----'</pre><span>Anatomy<br>403</span></a>
   <ul class="links">
     <li><a href="/exam-1/msk">Exam 1</a></li>
     <li><a href="/exam-2/neuro">Exam 2</a></li>
