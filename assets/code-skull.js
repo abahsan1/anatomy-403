@@ -1,4 +1,4 @@
-/* Home page hero art (positions are in canvas widths; the canvas is 10:9): a skull drawn in thousands of code characters that
+/* Home page hero art: a skull drawn in thousands of code characters that
    dissolves to the left. Shading comes from the brightness map in
    /assets/skull-map.js (window.A403_SKULL). Draws into every
    <canvas data-code-skull>. Static under prefers-reduced-motion; the
@@ -17,7 +17,7 @@
     const M = window.A403_SKULL; if (!M) return [];
     const bin = atob(M.d), map = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; i++) map[i] = bin.charCodeAt(i);
-    const sh = 0.86, sw = sh * M.w / M.h, left = 0.6 - sw / 2, top = 0.02;
+    const sh = 0.86, sw = sh * M.w / M.h, left = 0.6 - sw / 2, top = 0.06;
     const at = (u, v) => map[Math.min(M.h - 1, (v * M.h) | 0) * M.w + Math.min(M.w - 1, (u * M.w) | 0)] / 255;
     const step = 0.0068, out = []; let k = 0;
     for (let y = top; y < top + sh; y += step * 1.18) {
@@ -74,7 +74,7 @@
         if (g.s !== f) { f = g.s; ctx.font = fonts[f]; }
         if (g.col !== c) { c = g.col; ctx.fillStyle = c; }
         ctx.globalAlpha = g.stray ? g.a : g.a * Math.max(0, 1 + g.dx * 2.6);
-        ctx.fillText(g.ch, x, g.y * W);
+        ctx.fillText(g.ch, x, g.y * H);
       }
       ctx.globalAlpha = 1;
     }
