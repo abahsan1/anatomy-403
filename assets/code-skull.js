@@ -5,16 +5,10 @@
    animation pauses while the canvas is off screen. */
 (() => {
   const CODE = "function(){var lec=$(document).querySelector('#lecture');setTimeout(next,400);for(let i=0;i<deck.length;i++){if(card.missed)queue.push(card)}return score/total}const heart={atria:2,ventricles:2};aorta.branch('carotid');blood.type='O+';printText(index,chunk);display:block;contentArray.map(scrollTop);$(window).on('load',init);";
-  // Palettes, light to dark: hi = lit bone, mid = mid-tones, lo = shadows, glow = canvas halo.
-  // The page uses DEFAULT; add ?skull=<name> to the URL to preview another.
-  const PALETTES = {
-    neon: { hi: ["#FFFFFF", "#FF7ADB", "#FF3DB8", "#FF5FD2", "#FFC2EE"], mid: ["#E23CFF", "#B44BFF", "#8A5CFF", "#FF2E97", "#6E6BFF"], lo: ["#00C2FF", "#2F7BFF", "#3D5AFE", "#00E5FF", "#4B6BFF"], glow: "rgba(208,75,255,.38)" },
-    blood: { hi: ["#FFFFFF", "#FFD9D9", "#FF6B6B", "#FF9A9A"], mid: ["#FF2D3A", "#E0144C", "#FF4D5E", "#D3123A"], lo: ["#B0122E", "#C8102E", "#9E1B3A", "#E0244A"], glow: "rgba(255,40,70,.34)" },
-    acid: { hi: ["#FFFFFF", "#EAFFE0", "#C6FF3B", "#8CFF5A"], mid: ["#39FF14", "#00F57A", "#7CFF4F", "#B6FF3B"], lo: ["#00B865", "#00C853", "#14A85C", "#00D68F"], glow: "rgba(57,255,20,.3)" },
-  };
-  const DEFAULT = "neon";
-  const P = PALETTES[new URLSearchParams(location.search).get("skull")] || PALETTES[DEFAULT];
-  const HI = P.hi, MID = P.mid, LO = P.lo;
+  // light to dark: highlights warm, mid-tones mixed, shadows cool
+  const HI = ["#FFFFFF", "#FFF4D6", "#FFC23D", "#FFD98A"];
+  const MID = ["#FF8A5C", "#FF7EB6", "#2CD4C2", "#16A6F2", "#FFC23D", "#B3A3FF"];
+  const LO = ["#4F8CFF", "#7C5CFF", "#16A6F2", "#B3A3FF"];
   const SIZES = 7;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
   const rnd = (a) => a[(Math.random() * a.length) | 0];
@@ -61,7 +55,6 @@
   }
 
   function mount(cv) {
-    cv.style.filter = "drop-shadow(0 0 14px " + P.glow + ")";
     const ctx = cv.getContext("2d"); let glyphs = null, W = 0, H = 0, live = false, last = 0, fonts = [];
     function size() {
       const r = cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1);
