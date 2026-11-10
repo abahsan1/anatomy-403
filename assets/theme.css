@@ -1,6 +1,6 @@
 /* Anatomy 403 shared theme: the dark neon design.
- * Near-black pages and cards with a purple tint, a deep purple-to-blue "stage" for questions,
- * hot-pink-to-purple primary pills, a blue-purple-pink progress bar, and Jost type.
+ * Flat colour only: no gradients and no glows (per the design skills). Near-black pages and cards with a
+ * purple tint, a deep purple "stage" for questions, electric purple primary pills, hot pink progress, Jost type.
  * One dark palette for every color-scheme setting. */
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&display=swap");
 
@@ -11,14 +11,14 @@
   --x-violet:#A855FF; --x-pink:#FF3DB8; --x-blue:#3D7BFF; --x-cyan:#00D4FF; --x-teal:#2CD4C2; --x-coral:#FF8A5C; --x-green:#2BD49A; --x-red:#FF5A75; --x-yellow:#FFC23D;
   --x-good-wash:rgba(43,212,154,.16); --x-bad-wash:rgba(255,90,117,.16); --x-flag-wash:rgba(255,194,61,.14);
   --x-good-ink:#7EF0C4; --x-bad-ink:#FFA3B3;
-  --x-grad-progress:linear-gradient(90deg,#3D7BFF,#A855FF 55%,#FF3DB8);
-  --x-grad-primary:linear-gradient(135deg,#FF3DB8,#A855FF);
-  --x-grad-good:linear-gradient(135deg,#1FB585,#127A63);
-  --x-grad-stage:linear-gradient(135deg,#2A0C4A 0%,#160B3F 55%,#0A1A4A 100%);
-  --x-page:linear-gradient(135deg,#0D0626 0%,#2B0D55 50%,#6A1680 100%);
+  --x-progress:#FF3DB8;
+  --x-primary:#8B2CF5;
+  --x-good-fill:#127A63;
+  --x-stage-fill:#1A0D38;
+  --x-page:#160A30;
   --x-r-sm:12px; --x-r-md:16px; --x-r-lg:24px; --x-r-xl:30px; --x-r-pill:999px;
   --x-shadow:none; --x-shadow-sm:none;
-  --x-shadow-btn:0 10px 26px -8px rgba(255,61,184,.7); --x-shadow-stage:0 30px 60px -30px rgba(168,85,255,.5);
+  --x-shadow-btn:none; --x-shadow-stage:none;
   --x-font:"Jost", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --x-ease:cubic-bezier(0.16,1,0.3,1);
 }
@@ -31,6 +31,6 @@ html{background:var(--x-bg)}
 .xback:focus-visible{outline:3px solid var(--x-violet);outline-offset:2px}
 .xbar{display:flex;align-items:center;gap:12px;margin:6px 0 16px}
 .xbar .track-bg{flex:1;height:12px;border-radius:var(--x-r-pill);background:var(--x-line);overflow:hidden}
-.xbar .track-bg i{display:block;height:100%;border-radius:inherit;background:var(--x-grad-progress);transform-origin:left;transform:scaleX(var(--p,0));transition:transform .35s var(--x-ease)}
+.xbar .track-bg i{display:block;height:100%;border-radius:inherit;background:var(--x-progress);transform-origin:left;transform:scaleX(var(--p,0));transition:transform .35s var(--x-ease)}
 .xbar span{font:700 .85rem/1 var(--x-font);color:var(--x-muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 @media (prefers-reduced-motion: reduce){.xbar .track-bg i,.xback{transition:none}}

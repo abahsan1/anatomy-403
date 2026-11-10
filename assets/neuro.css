@@ -6,7 +6,7 @@
   --bad:var(--x-red); --bad-soft:var(--x-bad-wash); --warn:var(--x-yellow); --plate:#FFFFFF; color-scheme:dark;
   --f-display:var(--x-font); --f-body:var(--x-font); --f-mono:var(--x-font);
 }
-body{font-family:var(--x-font);-webkit-font-smoothing:antialiased;background:radial-gradient(900px 520px at 100% -10%,rgba(168,85,255,.20),transparent 60%),radial-gradient(700px 420px at -10% 110%,rgba(79,140,255,.12),transparent 60%),var(--x-bg);background-attachment:fixed}
+body{font-family:var(--x-font);-webkit-font-smoothing:antialiased;background:var(--x-bg);background-attachment:fixed}
 .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header h1{font-weight:700;letter-spacing:-0.03em}
 header p{font-size:.85rem}
@@ -15,18 +15,18 @@ header p{font-size:.85rem}
 .bar{border-bottom:0;background:transparent}
 .seg{border:1px solid var(--x-line);background:var(--x-surface);box-shadow:var(--x-shadow-sm);border-radius:var(--x-r-md);padding:4px;gap:4px}
 .seg button{border-radius:var(--x-r-sm);font-weight:700}
-.seg button[aria-pressed="true"]{background:var(--x-grad-primary);color:#fff;box-shadow:var(--x-shadow-btn)}
+.seg button[aria-pressed="true"]{background:var(--x-primary);color:#fff;box-shadow:var(--x-shadow-btn)}
 .chip{border:1px solid var(--x-line);background:var(--x-surface);box-shadow:var(--x-shadow-sm);border-radius:var(--x-r-pill);font-weight:700;padding:8px 14px}
 .chip[aria-pressed="true"]{background:var(--x-violet);border-color:var(--x-violet);color:#fff}
 .fchip[aria-pressed="true"]{background:var(--x-yellow);border-color:var(--x-yellow);color:#2A2100}
 .meta{font-family:var(--x-font);font-weight:600;letter-spacing:0;font-size:.82rem}
 .meta .score b{font-weight:800}
 .progress{height:12px;border-radius:var(--x-r-pill);background:var(--x-line)}
-.progress i{border-radius:inherit;background:var(--x-grad-progress)}
+.progress i{border-radius:inherit;background:var(--x-progress)}
 .linkbtn{color:var(--x-pink);font-weight:700}
 
 /* the question card is the deep violet stage */
-.card{background:var(--x-grad-stage);color:var(--x-stage-ink);border:1px solid #3B1F6E;border-radius:var(--x-r-xl);padding:24px;box-shadow:var(--x-shadow-stage)}
+.card{background:var(--x-stage-fill);color:var(--x-stage-ink);border:1px solid #3B1F6E;border-radius:var(--x-r-xl);padding:24px;box-shadow:var(--x-shadow-stage)}
 .tag{font-family:var(--x-font);text-transform:none;letter-spacing:0;font-weight:700;font-size:.82rem;color:var(--x-pink)}
 .said-badge{color:#2A2100;background:var(--x-yellow);border:0;border-radius:var(--x-r-pill);padding:2px 9px;font-family:var(--x-font);text-transform:none;letter-spacing:0}
 .q{font-weight:800;letter-spacing:-0.01em}
@@ -59,7 +59,7 @@ header p{font-size:.85rem}
 
 /* buttons: outlined dark pills on the page, cyan primary, violet pills on the stage */
 .btn{border:1px solid var(--x-line);border-radius:var(--x-r-pill);background:var(--x-surface);color:var(--x-ink);box-shadow:var(--x-shadow-sm);padding:12px 22px;font-weight:800}
-.btn.primary{border-color:transparent;background:var(--x-grad-primary);color:#fff;box-shadow:var(--x-shadow-btn)}
+.btn.primary{border-color:transparent;background:var(--x-primary);color:#fff;box-shadow:var(--x-shadow-btn)}
 .card .btn:not(.primary){border-color:transparent;background:var(--x-stage-2);color:var(--x-stage-ink);box-shadow:none}
 .btn:active:not(:disabled){transform:scale(.97)}
 .nav .again{background:var(--x-red);color:#fff;border:0}
@@ -89,7 +89,7 @@ header p{font-size:.85rem}
 .card.flash .said{background:var(--x-flag-wash);color:var(--x-ink)}
 
 /* results */
-.card.done{background:var(--x-grad-good);border-color:transparent;color:#fff}
+.card.done{background:var(--x-good-fill);border-color:transparent;color:#fff}
 .card.done h2{font-weight:800}
 .card.done p{color:rgba(255,255,255,.9)}
 .card.done .btn{border-color:transparent;background:rgba(255,255,255,.2);color:#fff;box-shadow:none}
