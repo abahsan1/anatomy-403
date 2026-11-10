@@ -30,7 +30,7 @@
     }));
   }
 
-  let status = "connecting", user = null, token = null;
+  let status = "connecting", user = null, token = null, known = false; // known: the sign-in check has answered
   const setStatus = s => { status = s; window.dispatchEvent(new CustomEvent("a403-sync", { detail: s })); };
 
   // ---------- push changes, but only after the first pull ----------
@@ -104,7 +104,7 @@
     avatar: meta(u).avatar_url || meta(u).picture || "",
     provider: (u.app_metadata && u.app_metadata.provider) || "email",
   };
-  const announce = () => window.dispatchEvent(new CustomEvent("a403-auth", { detail: profile(user) }));
+  const announce = () => { known = true; window.dispatchEvent(new CustomEvent("a403-auth", { detail: profile(user) })); };
 
   client().then(sb => {
     sb.auth.onAuthStateChange((event, session) => {
@@ -120,6 +120,8 @@
   window.a403Sync = {
     status: () => status,
     user: () => profile(user),
+    // true once sign-in is known; a page that loads after the "a403-auth" event reads user() instead
+    ready: () => known,
     client,
     // signing out also clears this browser's copy, so the next person here starts fresh
     signOut() {

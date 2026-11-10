@@ -277,7 +277,9 @@ a{color:inherit}
   };
   if(!A){show("offline");$("acct-out").hidden=false;return}
   show(A.status());addEventListener("a403-sync",e=>{show(e.detail);if(e.detail==="saved")render()});
-  if(A.status()!=="connecting")who(A.user());addEventListener("a403-auth",e=>who(e.detail));
+  // the sign-in answer may arrive before this script runs (cached library), so read it as well as listen
+  if(A.ready&&A.ready())who(A.user());addEventListener("a403-auth",e=>who(e.detail));
+  addEventListener("pageshow",e=>{if(e.persisted&&A.ready())who(A.user())});
   $("signout").onclick=async()=>{$("signout").disabled=true;await A.signOut();$("signout").disabled=false;$("msg").textContent="Signed out. This browser's copy was cleared; your progress is safe in your account.";render()};
 })();
 </script>
