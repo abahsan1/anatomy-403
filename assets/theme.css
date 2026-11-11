@@ -1,6 +1,6 @@
 /* Anatomy 403 shared theme: the dark neon design.
- * Flat colour only: no gradients and no glows (per the design skills). Near-black pages and cards with a
- * purple tint, a deep purple "stage" for questions, electric purple primary pills, hot pink progress, Jost type.
+ * Flat colour, no gradients. Near-black pages and cards with a purple tint, a deep purple "stage" for questions,
+ * purple-tinted glass primary buttons (translucent fill, light edge, blur, top highlight), hot pink progress, Jost type.
  * One dark palette for every color-scheme setting. */
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&display=swap");
 
@@ -12,13 +12,15 @@
   --x-good-wash:rgba(43,212,154,.16); --x-bad-wash:rgba(255,90,117,.16); --x-flag-wash:rgba(255,194,61,.14);
   --x-good-ink:#7EF0C4; --x-bad-ink:#FFA3B3;
   --x-progress:#FF3DB8;
-  --x-primary:#8B2CF5;
+  --x-primary:rgba(139,44,245,.30); --x-primary-hover:rgba(139,44,245,.42); --x-primary-on:rgba(139,44,245,.48);
+  --x-primary-edge:rgba(196,150,255,.45); --x-primary-solid:#8B2CF5;
+  --x-glass:blur(16px) saturate(170%);
   --x-good-fill:#127A63;
   --x-stage-fill:#1A0D38;
   --x-page:#160A30;
   --x-r-sm:12px; --x-r-md:16px; --x-r-lg:24px; --x-r-xl:30px; --x-r-pill:999px;
   --x-shadow:none; --x-shadow-sm:none;
-  --x-shadow-btn:none; --x-shadow-stage:none;
+  --x-shadow-btn:inset 0 1px 0 rgba(255,255,255,.32),0 10px 24px -14px rgba(0,0,0,.55); --x-shadow-stage:none;
   --x-font:"Jost", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --x-ease:cubic-bezier(0.16,1,0.3,1);
 }
