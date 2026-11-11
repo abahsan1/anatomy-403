@@ -1,13 +1,13 @@
-/* Anatomy 403 shared theme: the dark neon design.
- * Flat colour, no gradients. Near-black pages and cards with a purple tint, a deep purple "stage" for questions,
- * purple-tinted glass primary buttons (translucent fill, light edge, blur, top highlight), hot pink progress, Jost type.
+/* Anatomy 403 shared theme: glass on black (branch glass-orbs).
+ * A black page with glowing purple, pink and blue orbs behind it; cards, panels and the question stage are
+ * frosted glass over them; purple-tinted glass buttons, hot pink progress, Jost type.
  * One dark palette for every color-scheme setting. */
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&display=swap");
 
 :root,:root[data-theme="light"],:root[data-theme="dark"]{
   color-scheme:dark;
-  --x-bg:#06040D; --x-surface:#120C20; --x-surface-2:#1C1430; --x-ink:#FFFFFF; --x-muted:#B4A8D8; --x-line:#2B2147;
-  --x-stage:#170B33; --x-stage-2:#24124F; --x-stage-3:#33186E; --x-stage-ink:#FFFFFF; --x-stage-muted:#C7B6EC; --x-stage-line:#4A2A8F;
+  --x-bg:#000000; --x-surface:rgba(255,255,255,.055); --x-surface-2:rgba(255,255,255,.09); --x-ink:#FFFFFF; --x-muted:#C4BAE2; --x-line:rgba(255,255,255,.14);
+  --x-stage:#170B33; --x-stage-2:rgba(255,255,255,.08); --x-stage-3:rgba(255,255,255,.15); --x-stage-ink:#FFFFFF; --x-stage-muted:#C7B6EC; --x-stage-line:rgba(255,255,255,.3);
   --x-violet:#A855FF; --x-pink:#FF3DB8; --x-blue:#3D7BFF; --x-cyan:#00D4FF; --x-teal:#2CD4C2; --x-coral:#FF8A5C; --x-green:#2BD49A; --x-red:#FF5A75; --x-yellow:#FFC23D;
   --x-good-wash:rgba(43,212,154,.16); --x-bad-wash:rgba(255,90,117,.16); --x-flag-wash:rgba(255,194,61,.14);
   --x-good-ink:#7EF0C4; --x-bad-ink:#FFA3B3;
@@ -16,8 +16,9 @@
   --x-primary-edge:rgba(196,150,255,.45); --x-primary-solid:#8B2CF5;
   --x-glass:blur(16px) saturate(170%);
   --x-good-fill:#127A63;
-  --x-stage-fill:#1A0D38;
-  --x-page:#160A30;
+  --x-stage-fill:rgba(255,255,255,.06);
+  --x-page:#000000;
+  --x-panel:blur(28px) saturate(150%); --x-panel-shine:inset 0 1px 0 rgba(255,255,255,.12);
   --x-r-sm:12px; --x-r-md:16px; --x-r-lg:24px; --x-r-xl:30px; --x-r-pill:999px;
   --x-shadow:none; --x-shadow-sm:none;
   --x-shadow-btn:inset 0 1px 0 rgba(255,255,255,.32),0 10px 24px -14px rgba(0,0,0,.55); --x-shadow-stage:none;
@@ -25,6 +26,28 @@
   --x-ease:cubic-bezier(0.16,1,0.3,1);
 }
 html{background:var(--x-bg)}
+html body{background:transparent}
+
+/* the orbs: a soft glow field and three lit spheres, fixed behind every page */
+html::before{content:"";position:fixed;inset:-15%;z-index:-2;pointer-events:none;filter:blur(60px);
+  background:
+    radial-gradient(34vmax 34vmax at 6% 8%, rgba(139,44,245,.42), transparent 62%),
+    radial-gradient(32vmax 32vmax at 96% 92%, rgba(255,61,184,.34), transparent 62%),
+    radial-gradient(28vmax 28vmax at 92% 6%, rgba(0,212,255,.2), transparent 62%),
+    radial-gradient(26vmax 26vmax at 12% 96%, rgba(61,123,255,.32), transparent 62%)}
+body::before,body::after,html::after{content:"";position:fixed;z-index:-1;pointer-events:none;border-radius:50%}
+body::before{width:30vmin;height:30vmin;left:36vw;top:54vh;
+  background:radial-gradient(circle at 32% 28%,#E2C8FF 0,#A86BFF 30%,#7A2BF0 62%,#4B0FB0 100%);animation:x-float 22s ease-in-out infinite alternate}
+body::after{width:44vmin;height:44vmin;right:-10vmin;bottom:-12vmin;
+  background:radial-gradient(circle at 30% 28%,#B8F4FF 0,#2EC8FF 32%,#2F6BFF 70%,#2531B8 100%);animation:x-float 28s ease-in-out infinite alternate-reverse}
+html::after{width:26vmin;height:26vmin;left:-8vmin;top:-7vmin;
+  background:radial-gradient(circle at 34% 30%,#FFD0EE 0,#FF6AD0 32%,#E0249A 68%,#8E0F66 100%);animation:x-float 25s ease-in-out infinite alternate}
+@keyframes x-float{from{transform:translate3d(0,0,0)}to{transform:translate3d(3vmin,-4vmin,0)}}
+@media (prefers-reduced-motion: reduce){body::before,body::after,html::after{animation:none}}
+
+/* glass panels: frosted over the orbs, a light edge and a faint top highlight */
+.card,.past,.stage,.resume,.seg,.xback,.back{-webkit-backdrop-filter:var(--x-panel);backdrop-filter:var(--x-panel)}
+.card,.past{border:1px solid var(--x-line);box-shadow:var(--x-panel-shine)}
 
 /* the back link and the progress bar the quiz pages share */
 .xback{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px 0 10px;margin-bottom:14px;border-radius:var(--x-r-pill);background:var(--x-surface);border:1px solid var(--x-line);color:var(--x-ink);font:600 .9rem/1 var(--x-font);text-decoration:none;box-shadow:var(--x-shadow-sm);transition:transform .15s var(--x-ease)}

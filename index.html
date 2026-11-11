@@ -133,13 +133,13 @@ a{color:inherit}
 :root[data-theme="dark"] .acct-card .st.ok{color:#7EF0C4} :root[data-theme="dark"] .acct-card .st.off{color:#FFA3B3} :root[data-theme="dark"] .stat.flagged b{color:var(--x-yellow)}
 [hidden]{display:none!important}
 /* ===== dark landing design (branch: dark-redesign) ===== */
-:root{--d-bg:#06040D;--d-card:#120C20;--d-card-2:#1C1430;--d-line:#2B2147;--d-ink:#FFFFFF;--d-muted:#B4A8D8;
+:root{--d-bg:transparent;--d-card:rgba(255,255,255,.055);--d-card-2:rgba(255,255,255,.09);--d-line:rgba(255,255,255,.14);--d-ink:#FFFFFF;--d-muted:#C4BAE2;
   --d-violet:#A855FF;--d-cyan:#00D4FF;--d-glow:#A855FF;--d-font:"Jost",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   --d-page:var(--x-page)}
 body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-font)}
 .frame{
   --x-surface:var(--d-card);--x-surface-2:var(--d-card-2);--x-ink:var(--d-ink);--x-muted:var(--d-muted);--x-line:var(--d-line);
-  --x-stage:#170B33;--x-stage-2:#24124F;--x-stage-ink:#fff;--x-stage-muted:#C7B6EC;--x-font:var(--d-font);
+  --x-stage:rgba(255,255,255,.06);--x-stage-2:rgba(255,255,255,.09);--x-stage-ink:#fff;--x-stage-muted:#C7B6EC;--x-font:var(--d-font);
   --x-shadow:none;--x-shadow-sm:none;--x-shadow-stage:none;
   color-scheme:dark;max-width:1240px;margin:clamp(8px,1.2vw,16px) auto clamp(10px,3vw,40px);background:var(--d-bg);color:var(--d-ink);
   border-radius:clamp(20px,2.6vw,30px);overflow:hidden;box-shadow:none;font-family:var(--d-font)}
@@ -161,9 +161,9 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
 .hero{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center;min-height:min(620px,80vh);padding:24px clamp(20px,4vw,48px) 80px}
 .hero-copy{position:relative;z-index:2;min-width:0}
 .hello{margin:0 0 12px;font-size:1rem;color:var(--d-muted)}
-.hero h1{margin:0;font-size:clamp(3rem,7.4vw,6.4rem);font-weight:700;letter-spacing:-0.035em;line-height:.98;color:#fff;overflow-wrap:break-word;min-width:0}
-.resume{display:block;max-width:540px;margin-top:36px;padding:20px 22px;border-radius:22px;background:var(--x-stage-fill);border:1px solid #3B1F6E;color:#fff;text-decoration:none;transition:transform .2s var(--x-ease),border-color .2s var(--x-ease)}
-.resume:hover{transform:translateY(-2px);border-color:#6A2FB0}
+.hero h1{margin:0;font-size:clamp(3rem,7.4vw,6.4rem);font-weight:500;letter-spacing:-0.01em;line-height:.98;text-transform:uppercase;color:#fff;overflow-wrap:break-word;min-width:0}
+.resume{display:block;max-width:540px;margin-top:36px;padding:20px 22px;border-radius:22px;background:var(--x-stage-fill);border:1px solid var(--d-line);color:#fff;text-decoration:none;transition:transform .2s var(--x-ease),border-color .2s var(--x-ease)}
+.resume:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.3)}
 .resume .k{display:block;font-size:.88rem;color:var(--d-muted)}
 .resume .t{display:block;margin-top:4px;font-size:clamp(1.2rem,2.2vw,1.45rem);font-weight:600;letter-spacing:-0.01em;line-height:1.25}
 .resume .m{display:block;margin-top:4px;font-size:.95rem;color:#E2D6F5}
@@ -187,7 +187,7 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
 /* dashboard below the hero */
 .frame .shell{max-width:none;padding:18px clamp(20px,4vw,48px) 44px;scroll-margin-top:12px}
 .frame .card,.frame .past{border:1px solid var(--d-line)}
-.frame .stage{background:var(--x-stage-fill);border:1px solid #3B1F6E}
+.frame .stage{background:var(--x-stage-fill);border:1px solid var(--d-line)}
 .frame .btn{background:var(--x-primary)}
 .frame .btn.soft{background:var(--d-card-2);box-shadow:none;border:1px solid var(--d-line)}
 .frame .list a:hover{background:color-mix(in srgb,var(--c) 18%,var(--d-card-2))}
