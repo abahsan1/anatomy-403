@@ -16,7 +16,7 @@ header p{font-size:.85rem}
 .seg{border:1px solid var(--x-line);background:var(--x-surface);box-shadow:var(--x-shadow-sm);border-radius:var(--x-r-md);padding:4px;gap:4px}
 .seg button{border-radius:var(--x-r-sm);font-weight:700}
 .seg button[aria-pressed="true"]{background:var(--x-primary);border-color:var(--x-primary-edge);-webkit-backdrop-filter:var(--x-glass);backdrop-filter:var(--x-glass);color:#fff;box-shadow:var(--x-shadow-btn)}
-.chip{border:1px solid var(--x-line);background:var(--x-surface);box-shadow:var(--x-shadow-sm);border-radius:var(--x-r-pill);font-weight:700;padding:8px 14px}
+.chip{border:1px solid var(--x-line);background:var(--x-surface);box-shadow:var(--x-shadow-sm);border-radius:var(--x-r-sm);font-weight:700;padding:8px 14px}
 .chip[aria-pressed="true"]{background:var(--x-primary-on);border-color:var(--x-primary-edge);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.28)}
 .fchip[aria-pressed="true"]{background:var(--x-yellow);border-color:var(--x-yellow);color:#2A2100}
 .meta{font-family:var(--x-font);font-weight:600;letter-spacing:0;font-size:.82rem}
@@ -54,11 +54,11 @@ header p{font-size:.85rem}
 .card .said{border-left:0;border-radius:var(--x-r-sm);background:var(--x-flag-wash);padding:8px 12px;color:var(--x-stage-ink)}
 .card .said b{color:var(--x-yellow)}
 .card .lo{color:var(--x-stage-muted)} .card .lo b{color:var(--x-stage-ink)}
-.flag{border:0;border-radius:var(--x-r-pill);background:var(--x-stage-2);color:var(--x-stage-muted);font-weight:700;padding:7px 14px}
+.flag{border:0;border-radius:var(--x-r-sm);background:var(--x-stage-2);color:var(--x-stage-muted);font-weight:700;padding:7px 14px}
 .flag[aria-pressed="true"]{background:var(--x-yellow);color:#2A2100}
 
 /* buttons: outlined dark pills on the page, cyan primary, violet pills on the stage */
-.btn{border:1px solid var(--x-line);border-radius:var(--x-r-pill);background:var(--x-surface);color:var(--x-ink);box-shadow:var(--x-shadow-sm);padding:12px 22px;font-weight:800}
+.btn{border:1px solid var(--x-line);border-radius:var(--x-r-sm);background:var(--x-surface);color:var(--x-ink);box-shadow:var(--x-shadow-sm);padding:12px 22px;font-weight:800}
 .btn.primary{border-color:var(--x-primary-edge);background:var(--x-primary);-webkit-backdrop-filter:var(--x-glass);backdrop-filter:var(--x-glass);color:#fff;box-shadow:var(--x-shadow-btn)}
 .btn.primary:hover:not(:disabled){background:var(--x-primary-hover)}
 .card .btn:not(.primary){border-color:transparent;background:var(--x-stage-2);color:var(--x-stage-ink);box-shadow:none}
