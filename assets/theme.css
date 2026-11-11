@@ -1,12 +1,13 @@
-/* Anatomy 403 shared theme: glass on black (branch glass-orbs).
- * A black page with glowing purple, pink and blue orbs behind it; cards, panels and the question stage are
- * frosted glass over them; purple-tinted glass buttons, hot pink progress, Jost type.
+/* Anatomy 403 shared theme: glass on black, v2 (branch glass-orbs-v2).
+ * A pure black page with glowing purple, pink and blue orbs and three still spheres behind it. Cards, panels
+ * and the question stage are dark frosted glass (16px blur, 20% white edge) tuned so every text colour keeps
+ * at least 4.5:1 contrast even over the brightest part of a sphere. Purple-tinted glass buttons, pink progress, Jost.
  * One dark palette for every color-scheme setting. */
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&display=swap");
 
 :root,:root[data-theme="light"],:root[data-theme="dark"]{
   color-scheme:dark;
-  --x-bg:#000000; --x-surface:rgba(255,255,255,.055); --x-surface-2:rgba(255,255,255,.09); --x-ink:#FFFFFF; --x-muted:#C4BAE2; --x-line:rgba(255,255,255,.14);
+  --x-bg:#000000; --x-surface:rgba(36,32,47,.67); --x-surface-2:rgba(255,255,255,.08); --x-ink:#FFFFFF; --x-muted:#DCD3F2; --x-line:rgba(255,255,255,.2);
   --x-stage:#170B33; --x-stage-2:rgba(255,255,255,.08); --x-stage-3:rgba(255,255,255,.15); --x-stage-ink:#FFFFFF; --x-stage-muted:#C7B6EC; --x-stage-line:rgba(255,255,255,.3);
   --x-violet:#A855FF; --x-pink:#FF3DB8; --x-blue:#3D7BFF; --x-cyan:#00D4FF; --x-teal:#2CD4C2; --x-coral:#FF8A5C; --x-green:#2BD49A; --x-red:#FF5A75; --x-yellow:#FFC23D;
   --x-good-wash:rgba(43,212,154,.16); --x-bad-wash:rgba(255,90,117,.16); --x-flag-wash:rgba(255,194,61,.14);
@@ -16,9 +17,9 @@
   --x-primary-edge:rgba(196,150,255,.45); --x-primary-solid:#8B2CF5;
   --x-glass:blur(16px) saturate(170%);
   --x-good-fill:#127A63;
-  --x-stage-fill:rgba(255,255,255,.06);
+  --x-stage-fill:rgba(36,32,47,.67);
   --x-page:#000000;
-  --x-panel:blur(28px) saturate(150%); --x-panel-shine:inset 0 1px 0 rgba(255,255,255,.12);
+  --x-panel:blur(16px) saturate(140%); --x-panel-shine:inset 0 1px 0 rgba(255,255,255,.16);
   --x-r-sm:12px; --x-r-md:16px; --x-r-lg:24px; --x-r-xl:30px; --x-r-pill:999px;
   --x-shadow:none; --x-shadow-sm:none;
   --x-shadow-btn:inset 0 1px 0 rgba(255,255,255,.32),0 10px 24px -14px rgba(0,0,0,.55); --x-shadow-stage:none;
@@ -37,13 +38,11 @@ html::before{content:"";position:fixed;inset:-15%;z-index:-2;pointer-events:none
     radial-gradient(26vmax 26vmax at 12% 96%, rgba(61,123,255,.32), transparent 62%)}
 body::before,body::after,html::after{content:"";position:fixed;z-index:-1;pointer-events:none;border-radius:50%}
 body::before{width:30vmin;height:30vmin;left:36vw;top:54vh;
-  background:radial-gradient(circle at 32% 28%,#E2C8FF 0,#A86BFF 30%,#7A2BF0 62%,#4B0FB0 100%);animation:x-float 22s ease-in-out infinite alternate}
+  background:radial-gradient(circle at 32% 28%,#CDA8FF 0,#A86BFF 30%,#7A2BF0 62%,#4B0FB0 100%)}
 body::after{width:44vmin;height:44vmin;right:-10vmin;bottom:-12vmin;
-  background:radial-gradient(circle at 30% 28%,#B8F4FF 0,#2EC8FF 32%,#2F6BFF 70%,#2531B8 100%);animation:x-float 28s ease-in-out infinite alternate-reverse}
-html::after{width:26vmin;height:26vmin;left:-8vmin;top:-7vmin;
-  background:radial-gradient(circle at 34% 30%,#FFD0EE 0,#FF6AD0 32%,#E0249A 68%,#8E0F66 100%);animation:x-float 25s ease-in-out infinite alternate}
-@keyframes x-float{from{transform:translate3d(0,0,0)}to{transform:translate3d(3vmin,-4vmin,0)}}
-@media (prefers-reduced-motion: reduce){body::before,body::after,html::after{animation:none}}
+  background:radial-gradient(circle at 30% 28%,#7FE0FF 0,#2EC8FF 32%,#2F6BFF 70%,#2531B8 100%)}
+html::after{width:26vmin;height:26vmin;left:-9vmin;bottom:-9vmin;
+  background:radial-gradient(circle at 34% 30%,#FF9EDD 0,#FF6AD0 32%,#E0249A 68%,#8E0F66 100%)}
 
 /* glass panels: frosted over the orbs, a light edge and a faint top highlight */
 .card,.past,.stage,.resume,.seg,.xback,.back{-webkit-backdrop-filter:var(--x-panel);backdrop-filter:var(--x-panel)}

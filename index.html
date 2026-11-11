@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="theme-color" content="#000000">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Anatomy 403 Practice</title>
 <meta name="description" content="Practice quizzes and flashcards for Anatomy 403, one set per exam.">
@@ -133,13 +134,13 @@ a{color:inherit}
 :root[data-theme="dark"] .acct-card .st.ok{color:#7EF0C4} :root[data-theme="dark"] .acct-card .st.off{color:#FFA3B3} :root[data-theme="dark"] .stat.flagged b{color:var(--x-yellow)}
 [hidden]{display:none!important}
 /* ===== dark landing design (branch: dark-redesign) ===== */
-:root{--d-bg:transparent;--d-card:rgba(255,255,255,.055);--d-card-2:rgba(255,255,255,.09);--d-line:rgba(255,255,255,.14);--d-ink:#FFFFFF;--d-muted:#C4BAE2;
+:root{--d-bg:transparent;--d-card:rgba(36,32,47,.67);--d-card-2:rgba(255,255,255,.08);--d-line:rgba(255,255,255,.2);--d-ink:#FFFFFF;--d-muted:#DCD3F2;
   --d-violet:#A855FF;--d-cyan:#00D4FF;--d-glow:#A855FF;--d-font:"Jost",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   --d-page:var(--x-page)}
 body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-font)}
 .frame{
   --x-surface:var(--d-card);--x-surface-2:var(--d-card-2);--x-ink:var(--d-ink);--x-muted:var(--d-muted);--x-line:var(--d-line);
-  --x-stage:rgba(255,255,255,.06);--x-stage-2:rgba(255,255,255,.09);--x-stage-ink:#fff;--x-stage-muted:#C7B6EC;--x-font:var(--d-font);
+  --x-stage:rgba(36,32,47,.67);--x-stage-2:rgba(255,255,255,.08);--x-stage-ink:#fff;--x-stage-muted:#C7B6EC;--x-font:var(--d-font);
   --x-shadow:none;--x-shadow-sm:none;--x-shadow-stage:none;
   color-scheme:dark;max-width:1240px;margin:clamp(8px,1.2vw,16px) auto clamp(10px,3vw,40px);background:var(--d-bg);color:var(--d-ink);
   border-radius:clamp(20px,2.6vw,30px);overflow:hidden;box-shadow:none;font-family:var(--d-font)}
@@ -152,16 +153,16 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
 .brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:.92rem;line-height:1;letter-spacing:.06em;text-transform:uppercase}
 .brand svg{width:34px;height:34px}
 .links{display:flex;gap:clamp(18px,3vw,40px);margin:0 0 0 auto;padding:0;list-style:none}
-.links a{color:#fff;text-decoration:none;font-weight:600;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;opacity:.9}
+.links a{color:#fff;text-decoration:none;font-weight:600;font-size:.95rem;letter-spacing:0;opacity:.9}
 .links a:hover{opacity:1;text-decoration:underline;text-underline-offset:6px}
-.frame .acct{min-height:40px;padding:0 26px;background:var(--x-primary);border:1px solid var(--x-primary-edge);-webkit-backdrop-filter:var(--x-glass);backdrop-filter:var(--x-glass);box-shadow:var(--x-shadow-btn);color:#fff;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.frame .acct{min-height:40px;padding:0 26px;background:var(--x-primary);border:1px solid var(--x-primary-edge);-webkit-backdrop-filter:var(--x-glass);backdrop-filter:var(--x-glass);box-shadow:var(--x-shadow-btn);color:#fff;font-size:.95rem;letter-spacing:0;font-weight:600}
 .frame .acct .avatar{width:28px;height:28px;margin-left:-14px}
 
 /* hero: greeting and a named continue card on the left, the code skull on the right */
 .hero{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center;min-height:min(620px,80vh);padding:24px clamp(20px,4vw,48px) 80px}
 .hero-copy{position:relative;z-index:2;min-width:0}
 .hello{margin:0 0 12px;font-size:1rem;color:var(--d-muted)}
-.hero h1{margin:0;font-size:clamp(3rem,7.4vw,6.4rem);font-weight:500;letter-spacing:-0.01em;line-height:.98;text-transform:uppercase;color:#fff;overflow-wrap:break-word;min-width:0}
+.hero h1{margin:0;font-size:clamp(3rem,7.4vw,6.4rem);font-weight:500;letter-spacing:-0.01em;line-height:.98;text-transform:uppercase;text-wrap:balance;color:#fff;overflow-wrap:break-word;min-width:0}
 .resume{display:block;max-width:540px;margin-top:36px;padding:20px 22px;border-radius:22px;background:var(--x-stage-fill);border:1px solid var(--d-line);color:#fff;text-decoration:none;transition:transform .2s var(--x-ease),border-color .2s var(--x-ease)}
 .resume:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.3)}
 .resume .k{display:block;font-size:.88rem;color:var(--d-muted)}
@@ -171,7 +172,7 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
 .resume .tr{flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
 .resume .tr i{display:block;height:100%;border-radius:inherit;background:var(--x-progress);transform-origin:left;transform:scaleX(var(--p,0))}
 .resume .note{flex:1;font-size:.88rem;color:var(--d-muted)}
-.resume .go{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:0 18px 0 22px;border-radius:99px;background:var(--x-primary);border:1px solid var(--x-primary-edge);-webkit-backdrop-filter:var(--x-glass);backdrop-filter:var(--x-glass);box-shadow:var(--x-shadow-btn);font-weight:700;font-size:.82rem;letter-spacing:.07em;text-transform:uppercase}
+.resume .go{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:0 18px 0 22px;border-radius:99px;background:var(--x-primary);border:1px solid var(--x-primary-edge);-webkit-backdrop-filter:var(--x-glass);backdrop-filter:var(--x-glass);box-shadow:var(--x-shadow-btn);font-weight:700;font-size:.95rem;letter-spacing:0}
 .resume .go svg{width:16px;height:16px}
 .resume:hover .go,.frame .acct:hover{background:var(--x-primary-hover)}
 .hero-act{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
