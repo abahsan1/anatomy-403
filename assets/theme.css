@@ -1,6 +1,5 @@
-/* Anatomy 403 shared theme: glass on black (branch glass-orbs).
- * A black page with glowing purple, pink and blue orbs behind it; cards, panels and the question stage are
- * frosted glass over them; purple-tinted glass buttons, hot pink progress, Jost type.
+/* Anatomy 403 shared theme: glass on black, no orbs (branch glass-no-orbs).
+ * A black page; cards, panels and the question stage are frosted glass; purple-tinted glass buttons, hot pink progress, Jost type.
  * One dark palette for every color-scheme setting. */
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&display=swap");
 
@@ -27,23 +26,6 @@
 }
 html{background:var(--x-bg)}
 html body{background:transparent}
-
-/* the orbs: a soft glow field and three lit spheres, fixed behind every page */
-html::before{content:"";position:fixed;inset:-15%;z-index:-2;pointer-events:none;filter:blur(60px);
-  background:
-    radial-gradient(34vmax 34vmax at 6% 8%, rgba(139,44,245,.42), transparent 62%),
-    radial-gradient(32vmax 32vmax at 96% 92%, rgba(255,61,184,.34), transparent 62%),
-    radial-gradient(28vmax 28vmax at 92% 6%, rgba(0,212,255,.2), transparent 62%),
-    radial-gradient(26vmax 26vmax at 12% 96%, rgba(61,123,255,.32), transparent 62%)}
-body::before,body::after,html::after{content:"";position:fixed;z-index:-1;pointer-events:none;border-radius:50%}
-body::before{width:30vmin;height:30vmin;left:36vw;top:54vh;
-  background:radial-gradient(circle at 32% 28%,#E2C8FF 0,#A86BFF 30%,#7A2BF0 62%,#4B0FB0 100%);animation:x-float 22s ease-in-out infinite alternate}
-body::after{width:44vmin;height:44vmin;right:-10vmin;bottom:-12vmin;
-  background:radial-gradient(circle at 30% 28%,#B8F4FF 0,#2EC8FF 32%,#2F6BFF 70%,#2531B8 100%);animation:x-float 28s ease-in-out infinite alternate-reverse}
-html::after{width:26vmin;height:26vmin;left:-8vmin;top:-7vmin;
-  background:radial-gradient(circle at 34% 30%,#FFD0EE 0,#FF6AD0 32%,#E0249A 68%,#8E0F66 100%);animation:x-float 25s ease-in-out infinite alternate}
-@keyframes x-float{from{transform:translate3d(0,0,0)}to{transform:translate3d(3vmin,-4vmin,0)}}
-@media (prefers-reduced-motion: reduce){body::before,body::after,html::after{animation:none}}
 
 /* glass panels: frosted over the orbs, a light edge and a faint top highlight */
 .card,.past,.stage,.resume,.seg,.xback,.back{-webkit-backdrop-filter:var(--x-panel);backdrop-filter:var(--x-panel)}
