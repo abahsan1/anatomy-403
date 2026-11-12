@@ -150,13 +150,20 @@ const cardioMigrate = `(function(){try{if(localStorage.getItem('cardio-v2-flags'
   const f=conv(p.flags),m=conv(p.missed);if(f.length)localStorage.setItem('cardio-v2-flags',JSON.stringify(f));if(m.length)localStorage.setItem('cardio-v2-missed',JSON.stringify(m))}catch(e){}})();\n`;
 
 // on the practice page, a link to the notes page that only the owner's sign-in reveals
+const plainBlank = t => t.replace(/\[\[([^\]]+)\]\]/g, (_, a) => a.split("|")[0]);
+const noteInline = read("src/exam-3-cardio/notes-inline.js")
+  .replace("/*NOTE_IDS*/", () => js(cardioIds.map(([id, key]) => [key, id])))
+  .replace("/*NOTE_SNAPS*/", () => js([...C.MCQ.map(q => [q.id, q.q]), ...C.BLANKS.map(b => [b.id, plainBlank(b.s)])]));
 const ownerLink = html => swap(html, "  </header>\n\n  <div class=\"bar\">",
   `    <a class="btn" id="notes-link" href="/exam-3/notes" hidden style="margin-top:12px;display:inline-flex;text-decoration:none">Question notes</a>
   </header>
   <script>(function(){const show=u=>{const a=document.getElementById("notes-link");if(a)a.hidden=!(u&&u.id==="a1be1e0f-896a-49c9-b997-a06979110fae")};
   addEventListener("a403-auth",e=>show(e.detail));if(window.a403Sync&&a403Sync.ready())show(a403Sync.user())})();</script>
+  <script>${noteInline}</script>
 
-  <div class="bar">`);
+  <div class="bar">`)
+  // each question's note box hangs off its Flag button
+  .split("function wireFlag(){const b=$('#flag');if(!b)return;").join("function wireFlag(){const b=$('#flag');if(!b)return;if(window.a403Note)a403Note(b);");
 writeFileSync(new URL("exam-3/cardio.html", root), ownerLink(page({
   title: "Cardio Exam 3 Practice",
   sub: "Anatomy 403 · cardiovascular and respiratory · built from Dr. Fox's slides, learning objectives and lecture recordings",
