@@ -149,7 +149,15 @@ const cardioMigrate = `(function(){try{if(localStorage.getItem('cardio-v2-flags'
   const conv=o=>Object.keys(o||{}).map(k=>M.get(k)).filter(Boolean);
   const f=conv(p.flags),m=conv(p.missed);if(f.length)localStorage.setItem('cardio-v2-flags',JSON.stringify(f));if(m.length)localStorage.setItem('cardio-v2-missed',JSON.stringify(m))}catch(e){}})();\n`;
 
-writeFileSync(new URL("exam-3/cardio.html", root), page({
+// on the practice page, a link to the notes page that only the owner's sign-in reveals
+const ownerLink = html => swap(html, "  </header>\n\n  <div class=\"bar\">",
+  `    <a class="btn" id="notes-link" href="/exam-3/notes" hidden style="margin-top:12px;display:inline-flex;text-decoration:none">Question notes</a>
+  </header>
+  <script>(function(){const show=u=>{const a=document.getElementById("notes-link");if(a)a.hidden=!(u&&u.id==="a1be1e0f-896a-49c9-b997-a06979110fae")};
+  addEventListener("a403-auth",e=>show(e.detail));if(window.a403Sync&&a403Sync.ready())show(a403Sync.user())})();</script>
+
+  <div class="bar">`);
+writeFileSync(new URL("exam-3/cardio.html", root), ownerLink(page({
   title: "Cardio Exam 3 Practice",
   sub: "Anatomy 403 · cardiovascular and respiratory · built from Dr. Fox's slides, learning objectives and lecture recordings",
   prefix: "cardio-v2-",
@@ -157,8 +165,18 @@ writeFileSync(new URL("exam-3/cardio.html", root), page({
   lectures: C.LECTURES.map(L => ({n: L.n, ready: L.ready, short: "Cardio " + L.n,
     chip: L.ready ? `Cardio ${L.n} · ${L.name}` : `Cardio ${L.n} · coming soon`})),
   questions: cq, blanks: cb, muscles: [], migrate: cardioMigrate,
-}));
+})));
 console.log(`wrote exam-3/cardio.html: ${cq.length} questions, ${cb.length} sentences`);
+
+// the owner-only notes page: every Exam 3 question and sentence by its id, with notes saved through /api/notes
+const noteItems = [
+  ...C.MCQ.map(q => ({id: q.id, kind: "mcq", l: q.l, topic: topic(q).name, q: q.q, c: q.c, w: q.w, e: q.e})),
+  ...C.BLANKS.map(b => ({id: b.id, kind: "blank", l: b.l, topic: topic(b).name, s: b.s, e: b.e})),
+];
+writeFileSync(new URL("exam-3/notes.html", root), read("src/exam-3-cardio/notes-page.html")
+  .replace("/*LECTURES*/", () => js(C.LECTURES))
+  .replace("/*ITEMS*/", () => js(noteItems)));
+console.log(`wrote exam-3/notes.html: ${noteItems.length} items`);
 
 // ---------- Exam 4: GI, reproductive, endocrine and integumentary (empty until its lectures arrive) ----------
 const G = new Function(read("src/exam-4-gi/exam4-data.js") + ";return {LECTURES,TOPICS,MCQ,BLANKS}")();

@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Exam 3 Question Notes</title>
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/sync.js"></script>
+<style>
+/* Built by src/build-exams.mjs from src/exam-3-cardio/notes-page.html. Edit the source, not exam-3/notes.html. */
+*{box-sizing:border-box}
+html,body{overflow-x:clip}
+body{margin:0;font-family:var(--x-font);color:var(--x-ink);background:var(--x-bg);-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:28px clamp(16px,4vw,32px) 80px}
+header h1{margin:4px 0 6px;font-size:clamp(1.7rem,4vw,2.3rem);font-weight:700;letter-spacing:-0.03em}
+header p{margin:0;color:var(--x-muted);line-height:1.5;max-width:62ch}
+.panel{margin-top:20px;padding:18px;border:1px solid var(--x-line);border-radius:var(--x-r-lg);background:var(--x-surface);box-shadow:var(--x-panel-shine);-webkit-backdrop-filter:var(--x-panel);backdrop-filter:var(--x-panel)}
+.panel h2{margin:0 0 10px;font-size:1.05rem;font-weight:700}
+.gate{text-align:left}
+.gate p{margin:0 0 14px;color:var(--x-muted);line-height:1.5}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:var(--x-r-btn);border:1px solid var(--x-line);background:var(--x-surface);color:var(--x-ink);font:700 .92rem/1 var(--x-font);cursor:pointer;text-decoration:none;transition:background-color .15s var(--x-ease),transform .15s var(--x-ease)}
+.btn:hover{background:var(--x-surface-2)}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--x-primary);border-color:var(--x-primary-edge);box-shadow:var(--x-shadow-btn)}
+.btn.primary:hover{background:var(--x-primary-hover)}
+.btn.quiet{min-height:36px;padding:0 12px;font-size:.85rem}
+.btn:disabled{opacity:.5;cursor:default}
+.btn:focus-visible,.f:focus-visible,textarea:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--x-pink);outline-offset:2px}
+.tools{display:grid;gap:12px;margin-top:20px}
+input[type=search],select,textarea{width:100%;font:500 1rem/1.45 var(--x-font);color:var(--x-ink);background:var(--x-stage-2);border:1px solid var(--x-line);border-radius:var(--x-r-sm);padding:11px 13px}
+select{width:auto}
+textarea{min-height:92px;resize:vertical}
+input::placeholder,textarea::placeholder{color:var(--x-muted);opacity:.8}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.f{min-height:38px;padding:0 14px;border-radius:var(--x-r-btn);border:1px solid var(--x-line);background:var(--x-surface);color:var(--x-ink);font:700 .85rem/1 var(--x-font);cursor:pointer}
+.f[aria-pressed=true]{background:var(--x-primary);border-color:var(--x-primary-edge)}
+.f .n{color:var(--x-muted);font-weight:600;margin-left:4px}
+.count{color:var(--x-muted);font-size:.9rem;margin:18px 0 0}
+.list{display:grid;gap:12px;margin-top:12px}
+.item{padding:18px;border:1px solid var(--x-line);border-radius:var(--x-r-lg);background:var(--x-surface);box-shadow:var(--x-panel-shine)}
+.item.has{border-color:var(--x-primary-edge)}
+.tag{margin:0 0 8px;font-size:.82rem;font-weight:700;color:var(--x-pink)}
+.tag span{color:var(--x-muted);font-weight:600}
+.qt{margin:0 0 10px;font-size:1.05rem;font-weight:700;line-height:1.4}
+.ans,.wr{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:.92rem;line-height:1.4}
+.ans li{color:var(--x-good-ink)}
+.ans li::before{content:"✓ ";font-weight:800}
+.wr{margin-top:4px}
+.wr li{color:var(--x-muted)}
+.wr li::before{content:"✗ ";font-weight:800}
+.blank b{color:var(--x-good-ink);font-weight:700}
+details.ex{margin-top:10px;font-size:.9rem;color:var(--x-muted);line-height:1.5}
+details.ex summary{cursor:pointer;font-weight:700;color:var(--x-ink);width:max-content}
+details.ex p{margin:6px 0 0}
+.note{margin-top:14px;padding-top:14px;border-top:1px solid var(--x-line);display:grid;gap:10px}
+.saved{padding:12px 14px;border-radius:var(--x-r-md);background:var(--x-stage-2);white-space:pre-wrap;line-height:1.45}
+.st{font-size:.82rem;font-weight:700}
+.st.open{color:var(--x-yellow)}
+.st.done{color:var(--x-good-ink)}
+.reply{padding:12px 14px;border-radius:var(--x-r-md);background:var(--x-good-wash);line-height:1.45;white-space:pre-wrap}
+.reply b{display:block;margin-bottom:4px;color:var(--x-good-ink);font-size:.85rem}
+.err{color:var(--x-bad-ink);font-size:.88rem;margin:0}
+.more{margin:16px auto 0;display:flex}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){.btn{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="xback" href="/exam-3/cardio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Exam 3 practice</a>
+  <header>
+    <h1>Exam 3 question notes</h1>
+    <p>Only your GitHub account can use this page. Write what's wrong, unclear or missing on any question, or ask for a new one. Then tell Claude to work through your notes: it edits the questions and replies here.</p>
+  </header>
+
+  <div class="panel gate" id="gate" aria-live="polite"><p>Checking your sign-in…</p></div>
+
+  <div id="app" hidden>
+    <section class="panel" aria-labelledby="new-h">
+      <h2 id="new-h">Ask for a new question</h2>
+      <div class="note" style="border:0;padding:0;margin:0">
+        <label class="row" style="gap:10px"><span>Lecture</span>
+          <select id="new-l"></select></label>
+        <textarea id="new-t" placeholder="What should the new question test? Paste a slide line or a fact you keep missing."></textarea>
+        <div class="row"><button class="btn primary" id="new-save" type="button">Save request</button><p class="err" id="new-err" role="alert"></p></div>
+      </div>
+    </section>
+
+    <div class="tools">
+      <input type="search" id="q" placeholder="Search questions, answers and notes" aria-label="Search">
+      <div class="row" role="group" aria-label="Lecture" id="lects"></div>
+      <div class="row" role="group" aria-label="Show" id="shows"></div>
+    </div>
+    <p class="count" id="count" aria-live="polite"></p>
+    <div class="list" id="list"></div>
+    <button class="btn more" id="more" type="button" hidden>Show more</button>
+  </div>
+</div>
+
+<script>
+const LECTURES=/*LECTURES*/;
+const ITEMS=/*ITEMS*/;
+(function(){
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const OWNER="a1be1e0f-896a-49c9-b997-a06979110fae";
+const PAGE=40;
+const st={l:0,show:"all",q:"",limit:PAGE,open:new Set()};
+let notes=new Map(), token=null;
+
+async function api(method,body,qs){
+  const r=await fetch("/api/notes"+(qs||""),{method,cache:"no-store",headers:{"content-type":"application/json",authorization:"Bearer "+token},body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||"Couldn't reach the notes store.");
+  return j;
+}
+
+function gate(html){$("gate").innerHTML=html;$("gate").hidden=false;$("app").hidden=true}
+let started=null;
+async function start(u){
+  // the sign-in event repeats on token refreshes: only react when the account changes
+  const who=u?u.id:"none";if(who===started)return;started=who;
+  if(!u){gate('<p>Sign in with your GitHub account to use question notes.</p><a class="btn primary" href="/login?next=/exam-3/notes">Sign in</a>');return}
+  if(u.id!==OWNER){gate('<p>Question notes are only for the site owner. Your progress on the practice page still saves as usual.</p><a class="btn" href="/exam-3/cardio">Back to Exam 3 practice</a>');return}
+  try{
+    const sb=await window.a403Sync.client();
+    const {data}=await sb.auth.getSession();
+    token=data.session&&data.session.access_token;
+    const j=await api("GET");
+    notes=new Map(j.notes.map(n=>[n.qid,n]));
+  }catch(e){gate('<p>'+esc(e.message)+'</p><button class="btn" type="button" onclick="location.reload()">Try again</button>');return}
+  $("gate").hidden=true;$("app").hidden=false;
+  setup();render();
+}
+
+function setup(){
+  $("new-l").innerHTML=LECTURES.filter(L=>L.ready).map(L=>`<option value="${L.n}">Cardio ${L.n} · ${esc(L.name)}</option>`).join("")+`<option value="0">Any lecture</option>`;
+  $("new-save").onclick=async()=>{
+    const t=$("new-t").value.trim();$("new-err").textContent="";
+    if(!t){$("new-err").textContent="Write what the question should test first.";return}
+    const l=$("new-l").value, qid="new:"+Math.random().toString(36).slice(2,10);
+    $("new-save").disabled=true;
+    try{const j=await api("PUT",{qid,note:t,snap:l==="0"?"New question, any lecture":"New question for Cardio "+l});notes.set(qid,j.note);$("new-t").value="";st.show="new";render()}
+    catch(e){$("new-err").textContent=e.message}
+    $("new-save").disabled=false;
+  };
+  $("q").oninput=e=>{st.q=e.target.value.trim().toLowerCase();st.limit=PAGE;render()};
+  $("more").onclick=()=>{st.limit+=PAGE;render()};
+}
+
+const lecName=n=>(LECTURES.find(L=>L.n===n)||{}).name||"";
+const blankHtml=s=>esc(s).replace(/\[\[([^\]]+)\]\]/g,(_,a)=>"<b>"+a.split("|")[0]+"</b>");
+const plain=s=>String(s).replace(/\[\[([^\]]+)\]\]/g,(_,a)=>a.split("|")[0]);
+const snapOf=x=>x.kind==="blank"?plain(x.s):x.q;
+const hay=x=>(x.id+" "+(x.q||"")+" "+(x.s||"")+" "+[].concat(x.c||[]).join(" ")+" "+(x.w||[]).join(" ")+" "+(x.e||"")+" "+x.topic+" "+((notes.get(x.id)||{}).note||"")).toLowerCase();
+
+function newItems(){return [...notes.values()].filter(n=>n.qid.startsWith("new:")).map(n=>({id:n.qid,kind:"new",l:0,topic:"",q:n.snap}))}
+function pool(){
+  const inL=x=>!st.l||x.l===st.l;
+  const base=[...newItems(),...ITEMS].filter(x=>x.kind==="new"?!st.l||n2l(x)===st.l:inL(x));
+  const has=x=>notes.has(x.id);
+  const f={all:()=>true,notes:has,open:x=>has(x)&&notes.get(x.id).status==="open",done:x=>has(x)&&notes.get(x.id).status==="done",new:x=>x.kind==="new"};
+  return {base,f};
+}
+const n2l=x=>{const m=/Cardio (\d)/.exec(x.q||"");return m?+m[1]:0};
+
+function render(){
+  const {base,f}=pool();
+  $("lects").innerHTML=[{n:0,name:"All lectures",ready:true},...LECTURES.filter(L=>L.ready)].map(L=>`<button class="f" type="button" data-l="${L.n}" aria-pressed="${st.l===L.n}">${L.n?"Cardio "+L.n:"All lectures"}</button>`).join("");
+  const shows=[["all","All"],["notes","With notes"],["open","Waiting for Claude"],["done","Updated"],["new","New requests"]];
+  $("shows").innerHTML=shows.map(([k,t])=>`<button class="f" type="button" data-show="${k}" aria-pressed="${st.show===k}">${t}<span class="n">${base.filter(f[k]).length}</span></button>`).join("");
+  $("lects").querySelectorAll("button").forEach(b=>b.onclick=()=>{st.l=+b.dataset.l;st.limit=PAGE;render()});
+  $("shows").querySelectorAll("button").forEach(b=>b.onclick=()=>{st.show=b.dataset.show;st.limit=PAGE;render()});
+  let rows=base.filter(f[st.show]);
+  if(st.q)rows=rows.filter(x=>hay(x).includes(st.q));
+  $("count").textContent=rows.length?(rows.length===1?"1 item":rows.length+" items"):"";
+  $("list").innerHTML=rows.length?rows.slice(0,st.limit).map(card).join(""):'<div class="item"><p style="margin:0;color:var(--x-muted)">Nothing here'+(st.q?" for that search":"")+'.</p></div>';
+  $("more").hidden=rows.length<=st.limit;
+  $("list").querySelectorAll(".item").forEach(wire);
+}
+
+function card(x){
+  const n=notes.get(x.id), editing=st.open.has(x.id);
+  let body="";
+  if(x.kind==="mcq"){
+    body=`<p class="qt">${esc(x.q)}</p><ul class="ans">${[].concat(x.c).map(a=>`<li>${esc(a)}</li>`).join("")}</ul><ul class="wr">${x.w.map(a=>`<li>${esc(a)}</li>`).join("")}</ul>`+
+      (x.e?`<details class="ex"><summary>Explanation</summary><p>${esc(x.e)}</p></details>`:"");
+  }else if(x.kind==="blank"){body=`<p class="qt blank">${blankHtml(x.s)}</p>`+(x.e?`<details class="ex"><summary>Explanation</summary><p>${esc(x.e)}</p></details>`:"")}
+  else body=`<p class="qt">${esc(x.q)}</p>`;
+  const tag=x.kind==="new"?`New question request <span>· ${esc(x.id.slice(4))}</span>`:
+    `Cardio ${x.l} · ${esc(x.topic)} <span>· ${x.kind==="mcq"?"Multiple choice":"Fill in the blank"} · ${esc(x.id)}</span>`;
+  let nh="";
+  if(editing)nh=`<textarea aria-label="Note on ${esc(x.id)}" placeholder="What's wrong, unclear or missing?">${esc(n?n.note:"")}</textarea>
+    <div class="row"><button class="btn primary quiet" data-act="save" type="button">Save note</button><button class="btn quiet" data-act="cancel" type="button">Cancel</button><p class="err" role="alert"></p></div>`;
+  else if(n)nh=`<p class="st ${n.status}">${n.status==="done"?"Updated by Claude":"Waiting for Claude"}</p><div class="saved">${esc(n.note)}</div>`+
+    (n.reply?`<div class="reply"><b>Claude</b>${esc(n.reply)}</div>`:"")+
+    `<div class="row"><button class="btn quiet" data-act="edit" type="button">Edit note</button><button class="btn quiet" data-act="del" type="button">Delete note</button><p class="err" role="alert"></p></div>`;
+  else nh=`<div class="row"><button class="btn quiet" data-act="edit" type="button">Add note</button></div>`;
+  return `<article class="item${n?" has":""}" data-id="${esc(x.id)}"><p class="tag">${tag}</p>${body}<div class="note">${nh}</div></article>`;
+}
+
+function wire(el){
+  const id=el.dataset.id, x=ITEMS.find(i=>i.id===id)||{kind:"new",q:(notes.get(id)||{}).snap||""};
+  const err=()=>el.querySelector(".err");
+  el.querySelectorAll("[data-act]").forEach(b=>b.onclick=async()=>{
+    const act=b.dataset.act;
+    if(act==="edit"){st.open.add(id);const t=rerender(el,id).querySelector("textarea");t.focus();t.setSelectionRange(t.value.length,t.value.length);return}
+    if(act==="cancel"){st.open.delete(id);rerender(el,id);return}
+    b.disabled=true;
+    try{
+      if(act==="save"){
+        const note=el.querySelector("textarea").value.trim();
+        if(!note){err().textContent="Write a note first, or cancel.";b.disabled=false;return}
+        const j=await api("PUT",{qid:id,note,snap:x.kind==="new"?(notes.get(id)||{}).snap:snapOf(x)});
+        notes.set(id,j.note);st.open.delete(id);
+      }
+      if(act==="del"){
+        if(!confirm("Delete this note?")){b.disabled=false;return}
+        await api("DELETE",null,"?qid="+encodeURIComponent(id));notes.delete(id);
+      }
+      render();
+    }catch(e){err().textContent=e.message;b.disabled=false}
+  });
+}
+function rerender(el,id){
+  const x=ITEMS.find(i=>i.id===id)||newItems().find(i=>i.id===id);
+  const tmp=document.createElement("div");tmp.innerHTML=card(x);const nw=tmp.firstElementChild;el.replaceWith(nw);wire(nw);return nw;
+}
+
+const S=window.a403Sync;
+if(!S){gate("<p>Sign-in didn't load. Reload the page to try again.</p>");return}
+addEventListener("a403-auth",e=>start(e.detail));
+if(S.ready())start(S.user());
+})();
+</script>
+</body>
+</html>

@@ -158,7 +158,10 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
   <header>
     <h1>Cardio Exam 3 Practice</h1>
     <p>Anatomy 403 · cardiovascular and respiratory · built from Dr. Fox's slides, learning objectives and lecture recordings</p>
+    <a class="btn" id="notes-link" href="/exam-3/notes" hidden style="margin-top:12px;display:inline-flex;text-decoration:none">Question notes</a>
   </header>
+  <script>(function(){const show=u=>{const a=document.getElementById("notes-link");if(a)a.hidden=!(u&&u.id==="a1be1e0f-896a-49c9-b997-a06979110fae")};
+  addEventListener("a403-auth",e=>show(e.detail));if(window.a403Sync&&a403Sync.ready())show(a403Sync.user())})();</script>
 
   <div class="bar">
     <div class="seg" role="group" aria-label="Mode">
