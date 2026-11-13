@@ -28,6 +28,12 @@ function engineFor(ex) {
   // the Neuro-only key migration
   e = e.replace(/\(function migrateBlanks\(\)\{[\s\S]*?localStorage\.setItem\('[a-z0-9-]+sessions',r\)\}\}catch\(e\)\{\}\}\)\(\);\n/, "");
   if (e.includes("migrateBlanks")) throw new Error("Exam 2 page changed: migrateBlanks");
+  // a saved set keeps each question's shuffled option texts; if a question's options were reworded since,
+  // the old texts no longer match the answer key and a right pick is marked wrong, so reshuffle the current ones
+  e = swap(e, "return q?{...q,multi:Array.isArray(q.c),opts:o}:null}).filter(Boolean);",
+    "if(!q)return null;const cur=[...(Array.isArray(q.c)?q.c:[q.c]),...q.w];const same=Array.isArray(o)&&o.length===cur.length&&cur.every(x=>o.includes(x));return {...q,multi:Array.isArray(q.c),opts:same?o:shuffle(cur),stale:!same}}).filter(Boolean);");
+  e = swap(e, "cross:s.cross||{}};renderMCQ(true);return}",
+    "cross:s.cross||{}};list.forEach((q,j)=>{if(q.stale){delete mq.ans[j];delete mq.cross[j]}});renderMCQ(true);return}");
   // slide notes and fill-in explanations
   e = swap(e, "const saidNote=x=>x.said?'<p class=\"said\"><b>In lecture:</b> '+esc(x.said)+'</p>':'';",
     "const saidNote=x=>(x.said?'<p class=\"said\"><b>In lecture:</b> '+esc(x.said)+'</p>':'')+(x.note?'<p class=\"said\"><b>Your slide note:</b> '+esc(x.note)+'</p>':'');");

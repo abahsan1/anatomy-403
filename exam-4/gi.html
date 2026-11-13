@@ -241,8 +241,8 @@ let mq={list:[],i:0,right:0,answered:0,missed:[]};
 function saveMCQ(){putSess('mcq',{list:mq.list.map(q=>[qKey(q),q.opts]),i:mq.i,right:mq.right,answered:mq.answered,missed:mq.missed.map(qKey),ans:mq.ans||{},cross:mq.cross||{}})}
 function startMCQ(pool,fresh){
   if(!pool&&!fresh){const s=getSess('mcq');
-    if(s&&s.list&&s.list.length){const list=s.list.map(([k,o])=>{const q=QBY().get(k);return q?{...q,multi:Array.isArray(q.c),opts:o}:null}).filter(Boolean);
-      if(list.length){mq={list,i:Math.min(s.i,list.length),right:s.right,answered:s.answered,missed:s.missed.map(k=>QBY().get(k)).filter(Boolean),ans:s.ans||(s.chosen!=null?{[s.i]:s.chosen}:{}),cross:s.cross||{}};renderMCQ(true);return}}}
+    if(s&&s.list&&s.list.length){const list=s.list.map(([k,o])=>{const q=QBY().get(k);if(!q)return null;const cur=[...(Array.isArray(q.c)?q.c:[q.c]),...q.w];const same=Array.isArray(o)&&o.length===cur.length&&cur.every(x=>o.includes(x));return {...q,multi:Array.isArray(q.c),opts:same?o:shuffle(cur),stale:!same}}).filter(Boolean);
+      if(list.length){mq={list,i:Math.min(s.i,list.length),right:s.right,answered:s.answered,missed:s.missed.map(k=>QBY().get(k)).filter(Boolean),ans:s.ans||(s.chosen!=null?{[s.i]:s.chosen}:{}),cross:s.cross||{}};list.forEach((q,j)=>{if(q.stale){delete mq.ans[j];delete mq.cross[j]}});renderMCQ(true);return}}}
   const src=pool||QUESTIONS.filter(q=>(!st.lec||q.l===st.lec)&&(!st.flagOnly||flags.has(qKey(q)))&&styleOk(q,st.style));
   if(!src.length&&st.flagOnly){emptyFlagged('questions');return}
   mq={list:shuffle(src).map(q=>({...q,multi:Array.isArray(q.c),opts:shuffle([...(Array.isArray(q.c)?q.c:[q.c]),...q.w])})),i:0,right:0,answered:0,missed:[],ans:{},cross:{}};
