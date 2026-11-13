@@ -33,6 +33,11 @@ function engineFor(ex) {
     "const saidNote=x=>(x.said?'<p class=\"said\"><b>In lecture:</b> '+esc(x.said)+'</p>':'')+(x.note?'<p class=\"said\"><b>Your slide note:</b> '+esc(x.note)+'</p>':'');");
   e = swap(e, '<div id="fbsaid" hidden>${saidNote(b)}</div>',
     '<div id="fbsaid" hidden>${b.e?\'<div class="explain">\'+esc(b.e)+\'</div>\':\'\'}${saidNote(b)}</div>');
+  // questions tied to the owner's handwritten slide notes count as stressed too
+  e = swap(e, "s==='said'?!!q.said:", "s==='said'?!!(q.said||q.note):");
+  e = swap(e, "const saidBadge=x=>x.said?'<span class=\"said-badge\">Stressed in lecture</span>':'';",
+    "const saidBadge=x=>x.said?'<span class=\"said-badge\">Stressed in lecture</span>':x.note?'<span class=\"said-badge\">On your slide notes</span>':'';");
+  e = swap(e, ">Stressed in lecture (${n('said')})<", ">${QUESTIONS.some(q=>q.note)?'Stressed or in your notes':'Stressed in lecture'} (${n('said')})<");
   // question-style chips only when the bank has more than one style
   e = swap(e, "const n=s=>base.filter(q=>styleOk(q,s)).length;\n",
     "const n=s=>base.filter(q=>styleOk(q,s)).length;\n  if(!QUESTIONS.some(q=>q.deep||q.said))return '';\n");

@@ -196,8 +196,8 @@ const FIGS=[], IMG={}, KEYMIG={};
 
 (function(){
 const LECT={"1":"MSK 1","2":"MSK 2","3":"MSK 3","4":"MSK 4","5":"MSK 5"};
-const styleOk=(q,s)=>s==='all'||(s==='said'?!!q.said:(s==='deep')===!!q.deep);
-const saidBadge=x=>x.said?'<span class="said-badge">Stressed in lecture</span>':'';
+const styleOk=(q,s)=>s==='all'||(s==='said'?!!(q.said||q.note):(s==='deep')===!!q.deep);
+const saidBadge=x=>x.said?'<span class="said-badge">Stressed in lecture</span>':x.note?'<span class="said-badge">On your slide notes</span>':'';
 const saidNote=x=>(x.said?'<p class="said"><b>In lecture:</b> '+esc(x.said)+'</p>':'')+(x.note?'<p class="said"><b>Your slide note:</b> '+esc(x.note)+'</p>':'');
 const st={mode:'mcq',lec:0,style:'all'};
 try{const s=JSON.parse(localStorage.getItem('msk-prefs')||'{}');if(s.mode)st.mode=s.mode;if(s.lec!=null)st.lec=s.lec;if(s.style)st.style=s.style;}catch(e){}
@@ -259,7 +259,7 @@ function styleChips(){
    <button class="chip" data-style="deep" aria-pressed="${st.style==='deep'}">Full objective (${n('deep')})</button>
    <button class="chip" data-style="recall" aria-pressed="${st.style==='recall'}">Quick recall (${n('recall')})</button>
    <button class="chip" data-style="all" aria-pressed="${st.style==='all'}">Both (${n('all')})</button>
-   <button class="chip" data-style="said" aria-pressed="${st.style==='said'}">Stressed in lecture (${n('said')})</button></div>`;
+   <button class="chip" data-style="said" aria-pressed="${st.style==='said'}">${QUESTIONS.some(q=>q.note)?'Stressed or in your notes':'Stressed in lecture'} (${n('said')})</button></div>`;
 }
 function wireStyles(){view.querySelectorAll('[data-style]').forEach(b=>b.onclick=()=>{st.style=b.dataset.style;save();startMCQ()})}
 function renderMCQ(replay){
