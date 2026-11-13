@@ -128,6 +128,17 @@ console.log(`wrote exam-1/msk.html: ${msk.questions.length} questions, ${msk.bla
 // ---------- Exam 3: Cardio ----------
 const C = new Function(read("src/exam-3-cardio/cardio-data.js") + ";return {LECTURES,TOPICS,MCQ,BLANKS}")();
 const topic = x => C.TOPICS[x.l][x.t];
+// Guard against the "longest answer is right" tell: by chance the answer is the longest option about 1 time in 4.
+{
+  const single = C.MCQ.filter(q => !Array.isArray(q.c));
+  const longest = single.filter(q => q.c.length > Math.max(...q.w.map(w => w.length)));
+  const share = longest.length / single.length;
+  const multi = C.MCQ.filter(q => Array.isArray(q.c));
+  const avg = a => a.reduce((n, s) => n + s.length, 0) / a.length;
+  const right = avg(multi.flatMap(q => q.c)), wrong = avg(multi.flatMap(q => q.w));
+  if (share > 0.35) console.warn(`warning: in ${Math.round(share * 100)}% of Exam 3 questions the answer is the longest option: ${longest.map(q => q.id).join(", ")}`);
+  if (right > wrong * 1.2) console.warn(`warning: Exam 3 select-all answers average ${Math.round(right)} characters, wrong choices ${Math.round(wrong)}`);
+}
 const cq = C.MCQ.map(q => {
   const o = {l: q.l, t: topic(q).name, q: q.q, c: q.c, w: q.w, e: q.e, lo: topic(q).los[q.lo]};
   if (q.k === "deep") o.deep = true;
