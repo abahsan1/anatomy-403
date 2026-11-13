@@ -42,6 +42,9 @@ const load=()=>loading||(loading=api("GET").then(j=>{notes=new Map(j.notes.map(n
 // called by the page each time it draws a question's Flag button
 window.a403Note=function(flag){
   lastFlag=flag;
+  // the question in view, for the owner's agent chat (assets/agent.js)
+  window.a403Current={key:flag.dataset.key,id:IDS.get(flag.dataset.key)||null,text:SNAP.get(IDS.get(flag.dataset.key))||""};
+  dispatchEvent(new Event("a403-question"));
   if(!owner)return;
   const id=IDS.get(flag.dataset.key), head=flag.closest(".cardhead");
   if(!id||!head||head.querySelector(".qnote-btn"))return;
@@ -94,7 +97,8 @@ window.a403Note=function(flag){
 };
 
 // keep Enter inside the note box from moving to the next question
-window.addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest(".qnote"))e.stopPropagation()},true);
+// (on <html>, bubbling: the box's own keys still run, the page's document-level shortcuts don't)
+document.documentElement.addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest(".qnote"))e.stopPropagation()});
 
 const setOwner=u=>{
   const was=owner;owner=!!(u&&u.id===OWNER);
