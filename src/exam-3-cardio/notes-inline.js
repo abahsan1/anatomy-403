@@ -42,9 +42,6 @@ const load=()=>loading||(loading=api("GET").then(j=>{notes=new Map(j.notes.map(n
 // called by the page each time it draws a question's Flag button
 window.a403Note=function(flag){
   lastFlag=flag;
-  // the question in view, for the owner's agent chat (assets/agent.js)
-  window.a403Current={key:flag.dataset.key,id:IDS.get(flag.dataset.key)||null,text:SNAP.get(IDS.get(flag.dataset.key))||""};
-  dispatchEvent(new Event("a403-question"));
   if(!owner)return;
   const id=IDS.get(flag.dataset.key), head=flag.closest(".cardhead");
   if(!id||!head||head.querySelector(".qnote-btn"))return;

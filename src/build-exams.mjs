@@ -176,7 +176,6 @@ const ownerLink = html => swap(html, "  </header>\n\n  <div class=\"bar\">",
   <script>(function(){const show=u=>{const a=document.getElementById("notes-link");if(a)a.hidden=!(u&&u.id==="a1be1e0f-896a-49c9-b997-a06979110fae")};
   addEventListener("a403-auth",e=>show(e.detail));if(window.a403Sync&&a403Sync.ready())show(a403Sync.user())})();</script>
   <script>${noteInline}</script>
-  <script src="/assets/agent.js" defer></script>
 
   <div class="bar">`)
   // each question's note box hangs off its Flag button
