@@ -987,7 +987,7 @@ const BLANKS = [
 {id:"b-v-sv2",l:2,t:5,lo:0,s:"The [[basilic]] vein joins the brachial veins to form the axillary vein; the [[cephalic]] vein drains into the axillary vein later."},
 {id:"b-v-iv1",l:2,t:6,lo:0,s:"The IVC passes through the diaphragm at about [[T8]], the esophagus at [[T10]], and the aorta at [[T12]]."},
 {id:"b-v-iv2",l:2,t:6,lo:1,s:"The left gonadal vein drains into the left [[renal]] vein; the right gonadal vein drains directly into the [[IVC|inferior vena cava]]."},
-{id:"b-v-hp1",l:2,t:7,lo:0,s:"The hepatic portal vein is formed by the [[superior mesenteric]] vein and the [[splenic]] vein."},
+{id:"b-v-hp1",note:"Mnemonic: the liver gets an SMS. S + MS = Splenic v. + Superior Mesenteric v. = hepatic portal v. The inferior mesenteric v. is not part of the SMS; it drains into the splenic v. first (Updated Vasculature slide 66).",l:2,t:7,lo:0,s:"The hepatic portal vein is formed by the [[superior mesenteric]] vein and the [[splenic]] vein."},
 {id:"b-v-hp2",l:2,t:7,lo:0,s:"Blood leaves the liver sinusoids through the [[hepatic]] veins into the [[IVC|inferior vena cava]]."},
 // ---------- Lecture 3: Blood ----------
 {id:"b-bl-in1",l:3,t:0,lo:1,s:"Whole blood is about [[55]]% plasma and [[45]]% formed elements."},
