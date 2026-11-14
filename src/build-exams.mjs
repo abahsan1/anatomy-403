@@ -63,6 +63,26 @@ function engineFor(ex) {
   e = swap(e, "  if(c.type==='b'){tag=",
     "  if(c.type==='m'){tag=LECT[c.m.l]+' · '+esc(c.m.g)+' · muscle';front=`<div class=\"front\">${esc(c.m.n)}</div>`;\n" +
     "    back=c.m.f.map(([k,v])=>`<div class=\"why\"><b>${esc(k)}:</b> ${esc(v)}</div>`).join('');}\n  else if(c.type==='b'){tag=");
+  // Matching: select-all / matched-pair questions get their own tab; Multiple choice keeps the single-answer A–E ones
+  if (ex.matching) {
+    e = swap(e, "const st={mode:'mcq',lec:0,style:'all'};",
+      "const st={mode:'mcq',lec:0,style:'all'};\nconst KIND=q=>(st.mode==='mt')===Array.isArray(q.c);");
+    e = swap(e, "putSess('mcq',", "putSess(st.mode==='mt'?'mt':'mcq',");
+    e = swap(e, "const s=getSess('mcq');", "const s=getSess(st.mode==='mt'?'mt':'mcq');");
+    e = swap(e, "stale:!same}}).filter(Boolean);", "stale:!same}}).filter(q=>q&&KIND(q));");
+    e = swap(e, "if(list.length){mq=", "if(list.length&&list.length===s.list.length){mq=");
+    e = swap(e, "&&styleOk(q,st.style));", "&&styleOk(q,st.style)&&KIND(q));");
+    e = swap(e, "const base=QUESTIONS.filter(q=>(!st.lec||q.l===st.lec)&&(!st.flagOnly||flags.has(qKey(q))));",
+      "const base=QUESTIONS.filter(q=>(!st.lec||q.l===st.lec)&&(!st.flagOnly||flags.has(qKey(q)))&&KIND(q));");
+    e = swap(e, "st.mode==='mcq'?QUESTIONS.filter(q=>inLec(q.l)&&flags.has(qKey(q)))",
+      "(st.mode==='mcq'||st.mode==='mt')?QUESTIONS.filter(q=>inLec(q.l)&&flags.has(qKey(q))&&KIND(q))");
+    e = swap(e, "if(st.mode==='mcq'){ if(vis('#next'))", "if(st.mode==='mcq'||st.mode==='mt'){ if(vis('#next'))");
+    e = swap(e, "$('#m-mcq').setAttribute('aria-pressed',st.mode==='mcq');",
+      "$('#m-mcq').setAttribute('aria-pressed',st.mode==='mcq');$('#m-mt').setAttribute('aria-pressed',st.mode==='mt');");
+    e = swap(e, "st.mode==='mcq'?startMCQ():", "(st.mode==='mcq'||st.mode==='mt')?startMCQ():");
+    e = swap(e, "$('#m-mcq').onclick=()=>{st.mode='mcq';sync()};",
+      "$('#m-mcq').onclick=()=>{st.mode='mcq';sync()};\n$('#m-mt').onclick=()=>{st.mode='mt';sync()};");
+  }
   // an exam with nothing in it yet: say so instead of showing an empty "0 of 0" set
   if (!ex.questions.length && !ex.blanks.length && !ex.muscles.length)
     e = swap(e, "document.body.dataset.mode=st.mode; updateFchip(); save(); ",
@@ -81,6 +101,9 @@ function shellFor(ex) {
       ? `      <button class="chip" data-l="${l.n}" aria-pressed="false">${l.chip}</button>`
       : `      <button class="chip" data-l="${l.n}" aria-pressed="false" disabled title="Coming soon">${l.chip}</button>`).join("\n") + b);
   s = swap(s, '<button id="m-id" aria-pressed="false">', '<button id="m-id" aria-pressed="false" hidden>');
+  if (ex.matching) s = swap(s, '<button id="m-mcq" aria-pressed="true">Multiple choice</button>',
+    '<button id="m-mcq" aria-pressed="true">Multiple choice</button>\n      <button id="m-mt" aria-pressed="false">Matching</button>')
+    .replace("</head>", "<style>@media (min-width:561px) and (max-width:899px){.seg{grid-template-columns:repeat(4,1fr)}}</style>\n</head>");
   s = swap(s, '<link rel="stylesheet" href="/assets/neuro.css">',
     '<link rel="stylesheet" href="/assets/neuro.css">\n<style>@media (min-width:561px) and (max-width:899px){.seg{grid-template-columns:repeat(3,1fr)}}.chip:disabled{opacity:.5;cursor:default}</style>');
   return s;
@@ -193,7 +216,7 @@ writeFileSync(new URL("exam-3/cardio.html", root), ownerLink(page({
   comment: "// Built by src/build-exams.mjs from src/exam-3-cardio/cardio-data.js, on the Exam 2 page's engine. Edit the sources, not this file.",
   lectures: C.LECTURES.map(L => ({n: L.n, ready: L.ready, short: "Cardio " + L.n,
     chip: L.ready ? `Cardio ${L.n} · ${L.name}` : `Cardio ${L.n} · coming soon`})),
-  questions: cq, blanks: cb, muscles: [], migrate: cardioMigrate,
+  questions: cq, blanks: cb, muscles: [], migrate: cardioMigrate, matching: true,
 })));
 console.log(`wrote exam-3/cardio.html: ${cq.length} questions, ${cb.length} sentences`);
 
