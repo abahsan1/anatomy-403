@@ -189,6 +189,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 const QUESTIONS=[];
 const BLANKS=[];
 const MUSCLES=[];
+const CARD_LABEL="Muscles", CARD_KIND="muscle";
 const FIGS=[], IMG={}, KEYMIG={};
 
 (function(){
@@ -540,7 +541,7 @@ function srcChips(){
   return `<div class="src" role="group" aria-label="Deck">
    <button class="chip" data-src="missed" aria-pressed="${fc.src==='missed'}">Missed (${n('missed')})</button>
    <button class="chip" data-src="flagged" aria-pressed="${fc.src==='flagged'}">Flagged (${n('flagged')})</button>
-   ${MUSCLES.length?`<button class="chip" data-src="muscles" aria-pressed="${fc.src==='muscles'}">Muscles (${n('muscles')})</button>`:''}
+   ${MUSCLES.length?`<button class="chip" data-src="muscles" aria-pressed="${fc.src==='muscles'}">${CARD_LABEL} (${n('muscles')})</button>`:''}
    <button class="chip" data-src="all" aria-pressed="${fc.src==='all'}">Everything (${n('all')})</button></div>`;
 }
 function wireSrc(){view.querySelectorAll('[data-src]').forEach(b=>b.onclick=()=>startFC(b.dataset.src))}
@@ -560,7 +561,7 @@ function renderFC(replay){
   }
   const c=fc.deck[fc.i];
   let front,back,tag;
-  if(c.type==='m'){tag=LECT[c.m.l]+' · '+esc(c.m.g)+' · muscle';front=`<div class="front">${esc(c.m.n)}</div>`;
+  if(c.type==='m'){tag=LECT[c.m.l]+' · '+esc(c.m.g)+' · '+CARD_KIND;front=`<div class="front">${esc(c.m.n)}</div>`;
     back=c.m.f.map(([k,v])=>`<div class="why"><b>${esc(k)}:</b> ${esc(v)}</div>`).join('');}
   else if(c.type==='b'){tag=LECT[c.b.l]+' · '+esc(c.b.t)+' · fill in '+saidBadge(c.b);
     front=`<div class="front" style="font-weight:500">${c.b.segs.map(sg=>sg.text!=null?esc(sg.text):'_____').join('')}</div>`;

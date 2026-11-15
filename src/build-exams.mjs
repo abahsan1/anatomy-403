@@ -59,9 +59,9 @@ function engineFor(ex) {
   e = swap(e, "function cardFromKey(k){\n", "function cardFromKey(k){\n  if(k.startsWith('m:')){const m=MUSCLES.find(x=>x.key===k);return m?{type:'m',m,key:k}:null}\n");
   e = swap(e, "  if(c.type==='b'){const ws=", "  if(c.type==='m')return 'Give each: '+c.m.f.map(x=>x[0]).join(' · ');\n  if(c.type==='b'){const ws=");
   e = swap(e, '<button class="chip" data-src="all"',
-    '${MUSCLES.length?`<button class="chip" data-src="muscles" aria-pressed="${fc.src===\'muscles\'}">Muscles (${n(\'muscles\')})</button>`:\'\'}\n   <button class="chip" data-src="all"');
+    '${MUSCLES.length?`<button class="chip" data-src="muscles" aria-pressed="${fc.src===\'muscles\'}">${CARD_LABEL} (${n(\'muscles\')})</button>`:\'\'}\n   <button class="chip" data-src="all"');
   e = swap(e, "  if(c.type==='b'){tag=",
-    "  if(c.type==='m'){tag=LECT[c.m.l]+' · '+esc(c.m.g)+' · muscle';front=`<div class=\"front\">${esc(c.m.n)}</div>`;\n" +
+    "  if(c.type==='m'){tag=LECT[c.m.l]+' · '+esc(c.m.g)+' · '+CARD_KIND;front=`<div class=\"front\">${esc(c.m.n)}</div>`;\n" +
     "    back=c.m.f.map(([k,v])=>`<div class=\"why\"><b>${esc(k)}:</b> ${esc(v)}</div>`).join('');}\n  else if(c.type==='b'){tag=");
   // Matching: select-all / matched-pair questions get their own tab; Multiple choice keeps the single-answer A–E ones
   if (ex.matching) {
@@ -114,6 +114,7 @@ function page(ex) {
     "const QUESTIONS=" + js(ex.questions) + ";\n" +
     "const BLANKS=" + js(ex.blanks) + ";\n" +
     "const MUSCLES=" + js(ex.muscles) + ";\n" +
+    "const CARD_LABEL=" + js(ex.cardLabel || "Muscles") + ", CARD_KIND=" + js(ex.cardKind || "muscle") + ";\n" +
     "const FIGS=[], IMG={}, KEYMIG={};\n" +
     (ex.migrate || "") +
     engineFor(ex) + "</script>\n";
@@ -160,7 +161,7 @@ writeFileSync(new URL("exam-1/msk.html", root), page({
 console.log(`wrote exam-1/msk.html: ${msk.questions.length} questions, ${msk.blanks.length} sentences, ${msk.muscles.length} muscle cards`);
 
 // ---------- Exam 3: Cardio ----------
-const C = new Function(read("src/exam-3-cardio/cardio-data.js") + ";return {LECTURES,TOPICS,MCQ,BLANKS}")();
+const C = new Function(read("src/exam-3-cardio/cardio-data.js") + ";return {LECTURES,TOPICS,MCQ,BLANKS,CARDS}")();
 const topic = x => C.TOPICS[x.l][x.t];
 // Guard against the "longest answer is right" tell: by chance the answer is the longest option about 1 time in 4.
 {
@@ -216,9 +217,10 @@ writeFileSync(new URL("exam-3/cardio.html", root), ownerLink(page({
   comment: "// Built by src/build-exams.mjs from src/exam-3-cardio/cardio-data.js, on the Exam 2 page's engine. Edit the sources, not this file.",
   lectures: C.LECTURES.map(L => ({n: L.n, ready: L.ready, short: "Cardio " + L.n,
     chip: L.ready ? `Cardio ${L.n} · ${L.name}` : `Cardio ${L.n} · coming soon`})),
-  questions: cq, blanks: cb, muscles: [], migrate: cardioMigrate, matching: true,
+  questions: cq, blanks: cb, cardLabel: "Study cards", cardKind: "study card",
+  muscles: C.CARDS.map(c => ({l: c.l, g: c.g, n: c.n, f: c.f, key: "m:" + c.l + "|" + c.n})), migrate: cardioMigrate, matching: true,
 })));
-console.log(`wrote exam-3/cardio.html: ${cq.length} questions, ${cb.length} sentences`);
+console.log(`wrote exam-3/cardio.html: ${cq.length} questions, ${cb.length} sentences, ${C.CARDS.length} study cards`);
 
 // the owner-only notes page: every Exam 3 question and sentence by its id, with notes saved through /api/notes
 const noteItems = [
