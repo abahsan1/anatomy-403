@@ -494,7 +494,7 @@ function kind(a){
 }
 function fmtHint(c){
   if(c.type==='l'){const k=kind(c.a.a);const n=wc(c.a.a);return (k||'Structure name')+' · '+n+' word'+(n>1?'s':'')}
-  if(c.type==='m')return 'Give each: '+c.m.f.map(x=>x[0]).join(' · ');
+  if(c.type==='m')return 'Give each: '+c.m.f.filter(x=>x[0]!=='Slides').map(x=>x[0]).join(' · ');
   if(c.type==='b'){const ws=c.b.answers.map(a=>wc(a.a));return c.b.answers.length+' blank'+(c.b.answers.length>1?'s':'')+' · '+ws.map(w=>w+' word'+(w>1?'s':'')).join(', ')}
   const q=c.q, ans=q.c;
   if(Array.isArray(ans))return 'List '+ans.length+' items';

@@ -57,7 +57,7 @@ function engineFor(ex) {
   e = swap(e, "  FIGS.forEach(f=>{if(!inLec(f.lec))return;",
     "  MUSCLES.forEach(m=>{if(!inLec(m.l))return;if(src==='all'||src==='muscles')cards.push({type:'m',m,key:m.key})});\n  FIGS.forEach(f=>{if(!inLec(f.lec))return;");
   e = swap(e, "function cardFromKey(k){\n", "function cardFromKey(k){\n  if(k.startsWith('m:')){const m=MUSCLES.find(x=>x.key===k);return m?{type:'m',m,key:k}:null}\n");
-  e = swap(e, "  if(c.type==='b'){const ws=", "  if(c.type==='m')return 'Give each: '+c.m.f.map(x=>x[0]).join(' · ');\n  if(c.type==='b'){const ws=");
+  e = swap(e, "  if(c.type==='b'){const ws=", "  if(c.type==='m')return 'Give each: '+c.m.f.filter(x=>x[0]!=='Slides').map(x=>x[0]).join(' · ');\n  if(c.type==='b'){const ws=");
   e = swap(e, '<button class="chip" data-src="all"',
     '${MUSCLES.length?`<button class="chip" data-src="muscles" aria-pressed="${fc.src===\'muscles\'}">${CARD_LABEL} (${n(\'muscles\')})</button>`:\'\'}\n   <button class="chip" data-src="all"');
   e = swap(e, "  if(c.type==='b'){tag=",
