@@ -200,12 +200,14 @@ const plainBlank = t => t.replace(/\[\[([^\]]+)\]\]/g, (_, a) => a.split("|")[0]
 const noteInline = read("src/exam-3-cardio/notes-inline.js")
   .replace("/*NOTE_IDS*/", () => js(cardioIds.map(([id, key]) => [key, id])))
   .replace("/*NOTE_SNAPS*/", () => js([...C.MCQ.map(q => [q.id, q.q]), ...C.BLANKS.map(b => [b.id, plainBlank(b.s)])]));
+const labFigs = read("src/exam-3-cardio/labfigs-inline.js");
 const ownerLink = html => swap(html, "  </header>\n\n  <div class=\"bar\">",
   `    <a class="btn" id="notes-link" href="/exam-3/notes" hidden style="margin-top:12px;display:inline-flex;text-decoration:none">Question notes</a>
   </header>
   <script>(function(){const show=u=>{const a=document.getElementById("notes-link");if(a)a.hidden=!(u&&u.id==="a1be1e0f-896a-49c9-b997-a06979110fae")};
   addEventListener("a403-auth",e=>show(e.detail));if(window.a403Sync&&a403Sync.ready())show(a403Sync.user())})();</script>
   <script>${noteInline}</script>
+  <script>${labFigs}</script>
 
   <div class="bar">`)
   // each question's note box hangs off its Flag button
