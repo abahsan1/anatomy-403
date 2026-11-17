@@ -279,24 +279,34 @@ if(window.a403Sync&&a403Sync.ready())setOwner(a403Sync.user());
 (function(){
   const OWN="a1be1e0f-896a-49c9-b997-a06979110fae";let started=false;
   async function tok(){const sb=await window.a403Sync.client();const {data}=await sb.auth.getSession();return data.session&&data.session.access_token}
+  const btn=()=>document.getElementById("m-id");
+  const label=t=>{const b=btn();if(b)b.textContent=t};
   async function go(u){
     if(started||!u||u.id!==OWN)return;started=true;
-    const b=document.getElementById("m-id");
+    const b=btn();if(b){b.hidden=false;b.disabled=true}
+    label("Identification (loading)");
     try{
-      const h={authorization:"Bearer "+await tok()};
-      const r=await fetch("/api/labfigs",{headers:h,cache:"no-store"});if(!r.ok)throw new Error(r.status);
-      const figs=(await r.json()).figs||[];if(!figs.length)return;
-      const label=t=>{if(b)b.textContent=t};
-      if(b){b.hidden=false;b.disabled=true}
-      let done=0;const urls={},q=[...figs];
-      label("Identification (loading 0/"+figs.length+")");
+      const t=await tok();if(!t)throw new Error("no session");
+      const h={authorization:"Bearer "+t};
+      const r=await fetch("/api/labfigs",{headers:h,cache:"no-store"});if(!r.ok)throw new Error("list "+r.status);
+      const figs=(await r.json()).figs||[];if(!figs.length)throw new Error("no figures");
+      // each figure joins as soon as its image arrives, so the tab works before all of them are in
+      let done=0,ok=0;const q=[...figs];
       await Promise.all(Array.from({length:6},async()=>{while(q.length){const f=q.shift();
         try{const ir=await fetch("/api/labfigs?img="+encodeURIComponent(f.id)+"&v="+encodeURIComponent(f.v),{headers:h});
-          if(ir.ok)urls[f.id]=URL.createObjectURL(await ir.blob())}catch(e){}
-        label("Identification (loading "+(++done)+"/"+figs.length+")")}}));
-      figs.forEach(f=>{if(urls[f.id]){IMG[f.id]=urls[f.id];FIGS.push({img:f.id,title:f.title,lec:f.lec,answers:f.answers})}});
-      if(b){b.disabled=false;label("Identification")}
-    }catch(e){started=false;if(b)b.hidden=true}
+          if(ir.ok){IMG[f.id]=URL.createObjectURL(await ir.blob());FIGS.push({img:f.id,title:f.title,lec:f.lec,answers:f.answers});ok++}}catch(e){}
+        done++;if(b&&ok)b.disabled=false;
+        label(done<figs.length?"Identification ("+done+"/"+figs.length+")":"Identification")}}));
+      // keep the lab's order once everything is in
+      const ord=new Map(figs.map((f,i)=>[f.id,i]));FIGS.sort((x,y)=>ord.get(x.img)-ord.get(y.img));
+      if(!ok)throw new Error("no images");
+    }catch(e){
+      // show the failure instead of hiding the tab; tapping retries
+      started=false;
+      if(b){b.hidden=false;b.disabled=false;label("Identification (couldn't load, tap to retry)");
+        b.addEventListener("click",ev=>{if(!FIGS.length){ev.stopImmediatePropagation();go(window.a403Sync&&a403Sync.user())}},{capture:true,once:true})}
+      console.warn("lab figures:",e&&e.message);
+    }
   }
   // FIGS and IMG are declared by the data script further down the page, so wait for it to parse
   const run=u=>document.readyState==="loading"?addEventListener("DOMContentLoaded",()=>go(u),{once:true}):go(u);
