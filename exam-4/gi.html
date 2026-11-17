@@ -406,6 +406,14 @@ function renderID(replay){
 $('#zx').onclick=()=>{$('#zoom').hidden=true};
 $('#zoom').addEventListener('click',e=>{if(e.target.id==='zoom')$('#zoom').hidden=true});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#zoom').hidden=true});
+// number keys 1-9 pick options A-I, like clicking them; ignored while typing in a field
+document.addEventListener('keydown',e=>{
+  if(!/^[1-9]$/.test(e.key)||e.metaKey||e.ctrlKey||e.altKey||e.shiftKey||!$('#zoom').hidden)return;
+  if(st.mode!=='mcq'&&st.mode!=='mt')return;
+  if(e.target.closest&&e.target.closest('input,textarea,select,[contenteditable]'))return;
+  const b=document.querySelector(`.opts .opt[data-k="${e.key-1}"]`);
+  if(b&&!b.disabled&&b.offsetParent!==null){e.preventDefault();b.click();b.focus()}
+});
 document.addEventListener('keydown',e=>{
   if(e.key!=='Enter'||e.shiftKey||e.metaKey||e.ctrlKey||e.altKey||!$('#zoom').hidden)return;
   const vis=id=>{const el=$(id);return el&&!el.hidden&&!el.disabled&&el.offsetParent!==null};
