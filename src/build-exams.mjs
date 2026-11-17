@@ -215,8 +215,8 @@ writeFileSync(new URL("exam-3/cardio.html", root), ownerLink(page({
   sub: "Anatomy 403 · cardiovascular and respiratory · built from Dr. Fox's slides, learning objectives and lecture recordings",
   prefix: "cardio-v2-",
   comment: "// Built by src/build-exams.mjs from src/exam-3-cardio/cardio-data.js, on the Exam 2 page's engine. Edit the sources, not this file.",
-  lectures: C.LECTURES.map(L => ({n: L.n, ready: L.ready, short: "Cardio " + L.n,
-    chip: L.ready ? `Cardio ${L.n} · ${L.name}` : `Cardio ${L.n} · coming soon`})),
+  lectures: C.LECTURES.map(L => ({n: L.n, ready: L.ready, short: L.short || "Cardio " + L.n,
+    chip: L.short || (L.ready ? `Cardio ${L.n} · ${L.name}` : `Cardio ${L.n} · coming soon`)})),
   questions: cq, blanks: cb, cardLabel: "Study cards", cardKind: "study card",
   muscles: C.CARDS.map(c => ({l: c.l, g: c.g, n: c.n, f: c.f, key: "m:" + c.l + "|" + c.n})), migrate: cardioMigrate, matching: true,
 })));

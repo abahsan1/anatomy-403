@@ -285,9 +285,8 @@ if(window.a403Sync&&a403Sync.ready())setOwner(a403Sync.user());
       <button class="chip" data-l="1" aria-pressed="false">Cardio 1 · The heart</button>
       <button class="chip" data-l="2" aria-pressed="false">Cardio 2 · Vasculature</button>
       <button class="chip" data-l="3" aria-pressed="false">Cardio 3 · Blood</button>
-      <button class="chip" data-l="4" aria-pressed="false">Cardio 4 · Respiration</button>
-      <button class="chip" data-l="5" aria-pressed="false">Cardio 5 · Urinary</button>
-      <button class="chip" data-l="6" aria-pressed="false" disabled title="Coming soon">Cardio 6 · coming soon</button>
+      <button class="chip" data-l="4" aria-pressed="false">Respiratory</button>
+      <button class="chip" data-l="5" aria-pressed="false">Urinary</button>
       <button class="chip fchip" id="fchip" aria-pressed="false">Flagged only (0)</button>
     </div>
   </div>
@@ -310,14 +309,14 @@ const FIGS=[], IMG={}, KEYMIG={};
   const f=conv(p.flags),m=conv(p.missed);if(f.length)localStorage.setItem('cardio-v2-flags',JSON.stringify(f));if(m.length)localStorage.setItem('cardio-v2-missed',JSON.stringify(m))}catch(e){}})();
 
 (function(){
-const LECT={"1":"Cardio 1","2":"Cardio 2","3":"Cardio 3","4":"Cardio 4","5":"Cardio 5","6":"Cardio 6"};
+const LECT={"1":"Cardio 1","2":"Cardio 2","3":"Cardio 3","4":"Respiratory","5":"Urinary"};
 const styleOk=(q,s)=>s==='all'||(s==='said'?!!(q.said||q.note):(s==='deep')===!!q.deep);
 const saidBadge=x=>x.said?'<span class="said-badge">Stressed in lecture</span>':x.note?'<span class="said-badge">On your slide notes</span>':'';
 const saidNote=x=>(x.said?'<p class="said"><b>In lecture:</b> '+esc(x.said)+'</p>':'')+(x.note?'<p class="said"><b>Your slide note:</b> '+esc(x.note)+'</p>':'');
 const st={mode:'mcq',lec:0,style:'all'};
 const KIND=q=>(st.mode==='mt')===Array.isArray(q.c);
 try{const s=JSON.parse(localStorage.getItem('cardio-v2-prefs')||'{}');if(s.mode)st.mode=s.mode;if(s.lec!=null)st.lec=s.lec;if(s.style)st.style=s.style;}catch(e){}
-{const m=location.hash.match(/^#lecture-([1-6])$/);if(m)st.lec=+m[1];}
+{const m=location.hash.match(/^#lecture-([1-5])$/);if(m)st.lec=+m[1];}
 const save=()=>{try{localStorage.setItem('cardio-v2-prefs',JSON.stringify({mode:st.mode,lec:st.lec,style:st.style}))}catch(e){}};
 const $=s=>document.querySelector(s), view=$('#view');
 let flags=new Set();
@@ -724,7 +723,7 @@ $('#m-id').onclick=()=>{st.mode='id';sync()};
 $('#m-fc').onclick=()=>{st.mode='fc';sync()};
 $('#m-fb').onclick=()=>{st.mode='fb';sync()};
 document.querySelectorAll('.chip[data-l]').forEach(c=>c.onclick=()=>{st.lec=+c.dataset.l;history.replaceState(null,'',st.lec?'#lecture-'+st.lec:location.pathname);sync()});
-window.addEventListener('hashchange',()=>{const m=location.hash.match(/^#lecture-([1-6])$/);const n=m?+m[1]:0;if(n!==st.lec){st.lec=n;sync()}});
+window.addEventListener('hashchange',()=>{const m=location.hash.match(/^#lecture-([1-5])$/);const n=m?+m[1]:0;if(n!==st.lec){st.lec=n;sync()}});
 $('#fchip').onclick=()=>{st.flagOnly=!st.flagOnly;sync()};
 sync();
 })();

@@ -167,7 +167,7 @@ const n2l=x=>{const m=/Cardio (\d)/.exec(x.q||"");return m?+m[1]:0};
 
 function render(){
   const {base,f}=pool();
-  $("lects").innerHTML=[{n:0,name:"All lectures",ready:true},...LECTURES.filter(L=>L.ready)].map(L=>`<button class="f" type="button" data-l="${L.n}" aria-pressed="${st.l===L.n}">${L.n?"Cardio "+L.n:"All lectures"}</button>`).join("");
+  $("lects").innerHTML=[{n:0,name:"All lectures",ready:true},...LECTURES.filter(L=>L.ready)].map(L=>`<button class="f" type="button" data-l="${L.n}" aria-pressed="${st.l===L.n}">${L.n?(L.short||"Cardio "+L.n):"All lectures"}</button>`).join("");
   const shows=[["all","All"],["notes","With notes"],["open","Waiting for Claude"],["done","Updated"],["new","New requests"]];
   $("shows").innerHTML=shows.map(([k,t])=>`<button class="f" type="button" data-show="${k}" aria-pressed="${st.show===k}">${t}<span class="n">${base.filter(f[k]).length}</span></button>`).join("");
   $("lects").querySelectorAll("button").forEach(b=>b.onclick=()=>{st.l=+b.dataset.l;st.limit=PAGE;render()});

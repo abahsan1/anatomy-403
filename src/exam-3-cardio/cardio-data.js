@@ -6,9 +6,8 @@ const LECTURES = [
   {n:1, name:"The heart", ready:true},
   {n:2, name:"Vasculature", ready:true},
   {n:3, name:"Blood", ready:true},
-  {n:4, name:"Respiration", ready:true},
-  {n:5, name:"Urinary", ready:true},
-  {n:6, name:"Lecture 6", ready:false}
+  {n:4, name:"Respiration", short:"Respiratory", ready:true},
+  {n:5, name:"Urinary", short:"Urinary", ready:true}
 ];
 
 const TOPICS = {
