@@ -300,7 +300,7 @@ body{background:var(--d-page);background-attachment:fixed;font-family:var(--d-fo
   const GO='<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
   const MODE={mcq:"Multiple choice",fb:"Fill in the blank",id:"Identification",fc:"Flashcards"};
   const plural=(n,w)=>n+" "+w+(n===1?"":"s");
-  const lecName=(e,l)=>{const L=e.lectures.find(x=>x.n===l);return L?e.short+" "+l+": "+L.name:"All lectures"};
+  const lecName=(e,l)=>{const L=e.lectures.find(x=>x.n===l);return L?(L.short||e.short+" "+l+": "+L.name):"All lectures"};
   const items=L=>{const p=[];const qb=L.q+L.b;if(qb)p.push(plural(qb,"question")+(L.b?" and fill-ins":""));if(L.f)p.push(plural(L.f,"lab image"));if(L.m)p.push(plural(L.m,"muscle card"));return p.join(", ")};
 
   // what this browser knows about each exam
